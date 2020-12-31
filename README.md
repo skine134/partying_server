@@ -16,9 +16,14 @@ partting_server
 ├── package (nuget 외부 패키치 모음)
 │   ├── Extends Packages
 │   └── ...
+├── lib (기능 동작과 관련 있는 코드 모음)
+│   ├── Connection.cs
+│   └── Common_script
+│   └── ...
 ├── util(에러 핸들러, 로그 설정 같은 기능 동작과 관련 없는 코드 모음)
 │   └── Error_handler
 │   └── log
+│   └── config
 ├── log(로그 파일 모음)
 │   └── 20201231.log
 │   └── ...
