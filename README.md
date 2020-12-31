@@ -13,9 +13,8 @@
 ## 2. 구조
 ```
 partting_server
-├── lib (기능 동작과 관련 있는 코드 모음)
-│   ├── Connection.cs
-│   └── Common_script
+├── package (nuget 외부 패키치 모음)
+│   ├── Extends Packages
 │   └── ...
 ├── util(에러 핸들러, 로그 설정 같은 기능 동작과 관련 없는 코드 모음)
 │   └── Error_handler
@@ -27,8 +26,12 @@ partting_server
 │   └── Setup.sql
 │   └── 20211120.sql
 │   └── ...
-├── Controller.cs
-└── Main.cs
+├── src (메인동작 코드 모음)
+│   ├── Controller.cs
+│   └── Main.cs
+└── test (메인 동작의 test 코드 모음)
+    ├── Controller.Tests.cs
+    └── Main.Tests.cs
 ```
 ## 3. 역할
 > 세환 : 서버 통신 설계 및 구현 담당 및 api 구현 보조.
