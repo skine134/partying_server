@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;  
 using System.Threading;  
 using System.Collections.Generic;
-
+using patting_server.controller;
     
 // State object for reading client data asynchronously  
 public class StateObject
@@ -32,6 +32,7 @@ namespace patting_server.lib
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         
+        // -------- Receive Method ---------
         public static void waittingRequest()
         {
             // Establish the local endpoint for the socket.  
@@ -119,20 +120,19 @@ namespace patting_server.lib
                     for(int i = 0;i<content.IndexOf("<EOF>");i++){
                         receiveData = receiveData + content[i];
                     }
-                    string[] data = receiveData.Split("/");
-                    string sendData = string.Empty;
+                    
+                    requestController.CallApi(receiveData);
 
-
-                    // Echo the data back to the client.  
-                    Send(handler, sendData);
                 } else {  
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,  
-                    new AsyncCallback(ReadCallback), state);  
+                                            new AsyncCallback(ReadCallback), state);  
                 }  
             }  
         }
 
+
+        // ---------- Send Method --------------
         private static void Send(Socket handler, String data)
         {
             
