@@ -31,20 +31,12 @@ partting_server
 │   └── Setup.sql
 │   └── 20211120.sql
 │   └── ...
-├── src (메인동작 코드 모음)
-│   ├── Info.cs
-│   ├── controller
-│   │   ├── RequestController.cs
-│   │   ├── move.cs
-│   │   └── ...
-│   └── Main.cs
-└── test (메인 동작의 test 코드 모음)
-    ├── Info.cs
-    ├── controller
-    │   ├── RequestController.cs
-    │   ├── move.cs
-    │   └── ...
-    └── Main.cs
+├── Info.cs
+├── controller
+│   ├── RequestController.cs
+│   ├── move.cs
+│   └── ...
+└── Main.cs
 ```
 ## 3. 역할
 > 세환 : 서버 통신 설계 및 구현 담당 및 api 구현 보조.
