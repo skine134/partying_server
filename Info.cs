@@ -7,7 +7,7 @@ namespace patting_server
         private JObject usersInfo = new JObject();
         private JObject aiInfo = new JObject();
 
-        public Map UsersInfo
+        public JObject UsersInfo
         {
                 get
                 {
@@ -23,7 +23,7 @@ namespace patting_server
                 }
         }
 
-        public Map AiInfo
+        public JObject AiInfo
         {
                 get
                 {
