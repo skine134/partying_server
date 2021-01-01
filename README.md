@@ -55,7 +55,7 @@ partting_server
 
 
 ### 1) 브랜치 관련
-> 브랜치는 develop-{user_name} 으로 이름을 정한다.
+> 브랜치는 dev-{user_name} 으로 이름을 정한다.
 > 만약 추가로 브랜치를 만들 경우 develop-{user_name}-temp 로 이름을 정한다.
 
 ### 2) merge 관련
