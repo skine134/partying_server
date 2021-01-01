@@ -1,46 +1,16 @@
 using System;
 using System.IO;
+using log4net;
 
+// TODO 절대 경로 상대 경로로 바꾸는 방법 찾아야 함.
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "C:\\Users\\maple\\gitproject\\patting_server\\util\\Logger.config", Watch = true)]
 namespace patting_server.util
 {
     public class Logger
     {
-        public static string GetDateTime(){
-            DateTime NowDate = DateTime.Now;
-            return NowDate.ToString("yyyy-MM-dd HH:mm:ss")+":"+NowDate.Millisecond.ToString("000");
-        }
-        
-        public static void Log(string str){
-            string StartUpPath = System.IO.Directory.GetCurrentDirectory();
-            string FilePath= StartUpPath+@"\Logs\Log"+DateTime.Today.ToString("yyyyMMdd")+".log";
-            string DirPath = StartUpPath+@"\Logs";
-            string temp;
-
-            DirectoryInfo di = new DirectoryInfo(DirPath);
-            FileInfo fi = new FileInfo(FilePath);
-            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
-            try{
-                if(di.Exists != true){
-                    Directory.CreateDirectory(DirPath);}
-                
-                if(fi.Exists != true){
-                    using (StreamWriter sw = new StreamWriter(FilePath)){
-                        temp = string.Format("[{0}] : {1}", GetDateTime(), str);
-                        sw.WriteLine(temp);
-                        sw.Close();
-                    }
-                }
-                else{
-                    using (StreamWriter sw = File.AppendText(FilePath)){
-                        temp = string.Format("[{0}] : {1}", GetDateTime(), str);
-                        sw.WriteLine(temp);
-                        sw.Close();
-                    }
-                }
-            }
-            catch(Exception e){
-                Console.WriteLine(e);
-            }
+        private static ILog log = LogManager.GetLogger(typeof(Logger));
+        public static ILog GetLogger(){
+            return log;
         }
     }
 }
