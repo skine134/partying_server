@@ -1,42 +1,44 @@
-// using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 
-// namespace patting_server
-// {
-//     public class Info
-//     {
-//         private JObject usersInfo = new JObject();
-//         private JObject aiInfo = new JObject();
+namespace patting_server
+{
+    public class Info
+    {
+        private JObject usersInfo = new JObject();
+        private JObject aiInfo = new JObject();
 
-//         public Map UsersInfo
-//         {
-//                 get
-//                 {
-//                         return usersInfo;
-//                 }
+        public JObject UsersInfo
+        {
+            get
+            {
+                return usersInfo;
+            }
 
-            
-//                 set
-//                 {
-//                 lock(usersInfo){
-//                         usersInfo = value;
-//                 }
-//                 }
-//         }
 
-//         public Map AiInfo
-//         {
-//                 get
-//                 {
-//                         return aiInfo;
-//                 }
+            set
+            {
+                lock (usersInfo)
+                {
+                    usersInfo = value;
+                }
+            }
+        }
 
-            
-//                 set
-//                 {
-//                 lock(aiInfo){
-//                         aiInfo = value;
-//                 }
-//                 }
-//         }
-//     }
-// }
+        public JObject AiInfo
+        {
+            get
+            {
+                return aiInfo;
+            }
+
+
+            set
+            {
+                lock (aiInfo)
+                {
+                    aiInfo = value;
+                }
+            }
+        }
+    }
+}

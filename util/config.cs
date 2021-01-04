@@ -1,7 +1,9 @@
+
+
+
 namespace patting_server.util
 {
-    public class ErrorHandler
+    public class config
     {
-
-    } 
+    }
 }
