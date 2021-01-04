@@ -9,8 +9,6 @@ namespace patting_server
     {
         static void Main(string[] args)
         {
-            ILog log = Logger.GetLogger();
-            log.Info("hello world");
             Connection.waittingRequest();
         }
     }

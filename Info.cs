@@ -9,34 +9,36 @@ namespace patting_server
 
         public JObject UsersInfo
         {
-                get
-                {
-                        return usersInfo;
-                }
+            get
+            {
+                return usersInfo;
+            }
 
-            
-                set
+
+            set
+            {
+                lock (usersInfo)
                 {
-                lock(usersInfo){
-                        usersInfo = value;
+                    usersInfo = value;
                 }
-                }
+            }
         }
 
         public JObject AiInfo
         {
-                get
-                {
-                        return aiInfo;
-                }
+            get
+            {
+                return aiInfo;
+            }
 
-            
-                set
+
+            set
+            {
+                lock (aiInfo)
                 {
-                lock(aiInfo){
-                        aiInfo = value;
+                    aiInfo = value;
                 }
-                }
+            }
         }
     }
 }
