@@ -1,6 +1,6 @@
 # patting_server
 
-**Unity로 구현한 patting 게임의 서버**
+**Unity로 구현한 partting 게임의 서버**
 
 ## 1. 사양
 
