@@ -121,7 +121,7 @@ namespace patting_server.lib
                         receiveData = receiveData + content[i];
                     }
                     
-                    requestController.CallApi(receiveData);
+                    RequestController.CallApi(receiveData);
 
                 } else {  
                     // Not all data received. Get more.  
@@ -133,7 +133,7 @@ namespace patting_server.lib
 
 
         // ---------- Send Method --------------
-        private static void Send(Socket handler, String data)
+        public static void Send(Socket handler, String data)
         {
             
             Console.WriteLine("Sent {0} bytes to client.", data);  

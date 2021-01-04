@@ -1,7 +1,8 @@
 namespace patting_server.util
 {
-    public class ErrorHandler
+    public class NotFoundException : System.Exception
     {
+        public NotFoundException(string message) : base(message){}
+    }
 
-    } 
 }

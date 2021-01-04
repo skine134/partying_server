@@ -1,13 +1,14 @@
 using System;
+using patting_server.util;
 using Newtonsoft.Json.Linq;
 
 namespace patting_server.controller
 {
-    public class requestController
+    public class RequestController
     {
-        public static void CallApi(string receiveData){
-            JObject json = JObject.Parse(receiveData);
-            string type = json.Value<string>("type");
+        public static void CallApi(string requestData){
+            JObject requestJson = JObject.Parse(requestData);
+            string type = requestJson.Value<string>("type");
             
             switch(type){
 
@@ -15,14 +16,15 @@ namespace patting_server.controller
                     // getItem();
                     break;
                     
-                case "Sync–Packit":
-                    // syncPackit();
+                case "Move":
+                    new Move(requestJson);
                     break;
 
                 // ...
 
-                // default:
-                    // Not found exception
+                default:
+                    new NotFoundException(String.Format("{0} 타입의 api가 존재 하지 않습니다.",type));
+                    break;
             }
         }
     }

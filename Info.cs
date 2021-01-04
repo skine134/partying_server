@@ -4,10 +4,10 @@ namespace patting_server
 {
     public class Info
     {
-        private JObject usersInfo = new JObject();
-        private JObject aiInfo = new JObject();
+        private static JObject usersInfo = new JObject();
+        private static JObject aiInfo = new JObject();
 
-        public JObject UsersInfo
+        public static JObject UsersInfo
         {
             get
             {
@@ -24,7 +24,7 @@ namespace patting_server
             }
         }
 
-        public JObject AiInfo
+        public static JObject AiInfo
         {
             get
             {
