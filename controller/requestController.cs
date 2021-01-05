@@ -11,14 +11,21 @@ namespace patting_server.controller
             string type = requestJson.Value<string>("type");
             
             switch(type){
-
-                case "getItem":
-                    // getItem();
-                    break;
-                    
                 case "Move":
                     new Move(requestJson);
                     break;
+
+                case "GetItem":
+                    new GetItem(requestJson);
+                    break;
+                    
+                case "Death":
+                    new Death(requestJson);
+                    break;
+
+                case "IsDetected":
+                    new IsDetected(requestJson);
+                    break;    
 
                 // ...
 
