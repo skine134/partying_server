@@ -13,23 +13,23 @@ namespace patting_server.controller
             
             switch(type){
                 case "move":
-                    new Move(requestJson);
+                    new Move(requestJson,handler);
                     break;
 
                 case "aiMove":
-                    new AiMove(requestJson);
+                    new AiMove(requestJson,handler);
                     break;
 
                 case "getItem":
-                    new GetItem(requestJson);
+                    new GetItem(requestJson,handler);
                     break;
                     
                 case "death":
-                    new Death(requestJson);
+                    new Death(requestJson,handler);
                     break;
 
                 case "isDetected":
-                    new IsDetected(requestJson);
+                    new IsDetected(requestJson,handler);
                     break;    
                 
                 case "syncPacket":

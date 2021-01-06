@@ -1,8 +1,8 @@
+using System.Net.Sockets;  
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using patting_server;
 using patting_server.lib;
-using System.Net.Sockets;  
 
 namespace patting_server.controller
 {
@@ -10,7 +10,7 @@ namespace patting_server.controller
     {
         public SetAiLocation(JObject requestJson, Socket handler) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.sendAiInfo(requestJson["taggerAiUuid"].ToString(),handler);
+            UserLib.sendAiInfo(requestJson["aiUuid"].ToString(),handler);
         }
     }
 }

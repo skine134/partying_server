@@ -1,3 +1,4 @@
+using System.Net.Sockets;  
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using patting_server;
@@ -7,9 +8,9 @@ namespace patting_server.controller
 {
     public class AiMove : APIController
     {
-        public AiMove(JObject requestJson) : base(requestJson){
+        public AiMove(JObject requestJson,Socket handler) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.saveAiInfo(requestJson["uuid"].ToString(),requestJson);
+            UserLib.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson);
         }
     }
 }

@@ -19,12 +19,12 @@ namespace patting_server.lib
             string vector = userInfo.Value<string>("vector");
             JObject usersInfo = Info.UsersInfo;
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["type"] = type;
                 usersInfo[userUuid]["movement"] = movement;
                 usersInfo[userUuid]["location"] = location;
                 usersInfo[userUuid]["vector"] = vector;
-            }else{
+            }catch{
                 usersInfo.Add(userUuid,userInfo);
             }
 
@@ -37,10 +37,10 @@ namespace patting_server.lib
             string item = userInfo.Value<string>("item");
             JObject usersInfo = Info.UsersInfo;
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["type"] = type;
                 usersInfo[userUuid]["item"] = item;
-            }else{
+            }catch{
                 log.Error(userUuid+"없는 uuid!");
             }
 
@@ -50,9 +50,9 @@ namespace patting_server.lib
         public static void deleteUserInfo(string userUuid){
             JObject usersInfo = Info.UsersInfo;
 
-            if(usersInfo.ContainsKey(userUuid)){
-                usersInfo.Remove(userUuid);
-            }else{
+            try{
+                usersInfo[userUuid]["death"] = true;
+            }catch{
                 log.Error(userUuid+"없는 uuid!");
             }
 
@@ -63,10 +63,10 @@ namespace patting_server.lib
             JObject usersInfo = Info.UsersInfo;
             string taggerAiUuid = userInfo.Value<string>("taggerAiUuid");
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["isDetected"] = true;
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
-            }else{
+            }catch{
                 log.Error(userUuid+"없는 uuid!");
             }
 
@@ -76,44 +76,46 @@ namespace patting_server.lib
         public static void sendUserInfo(string userUuid, Socket handler){
             JObject usersInfo = Info.UsersInfo;
         
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 string usersInfoString = usersInfo.ToString();
+
                 Connection.Send(handler,usersInfoString);
-            }else{
+            }catch{
                 log.Error(userUuid+"없는 uuid!");
             }
 
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveAiInfo(string AiUuid,JObject userInfo){
-            string type = userInfo.Value<string>("type");
-            string location = userInfo.Value<string>("location");
-            string vector = userInfo.Value<string>("vector");
-            string detectedUserUuid = userInfo.Value<string>("detectedUserUuid");
+        public static void saveAiInfo(string aiUuid,JObject aiInfo){
+            string type = aiInfo.Value<string>("type");
+            string location = aiInfo.Value<string>("location");
+            string vector = aiInfo.Value<string>("vector");
+            string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
             
-            JObject usersInfo = Info.UsersInfo;
+            JObject aisInfo = Info.AiInfo;
 
-            if(usersInfo.ContainsKey(AiUuid)){
-                usersInfo[AiUuid]["type"] = type;
-                usersInfo[AiUuid]["location"] = location;
-                usersInfo[AiUuid]["vector"] = vector;
-                usersInfo[AiUuid]["detectedUserUuid"] = detectedUserUuid;
-            }else{
-                usersInfo.Add(AiUuid,userInfo);
+            try{
+                aisInfo[aiUuid]["type"] = type;
+                aisInfo[aiUuid]["location"] = location;
+                aisInfo[aiUuid]["vector"] = vector;
+                aisInfo[aiUuid]["detectedUserUuid"] = detectedUserUuid;
+            }catch{
+                aisInfo.Add(aiUuid,aiInfo);
             }
 
-            Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
+            Info.AiInfo = aisInfo;
+            log.Info(Info.AiInfo.ToString());
         }
-        public static void sendAiInfo(string AiUuid, Socket handler){
-            JObject usersInfo = Info.UsersInfo;
+        public static void sendAiInfo(string aiUuid, Socket handler){
+            JObject aisInfo = Info.AiInfo;
         
-            if(usersInfo.ContainsKey(AiUuid)){
-                string AiInfoString = usersInfo[AiUuid].ToString();
+            try{
+                string aisInfoString = aisInfo.ToString();
 
-                Connection.Send(handler,AiInfoString);
-            }else{
-                log.Error(AiUuid+"없는 Ai!");
+                Connection.Send(handler,aisInfoString);
+            }catch{
+                log.Error(aiUuid+"없는 Ai!");
+
             }
 
             log.Info(Info.UsersInfo.ToString());
