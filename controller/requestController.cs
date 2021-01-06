@@ -1,31 +1,44 @@
 using System;
 using patting_server.util;
 using Newtonsoft.Json.Linq;
+using System.Net.Sockets;  
 
 namespace patting_server.controller
 {
     public class RequestController
     {
-        public static void CallApi(string requestData){
+        public static void CallApi(string requestData, Socket handler){
             JObject requestJson = JObject.Parse(requestData);
             string type = requestJson.Value<string>("type");
             
             switch(type){
-                case "Move":
+                case "move":
                     new Move(requestJson);
                     break;
 
-                case "GetItem":
+                case "aiMove":
+                    new AiMove(requestJson);
+                    break;
+
+                case "getItem":
                     new GetItem(requestJson);
                     break;
                     
-                case "Death":
+                case "death":
                     new Death(requestJson);
                     break;
 
-                case "IsDetected":
+                case "isDetected":
                     new IsDetected(requestJson);
                     break;    
+                
+                case "syncPacket":
+                    new SyncPacket(requestJson, handler);
+                    break;
+
+                case "setAiLocation":
+                    new SetAiLocation(requestJson, handler);
+                    break;
 
                 // ...
 

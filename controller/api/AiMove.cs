@@ -5,11 +5,11 @@ using patting_server.lib;
 
 namespace patting_server.controller
 {
-    public class IsDetected : APIController
+    public class AiMove : APIController
     {
-        public IsDetected(JObject requestJson) : base(requestJson){
+        public AiMove(JObject requestJson) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.saveDetectedUserInfo(requestJson["uuid"].ToString(),requestJson);
+            UserLib.saveAiInfo(requestJson["uuid"].ToString(),requestJson);
         }
     }
 }

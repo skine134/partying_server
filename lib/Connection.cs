@@ -121,12 +121,12 @@ namespace patting_server.lib
                         receiveData = receiveData + content[i];
                     }
                     
-                    RequestController.CallApi(receiveData);
+                    RequestController.CallApi(receiveData,handler);
 
                 } else {  
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,  
-                                            new AsyncCallback(ReadCallback), state);  
+                    new AsyncCallback(ReadCallback), state);  
                 }  
             }  
         }
