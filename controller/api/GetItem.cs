@@ -10,7 +10,7 @@ namespace patting_server.controller
     {
         public GetItem(JObject requestJson,Socket handler) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.saveItemInfo(requestJson["uuid"].ToString(),requestJson);
+            UserLib.saveItemInfo(requestJson["uuid"].ToString(),requestJson,handler);
         }
     }
 }

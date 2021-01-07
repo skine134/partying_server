@@ -10,7 +10,7 @@ namespace patting_server.controller
     {
         public AiMove(JObject requestJson,Socket handler) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson);
+            UserLib.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson,handler);
         }
     }
 }

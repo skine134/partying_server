@@ -10,7 +10,7 @@ namespace patting_server.controller
     {
         public Death(JObject requestJson,Socket handler) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.deleteUserInfo(requestJson["uuid"].ToString());
+            UserLib.deleteUserInfo(requestJson["uuid"].ToString(),handler);
         }
     }
 }

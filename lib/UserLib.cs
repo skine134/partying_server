@@ -10,56 +10,53 @@ namespace patting_server.lib
     public class UserLib
     {
         public UserLib(){}
-        static ILog log = Logger.GetLogger();
+        private static ILog log = Logger.GetLogger();
 
-        public static void saveUserInfo(string userUuid,JObject userInfo){
-            string type = userInfo.Value<string>("type");
+        public static void saveUserInfo(string userUuid,JObject userInfo, Socket handler){
             string movement = userInfo.Value<string>("movement");
             string location = userInfo.Value<string>("location");
             string vector = userInfo.Value<string>("vector");
             JObject usersInfo = Info.UsersInfo;
 
-            try{
-                usersInfo[userUuid]["type"] = type;
+            if(usersInfo.ContainsKey(userUuid)){
                 usersInfo[userUuid]["movement"] = movement;
                 usersInfo[userUuid]["location"] = location;
                 usersInfo[userUuid]["vector"] = vector;
-            }catch{
+            }else{
                 usersInfo.Add(userUuid,userInfo);
             }
-
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveItemInfo(string userUuid,JObject userInfo){
-            string type = userInfo.Value<string>("type");
+        public static void saveItemInfo(string userUuid,JObject userInfo, Socket handler){
             string item = userInfo.Value<string>("item");
             JObject usersInfo = Info.UsersInfo;
 
             try{
-                usersInfo[userUuid]["type"] = type;
                 usersInfo[userUuid]["item"] = item;
             }catch{
-                log.Error(userUuid+"없는 uuid!");
+                log.Error("Status Code: 000");
+                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void deleteUserInfo(string userUuid){
+        public static void deleteUserInfo(string userUuid, Socket handler){
             JObject usersInfo = Info.UsersInfo;
 
             try{
                 usersInfo[userUuid]["death"] = true;
             }catch{
-                log.Error(userUuid+"없는 uuid!");
+                log.Error("Status Code: 000");
+                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveDetectedUserInfo(string userUuid,JObject userInfo){
+        public static void saveDetectedUserInfo(string userUuid,JObject userInfo, Socket handler){
             JObject usersInfo = Info.UsersInfo;
             string taggerAiUuid = userInfo.Value<string>("taggerAiUuid");
 
@@ -67,7 +64,8 @@ namespace patting_server.lib
                 usersInfo[userUuid]["isDetected"] = true;
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
             }catch{
-                log.Error(userUuid+"없는 uuid!");
+                log.Error("Status Code: 000");
+                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
@@ -78,31 +76,28 @@ namespace patting_server.lib
         
             try{
                 string usersInfoString = usersInfo.ToString();
-
                 Connection.Send(handler,usersInfoString);
             }catch{
-                log.Error(userUuid+"없는 uuid!");
+                log.Error("Status Code: 000");
+                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveAiInfo(string aiUuid,JObject aiInfo){
-            string type = aiInfo.Value<string>("type");
+        public static void saveAiInfo(string aiUuid,JObject aiInfo, Socket handler){
             string location = aiInfo.Value<string>("location");
             string vector = aiInfo.Value<string>("vector");
             string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
             
             JObject aisInfo = Info.AiInfo;
 
-            try{
-                aisInfo[aiUuid]["type"] = type;
+            if(aisInfo.ContainsKey(aiUuid)){
                 aisInfo[aiUuid]["location"] = location;
                 aisInfo[aiUuid]["vector"] = vector;
                 aisInfo[aiUuid]["detectedUserUuid"] = detectedUserUuid;
-            }catch{
+            }else{
                 aisInfo.Add(aiUuid,aiInfo);
             }
-
             Info.AiInfo = aisInfo;
             log.Info(Info.AiInfo.ToString());
         }
@@ -111,17 +106,13 @@ namespace patting_server.lib
         
             try{
                 string aisInfoString = aisInfo.ToString();
-
                 Connection.Send(handler,aisInfoString);
             }catch{
-                log.Error(aiUuid+"없는 Ai!");
-
+                log.Error("Status Code: 000");
+                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             log.Info(Info.UsersInfo.ToString());
         }
-        
-        
-        
     }
 }
