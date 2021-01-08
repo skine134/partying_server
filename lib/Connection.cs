@@ -121,12 +121,13 @@ namespace patting_server.lib
                         receiveData = receiveData + content[i];
                     }
                     
-                    RequestController.CallApi(receiveData);
+                    // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
+                    RequestController.CallApi(receiveData,handler);
 
                 } else {  
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,  
-                                            new AsyncCallback(ReadCallback), state);  
+                    new AsyncCallback(ReadCallback), state);  
                 }  
             }  
         }
