@@ -12,36 +12,51 @@ namespace patting_server.controller
         private static ILog log = Logger.GetLogger();
 
         public static void CallApi(string requestData, Socket handler){
-            JObject requestJson = JObject.Parse(requestData);
+            
+            //try(json인지 검사)
+            JObject requestJson = new JObject();
+
+            try{
+                requestJson = JObject.Parse(requestData);
+            }catch(Exception e){
+                log.Error("Status Code: 005 "+e);
+                Connection.Send(handler,"Error Code: 005 "+requestData+" Json형식이 아닙니다.");
+            }
             string type = requestJson.Value<string>("type");
-            // if(RegularExpression.checkRegex(type,requestData,handler)){
                 switch(type){
                     case "move":
-                        new Move(requestJson,handler);
+                        if(RegularExpression.checkRegexMove(requestJson,handler))
+                        {new Move(requestJson,handler);}
                         break;
 
                     case "aiMove":
-                        new AiMove(requestJson,handler);
+                        if(RegularExpression.checkRegexAiMove(requestJson,handler))
+                        {new AiMove(requestJson,handler);}
                         break;
 
                     case "getItem":
-                        new GetItem(requestJson,handler);
+                        if(RegularExpression.checkRegexGetItem(requestJson,handler))
+                        {new GetItem(requestJson,handler);}
                         break;
                         
                     case "death":
-                        new Death(requestJson,handler);
+                        if(RegularExpression.checkRegexUuid(requestJson,handler))
+                        {new Death(requestJson,handler);}
                         break;
 
                     case "isDetected":
-                        new IsDetected(requestJson,handler);
+                        if(RegularExpression.checkRegexUuid(requestJson,handler))
+                        {new IsDetected(requestJson,handler);}
                         break;    
                     
                     case "syncPacket":
-                        new SyncPacket(requestJson, handler);
+                        if(RegularExpression.checkRegexUuid(requestJson,handler))
+                        {new SyncPacket(requestJson, handler);}
                         break;
 
                     case "setAiLocation":
-                        new SetAiLocation(requestJson, handler);
+                        if(RegularExpression.checkRegexSetAiLocation(requestJson,handler))
+                        {new SetAiLocation(requestJson, handler);}
                         break;
 
                     // ...
@@ -52,7 +67,7 @@ namespace patting_server.controller
                         // new NotFoundException(String.Format("{0} 타입의 api가 존재하지 않습니다.",type));
                         break;
                 }
-            // }
+            
         }
     }
 }

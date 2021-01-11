@@ -12,7 +12,7 @@ namespace patting_server.lib
     {
         public UserLib(){}
         private static ILog log = Logger.GetLogger();
-
+        
         public static void saveUserInfo(string userUuid,JObject userInfo, Socket handler){
             string movement = userInfo.Value<string>("movement");
             string location = userInfo.Value<string>("location");
@@ -34,10 +34,10 @@ namespace patting_server.lib
             string item = userInfo.Value<string>("item");
             JObject usersInfo = Info.UsersInfo;
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["item"] = item;
-            }else{
-                log.Error("Status Code: 003");
+            }catch(Exception e){
+                log.Error("Status Code: 003 "+e);
                 Connection.Send(handler,"Error Code: 003 "+userUuid+" 유저가 존재하지 않습니다.");
             }
 
@@ -47,10 +47,10 @@ namespace patting_server.lib
         public static void deleteUserInfo(string userUuid, Socket handler){
             JObject usersInfo = Info.UsersInfo;
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["death"] = true;
-            }else{
-                log.Error("Status Code: 003");
+            }catch(Exception e){
+                log.Error("Status Code: 003 "+e);
                 Connection.Send(handler,"Error Code: 003 "+userUuid+" 유저가 존재하지 않습니다.");
             }
 
@@ -61,11 +61,11 @@ namespace patting_server.lib
             JObject usersInfo = Info.UsersInfo;
             string taggerAiUuid = userInfo.Value<string>("taggerAiUuid");
 
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 usersInfo[userUuid]["isDetected"] = true;
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
-            }else{
-                log.Error("Status Code: 003");
+            }catch(Exception e){
+                log.Error("Status Code: 003 "+e);
                 Connection.Send(handler,"Error Code: 003 "+userUuid+" 유저가 존재하지 않습니다.");
             }
 
@@ -75,11 +75,11 @@ namespace patting_server.lib
         public static void sendUserInfo(string userUuid, Socket handler){
             JObject usersInfo = Info.UsersInfo;
         
-            if(usersInfo.ContainsKey(userUuid)){
+            try{
                 string usersInfoString = usersInfo.ToString();
                 Connection.Send(handler,usersInfoString);
-            }else{
-                log.Error("Status Code: 003");
+            }catch(Exception e){
+                log.Error("Status Code: 003 "+e);
                 Connection.Send(handler,"Error Code: 003 "+userUuid+" 유저가 존재하지 않습니다.");
             }
 
@@ -105,11 +105,11 @@ namespace patting_server.lib
         public static void sendAiInfo(string aiUuid, Socket handler){
             JObject aisInfo = Info.AiInfo;
         
-            if(aisInfo.ContainsKey(aiUuid)){
+            try{
                 string aisInfoString = aisInfo.ToString();
                 Connection.Send(handler,aisInfoString);
-            }else{
-                log.Error("Status Code: 004");
+            }catch(Exception e){
+                log.Error("Status Code: 004 "+e);
                 Connection.Send(handler,"Error Code: 004 "+aiUuid+" ai가 존재하지 않습니다.");
             }
 
