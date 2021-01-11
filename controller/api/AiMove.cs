@@ -8,9 +8,9 @@ namespace patting_server.controller
 {
     public class AiMove : APIController
     {
-        public AiMove(JObject requestJson,Socket handler) : base(requestJson){
+        public AiMove(JObject requestJson) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson,handler);
+            UserLib.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson);
         }
     }
 }

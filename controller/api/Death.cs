@@ -8,9 +8,9 @@ namespace patting_server.controller
 {
     public class Death : APIController
     {
-        public Death(JObject requestJson,Socket handler) : base(requestJson){
+        public Death(JObject requestJson) : base(requestJson){
             // moveValidationCheck(requestJson);
-            UserLib.deleteUserInfo(requestJson["uuid"].ToString(),handler);
+            UserLib.deleteUserInfo(requestJson["uuid"].ToString());
         }
     }
 }

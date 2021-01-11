@@ -12,7 +12,7 @@ namespace patting_server.lib
         public UserLib(){}
         private static ILog log = Logger.GetLogger();
 
-        public static void saveUserInfo(string userUuid,JObject userInfo, Socket handler){
+        public static void saveUserInfo(string userUuid,JObject userInfo){
             string movement = userInfo.Value<string>("movement");
             string location = userInfo.Value<string>("location");
             string vector = userInfo.Value<string>("vector");
@@ -29,7 +29,7 @@ namespace patting_server.lib
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveItemInfo(string userUuid,JObject userInfo, Socket handler){
+        public static void saveItemInfo(string userUuid,JObject userInfo){
             string item = userInfo.Value<string>("item");
             JObject usersInfo = Info.UsersInfo;
 
@@ -37,26 +37,26 @@ namespace patting_server.lib
                 usersInfo[userUuid]["item"] = item;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void deleteUserInfo(string userUuid, Socket handler){
+        public static void deleteUserInfo(string userUuid){
             JObject usersInfo = Info.UsersInfo;
 
             try{
                 usersInfo[userUuid]["death"] = true;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveDetectedUserInfo(string userUuid,JObject userInfo, Socket handler){
+        public static void saveDetectedUserInfo(string userUuid,JObject userInfo){
             JObject usersInfo = Info.UsersInfo;
             string taggerAiUuid = userInfo.Value<string>("taggerAiUuid");
 
@@ -65,26 +65,26 @@ namespace patting_server.lib
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void sendUserInfo(string userUuid, Socket handler){
+        public static void sendUserInfo(string userUuid){
             JObject usersInfo = Info.UsersInfo;
         
             try{
                 string usersInfoString = usersInfo.ToString();
-                Connection.Send(handler,usersInfoString);
+                Connection.Send(usersInfoString);
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void saveAiInfo(string aiUuid,JObject aiInfo, Socket handler){
+        public static void saveAiInfo(string aiUuid,JObject aiInfo){
             string location = aiInfo.Value<string>("location");
             string vector = aiInfo.Value<string>("vector");
             string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
@@ -101,15 +101,15 @@ namespace patting_server.lib
             Info.AiInfo = aisInfo;
             log.Info(Info.AiInfo.ToString());
         }
-        public static void sendAiInfo(string aiUuid, Socket handler){
+        public static void sendAiInfo(string aiUuid){
             JObject aisInfo = Info.AiInfo;
         
             try{
                 string aisInfoString = aisInfo.ToString();
-                Connection.Send(handler,aisInfoString);
+                Connection.Send(aisInfoString);
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             log.Info(Info.UsersInfo.ToString());
