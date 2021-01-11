@@ -10,7 +10,6 @@ namespace patting_server.controller
     public class Move : APIController
     {
         public Move(JObject requestJson,Socket handler) : base(requestJson){
-            // moveValidationCheck(requestJson);
             UserLib.saveUserInfo(requestJson["uuid"].ToString(),requestJson,handler);
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Net;  
 using System.Net.Sockets;  
 using Newtonsoft.Json.Linq;
 using patting_server.util;
@@ -11,9 +12,9 @@ namespace patting_server.controller
     {   
         private static ILog log = Logger.GetLogger();
 
-        public static void CallApi(string requestData, Socket handler){
+        public static void CallApi(string requestData, Socket handler, IPEndPoint ip_point){
             
-            //try(json인지 검사)
+            log.Info("requestJson.ip : "+ip_point);
             JObject requestJson = new JObject();
 
             try{

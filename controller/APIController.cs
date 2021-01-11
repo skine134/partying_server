@@ -9,7 +9,7 @@ namespace patting_server.controller
     {
         ILog log = Logger.GetLogger();
         public APIController(JObject requestJson){
-            log.Info("requestJson.ip . . .");
+            // log.Info("requestJson.ip . . .");
         }
     }
 }

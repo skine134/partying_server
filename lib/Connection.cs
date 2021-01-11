@@ -83,10 +83,10 @@ namespace patting_server.lib
             // Get the socket that handles the client request.  
             Socket listener = (Socket) ar.AsyncState;  
             Socket handler = listener.EndAccept(ar);  
-
+            
             // Create the state object.  
             StateObject state = new StateObject();  
-            state.workSocket = handler;  
+            state.workSocket = handler;
             handler.BeginReceive( state.buffer, 0, StateObject.BufferSize, 0,  
                 new AsyncCallback(ReadCallback), state);  
         }
@@ -99,7 +99,9 @@ namespace patting_server.lib
             // from the asynchronous state object.  
             StateObject state = (StateObject) ar.AsyncState;  
             Socket handler = state.workSocket;  
-
+            IPEndPoint ip_point = (IPEndPoint)handler.RemoteEndPoint;  
+            
+            Console.WriteLine(ip_point);
             // Read data from the client socket.
             int bytesRead = handler.EndReceive(ar);  
 
@@ -122,7 +124,7 @@ namespace patting_server.lib
                     }
                     
                     // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
-                    RequestController.CallApi(receiveData,handler);
+                    RequestController.CallApi(receiveData,handler,ip_point);
 
                 } else {  
                     // Not all data received. Get more.  
