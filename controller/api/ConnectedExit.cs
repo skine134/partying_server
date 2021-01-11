@@ -5,9 +5,9 @@ using System.Net.Sockets;
 
 namespace patting_server.controller
 {
-    public class ConnecttedExit : APIController
+    public class ConnectedExit : APIController
     {
-        public ConnecttedExit(JObject requestJson, Socket handler) : base(requestJson)
+        public ConnectedExit(JObject requestJson, Socket handler) : base(requestJson)
         {
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();

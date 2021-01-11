@@ -7,9 +7,9 @@ using patting_server.lib;
 
 namespace patting_server.controller
 {
-    public class Connect : APIController
+    public class Connected : APIController
     {
-        public Connect(JObject requestJson, Socket handler) : base(requestJson)
+        public Connected(JObject requestJson, Socket handler) : base(requestJson)
         {
 
                 foreach(KeyValuePair<string,Socket> item in Info.MultiUserHandler){

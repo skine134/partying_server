@@ -14,12 +14,12 @@ namespace patting_server.controller
 
             switch (type)
             {
-                case "connectted":
-                    new Connectted(requestJson, handler);
+                case "connected":
+                    new Connected(requestJson, handler);
                     break;
 
-                case "connecttedExit":
-                    new ConnecttedExit(requestJson, handler);
+                case "connectedExit":
+                    new ConnectedExit(requestJson, handler);
                     break;
 
                 case "move":
