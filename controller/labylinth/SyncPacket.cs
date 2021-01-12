@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Sockets;  
 using partting_server.lib;
 using Newtonsoft.Json.Linq;
@@ -9,7 +10,7 @@ namespace partting_server.controller
     {
         public SyncPacket(JObject requestJson) : base(requestJson){
             string usersInfoString = UserService.getUserInfo();
-            Connection.Send(usersInfoString);
+            Connection.Send(usersInfoString,Info.MultiUserHandler.Keys.ToList().ToArray());
         }
     }
 }
