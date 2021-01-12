@@ -56,7 +56,7 @@ namespace patting_server.lib
 
                 default:
                     log.Error("Status Code: 001");
-                    Connection.Send(handler,"Error Code: 001 "+type+" 타입의 api가 존재하지 않습니다.");
+                    Connection.Send("Error Code: 001 "+type+" 타입의 api가 존재하지 않습니다.");
                     // new NotFoundException(String.Format("{0} 타입의 api가 존재하지 않습니다.",type));
                     break;
             }
@@ -68,7 +68,7 @@ namespace patting_server.lib
             }
             else{
                 log.Error("Status Code: 002");
-                Connection.Send(handler,"Error Code: 002 정규식이 맞지 않습니다.");
+                Connection.Send("Error Code: 002 정규식이 맞지 않습니다.");
                 return false;
             }
         }
