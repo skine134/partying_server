@@ -6,6 +6,7 @@ using System.Net.Sockets;
 namespace partting_server.controller
 {
     public class RequestController
+
     {
         public static void CallApi(string requestData, Socket handler)
         {

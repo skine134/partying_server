@@ -13,6 +13,10 @@ namespace partting_server.util
         {
             Connection.Send(Common.getErrorFormat(errorCode));
         }
+        public static void InvalidException(string errorCode)
+        {
+            Connection.Send(Common.getErrorFormat(errorCode));
+        }
     }
 
 }

@@ -112,7 +112,6 @@ namespace partting_server.lib
             // from the asynchronous state object.  
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.workSocket;
-
             // Read data from the client socket.
             int bytesRead = handler.EndReceive(ar);
 
