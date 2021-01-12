@@ -46,8 +46,8 @@ namespace patting_server.controller
                     new SyncPacket(requestJson);
                     break;
 
-                case "setAiLocation":
-                    new SetAiLocation(requestJson);
+                case "syncAiLocation":
+                    new SyncAiLocation(requestJson);
                     break;
 
                 // ...

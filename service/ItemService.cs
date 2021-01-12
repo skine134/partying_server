@@ -1,9 +1,7 @@
+using System;
 using Newtonsoft.Json.Linq;
-using patting_server.lib;
-using patting_server.service;
-using patting_server.util;
 using log4net;
-using System.Net.Sockets;  
+using patting_server.util;
 
 
 namespace patting_server.service
@@ -18,9 +16,9 @@ namespace patting_server.service
 
             try{
                 usersInfo[userUuid]["item"] = item;
-            }catch{
-                log.Error("Status Code: 000");
-                Connection.Send("Error Code: 001 해당 아이템이 존재하지 않습니다.");
+            }catch(Exception e){
+                log.Error(e.ToString());
+                ErrorHandler.NotFoundException("40403");
             }
 
             Info.UsersInfo = usersInfo;

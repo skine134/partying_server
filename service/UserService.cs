@@ -1,9 +1,8 @@
+using System;
 using Newtonsoft.Json.Linq;
 using patting_server.lib;
-using patting_server.service;
 using patting_server.util;
 using log4net;
-using System.Net.Sockets;  
 
 
 
@@ -35,8 +34,8 @@ namespace patting_server.service
 
             try{
                 usersInfo[userUuid]["death"] = true;
-            }catch{
-                log.Error("Status Code: 000");
+            }catch(Exception e){
+                log.Error(e.ToString());
                 ErrorHandler.NotFoundException("40402");
             }
 
@@ -50,26 +49,21 @@ namespace patting_server.service
             try{
                 usersInfo[userUuid]["isDetected"] = true;
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
-            }catch{
-                log.Error("Status Code: 000");
+            }catch(Exception e){
+                log.Error(e.ToString());
                 ErrorHandler.NotFoundException("40402");
             }
 
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void sendUserInfo(string userUuid){
+        public static string getUserInfo(){
             JObject usersInfo = Info.UsersInfo;
-        
-            try{
-                string usersInfoString = usersInfo.ToString();
-                Connection.Send(usersInfoString);
-            }catch{
-                log.Error("Status Code: 000");
-                ErrorHandler.NotFoundException("40402");
-            }
+            string usersInfoString = "";
+            usersInfoString = usersInfo.ToString();
 
             log.Info(Info.UsersInfo.ToString());
+            return usersInfoString;
         }
     }
 }
