@@ -3,7 +3,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using log4net;
 using partting_server.controller;
+using partting_server.util;
 
 // State object for reading client data asynchronously
 public class StateObject
@@ -30,6 +32,7 @@ namespace partting_server.lib
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         private static Socket handler;
+        private static ILog log = Logger.GetLogger();
 
         // -------- Receive Method ---------
         public static void waittingRequest()
@@ -70,6 +73,7 @@ namespace partting_server.lib
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                Send(Common.getErrorFormat("50000"));
             }
 
             Console.WriteLine("\nPress ENTER to continue...");
@@ -79,6 +83,8 @@ namespace partting_server.lib
 
         public static void AcceptCallback(IAsyncResult ar)
         {
+            try{
+                
             // Signal the main thread to continue.  
             allDone.Set();
             Socket listener = (Socket)ar.AsyncState;
@@ -92,12 +98,16 @@ namespace partting_server.lib
             state.workSocket = handler;
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
+            }catch(Exception e){
+                log.Error(e.ToString());
+                Send(Common.getErrorFormat("50000"));
+            }
         }
 
         public static void ReadCallback(IAsyncResult ar)
         {
             String content = String.Empty;
-
+            try{
             // Retrieve the state object and the handler socket  
             // from the asynchronous state object.  
             StateObject state = (StateObject)ar.AsyncState;
@@ -138,6 +148,10 @@ namespace partting_server.lib
                     new AsyncCallback(ReadCallback), state);
                 }
             }
+            }catch(Exception e){
+                log.Error(e.ToString());
+                Send(Common.getErrorFormat("50000"));
+            }
         }
 
 
@@ -145,16 +159,21 @@ namespace partting_server.lib
         public static void Send(String data)
         {
 
+            try{
             Console.WriteLine("Sent {0} bytes to client.", data);
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.UTF8.GetBytes(data);
             // Begin sending the data to the remote device.
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), handler);
+            }catch(Exception e){
+                log.Error(e.ToString());
+                Send(Common.getErrorFormat("50000"));
+            }
         }
         public static void Send(String sendData, String[] userList)
         {
-
+            try{
             string data = sendData+"<EOF>";
             Console.WriteLine("Sent {0} bytes to client.", data);
             // Convert the string data to byte data using ASCII encoding.  
@@ -165,6 +184,10 @@ namespace partting_server.lib
                 Socket handler = Info.MultiUserHandler[userUuid];
                 handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), handler);
+            }
+            }catch(Exception e){
+                log.Error(e.ToString());
+                Send(Common.getErrorFormat("50000"));
             }
         }
 
@@ -178,10 +201,10 @@ namespace partting_server.lib
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
+            
+            }catch(Exception e){
+                log.Error(e.ToString());
+                Send(Common.getErrorFormat("50000"));
             }
         }
     }
