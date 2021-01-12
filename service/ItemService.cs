@@ -20,7 +20,7 @@ namespace patting_server.service
                 usersInfo[userUuid]["item"] = item;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 아이템이 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 아이템이 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;

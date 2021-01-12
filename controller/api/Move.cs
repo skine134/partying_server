@@ -8,7 +8,7 @@ namespace patting_server.controller
     public class Move : APIController
     {
         public Move(JObject requestJson,Socket handler) : base(requestJson){
-            UserService.saveUserInfo(requestJson["uuid"].ToString(),requestJson,handler);
+            UserService.saveUserInfo(requestJson["uuid"].ToString(),requestJson);
         }
     }
 }

@@ -34,10 +34,10 @@ namespace patting_server.service
         
             try{
                 string aisInfoString = aisInfo.ToString();
-                Connection.Send(handler,aisInfoString);
+                Connection.Send(aisInfoString);
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 AI가 존재하지 않습니다.");
+                Connection.Send("Error Code: 001 해당 AI가 존재하지 않습니다.");
             }
 
             log.Info(Info.UsersInfo.ToString());

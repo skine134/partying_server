@@ -7,7 +7,7 @@ namespace patting_server.controller
     public class IsDetected : APIController
     {
         public IsDetected(JObject requestJson,Socket handler) : base(requestJson){
-            UserService.saveDetectedUserInfo(requestJson["uuid"].ToString(),requestJson,handler);
+            UserService.saveDetectedUserInfo(requestJson["uuid"].ToString(),requestJson);
         }
     }
 }
