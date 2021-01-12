@@ -80,7 +80,7 @@ namespace patting_server.lib
 
         public static void AcceptCallback(IAsyncResult ar)
         {
-            // Signal the main thread to continue.  
+            // Signal the main thread to continue.
             allDone.Set();
             Socket listener = (Socket)ar.AsyncState;
             handler = listener.EndAccept(ar);
@@ -103,7 +103,6 @@ namespace patting_server.lib
             // from the asynchronous state object.  
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.workSocket;
-
             // Read data from the client socket.
             int bytesRead = handler.EndReceive(ar);
 
