@@ -35,7 +35,7 @@ namespace partting_server.service
             try{
                 usersInfo[userUuid]["death"] = true;
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 ErrorHandler.NotFoundException("40402");
             }
 
@@ -50,7 +50,7 @@ namespace partting_server.service
                 usersInfo[userUuid]["isDetected"] = true;
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 ErrorHandler.NotFoundException("40402");
             }
 

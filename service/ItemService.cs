@@ -17,7 +17,7 @@ namespace partting_server.service
             try{
                 usersInfo[userUuid]["item"] = item;
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 ErrorHandler.NotFoundException("40403");
             }
 

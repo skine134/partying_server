@@ -72,7 +72,7 @@ namespace partting_server.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
 
@@ -99,7 +99,7 @@ namespace partting_server.lib
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
         }
@@ -148,7 +148,7 @@ namespace partting_server.lib
                 }
             }
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
         }
@@ -166,7 +166,7 @@ namespace partting_server.lib
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), handler);
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
         }
@@ -185,7 +185,7 @@ namespace partting_server.lib
                     new AsyncCallback(SendCallback), handler);
             }
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
         }
@@ -202,7 +202,7 @@ namespace partting_server.lib
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
             
             }catch(Exception e){
-                log.Error(e.ToString());
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
         }
