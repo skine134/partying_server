@@ -12,7 +12,6 @@ namespace partting_server.controller
         {
             JObject requestJson = JObject.Parse(requestData);
             string type = requestJson.Value<string>("type");
-
             switch (type)
             {
                 case "connected":

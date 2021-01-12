@@ -1,7 +1,9 @@
+using System.Net.Mime;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using partting_server.controller;
@@ -30,7 +32,12 @@ namespace partting_server.lib
     {
 
         // Thread signal.  
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public static ManualResetEvent allDone = 
+            new ManualResetEvent(false);
+        private static ManualResetEvent sendDone =
+            new ManualResetEvent(false);
+        private static ManualResetEvent receiveDone =
+            new ManualResetEvent(false);
         private static Socket handler;
         private static ILog log = Logger.GetLogger();
 
@@ -83,110 +90,140 @@ namespace partting_server.lib
 
         public static void AcceptCallback(IAsyncResult ar)
         {
-            try{
-                
-            // Signal the main thread to continue.  
-            allDone.Set();
-            Socket listener = (Socket)ar.AsyncState;
-            handler = listener.EndAccept(ar);
-            if (!Info.MultiUserHandler.ContainsValue(handler))
+            try
             {
-                Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
+
+                // Signal the main thread to continue.  
+                allDone.Set();
+                Socket listener = (Socket)ar.AsyncState;
+                handler = listener.EndAccept(ar);
+                Console.WriteLine(Common.FindHandler(handler));
+                // Create the state object.  
+                StateObject state = new StateObject();
+                state.workSocket = handler;
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
             }
-            // Create the state object.  
-            StateObject state = new StateObject();
-            state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
-            }catch(Exception e){
+            catch (Exception e)
+            {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
+                return;
             }
         }
 
         public static void ReadCallback(IAsyncResult ar)
         {
             String content = String.Empty;
-            try{
-            // Retrieve the state object and the handler socket  
-            // from the asynchronous state object.  
-            StateObject state = (StateObject)ar.AsyncState;
-            Socket handler = state.workSocket;
-            // Read data from the client socket.
-            int bytesRead = handler.EndReceive(ar);
-
-            if (bytesRead > 0)
+            try
             {
-                // There  might be more data, so store the data received so far.  
-                state.sb.Append(Encoding.UTF8.GetString(
-                    state.buffer, 0, bytesRead));
-
-                // Check for end-of-file tag. If it is not there, read
-                // more data.  
-                content = state.sb.ToString();
-                if (content.IndexOf("<EOF>") > -1)
-                {
-                    // All the data has been read from the
-                    // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
-                        content.Length, content);
-                    string receiveData = "";
-                    for (int i = 0; i < content.IndexOf("<EOF>"); i++)
-                    {
-                        receiveData = receiveData + content[i];
-                    }
-
-                    // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
-                    RequestController.CallApi(receiveData, handler);
-
+                // Retrieve the state object and the handler socket  
+                // from the asynchronous state object.  
+                StateObject state = (StateObject)ar.AsyncState;
+                Socket handler = state.workSocket;
+                int bytesRead = 0;
+                try{
+                // Read data from the client socket.
+                bytesRead = handler.EndReceive(ar);
                 }
-                else
+                catch(SocketException se){
+                    log.Error(se.Message);
+                    new ConnectedExit(null,handler);
+                    return;
+                }
+                if (bytesRead > 0)
                 {
-                    // Not all data received. Get more.  
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
+                    
+                    receiveDone.Set();
+                    // There  might be more data, so store the data received so far.  
+                    state.sb.Append(Encoding.UTF8.GetString(
+                        state.buffer, 0, bytesRead));
+
+                    // Check for end-of-file tag. If it is not there, read
+                    // more data.  
+                    content = state.sb.ToString();
+                    if (content.IndexOf("<EOF>") > -1)
+                    {
+                        // All the data has been read from the
+                        // client. Display it on the console.  
+                        log.Info(String.Format("req {0}", content));
+                        string receiveData = "";
+                        for (int i = 0; i < content.IndexOf("<EOF>"); i++)
+                        {
+                            receiveData = receiveData + content[i];
+                        }
+                        // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
+                        RequestController.CallApi(receiveData, handler);
+
+                    }
+                }
+                state.sb.Clear();
+                try{
+                // data received. Get more.  
+                state.workSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReadCallback), state);
+                }catch(SocketException se){
+                    log.Error(se.Message);
+                    new ConnectedExit(null,handler);
+                    return;
                 }
             }
-            }catch(Exception e){
+            catch (Exception e)
+            {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
+                return;
             }
         }
 
 
         // ---------- Send Method --------------
-        public static void Send(String data)
+        public static void Send(String sendData)
         {
 
-            try{
-            Console.WriteLine("Sent {0} bytes to client.", data);
-            // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.UTF8.GetBytes(data);
-            // Begin sending the data to the remote device.
-            handler.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), handler);
-            }catch(Exception e){
+            try
+            {
+                string data = sendData + "<EOF>";
+                log.Info(String.Format("res {0}", data));
+                // Convert the string data to byte data using ASCII encoding.  
+                byte[] byteData = Encoding.UTF8.GetBytes(data);
+                // Begin sending the data to the remote device.
+                handler.BeginSend(byteData, 0, byteData.Length, 0,
+                    new AsyncCallback(SendCallback), handler);
+            }
+            catch (SocketException se){
+                log.Error(se.Message);
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            }
+            catch (Exception e)
+            {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                new ConnectedExit(null,handler);
+                return;
             }
         }
         public static void Send(String sendData, String[] userList)
         {
-            try{
-            string data = sendData+"<EOF>";
-            Console.WriteLine("Sent {0} bytes to client.", data);
-            // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.UTF8.GetBytes(data);
-            // Begin sending the data to the remote device.  
-            foreach (string userUuid in userList)
+            try
             {
-                Socket handler = Info.MultiUserHandler[userUuid];
-                handler.BeginSend(byteData, 0, byteData.Length, 0,
-                    new AsyncCallback(SendCallback), handler);
+                string data = sendData + "<EOF>";
+                log.Info(String.Format("res {0}", data));
+                // Convert the string data to byte data using ASCII encoding.  
+                byte[] byteData = Encoding.UTF8.GetBytes(data);
+                // Begin sending the data to the remote device.  
+                foreach (string userUuid in userList)
+                {
+                    Socket handler = Info.MultiUserHandler[userUuid];
+                    handler.BeginSend(byteData, 0, byteData.Length, 0,
+                        new AsyncCallback(SendCallback), handler);
+                }
             }
-            }catch(Exception e){
+            catch (Exception e)
+            {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
+                return;
             }
         }
 
@@ -197,11 +234,15 @@ namespace partting_server.lib
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
 
+                
+                //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-            
-            }catch(Exception e){
+
+            }
+            catch (Exception e)
+            {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }

@@ -1,7 +1,9 @@
+using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using partting_server.util;
 
 namespace partting_server.lib
@@ -38,6 +40,28 @@ namespace partting_server.lib
             errorFormat["errorMsg"] = Config.errorMessage[errorCode];
             return errorFormat.ToString();
 
+        }
+        public static bool FindHandler(Socket handler)
+        {
+            bool result = false;
+            Console.WriteLine(Info.MultiUserHandler.Count);
+            if (Info.MultiUserHandler.Count > 0)
+            {
+
+                foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
+                {
+                    if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
+                    {
+                        Console.WriteLine("있음");
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            if (!result){
+                Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
+            }
+            return result;
         }
     }
 }

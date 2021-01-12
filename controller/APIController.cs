@@ -3,7 +3,6 @@ using System;
 using System.Net;
 using log4net;
 using Newtonsoft.Json.Linq;
-using partting_server.lib;
 using partting_server.util;
 
 namespace partting_server.controller
@@ -14,7 +13,7 @@ namespace partting_server.controller
         public APIController(JObject requestJson)
         {
             string requestIp = ((IPEndPoint)Info.MultiUserHandler[requestJson["uuid"].ToString()].RemoteEndPoint).Address.ToString();
-            log.Info(string.Format("[{0}] - {1}", requestIp, requestJson.ToString()));
+            log.Info(string.Format("{0}", requestJson.ToString()));
         }
     }
 }
