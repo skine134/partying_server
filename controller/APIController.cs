@@ -3,10 +3,10 @@ using System;
 using System.Net;
 using log4net;
 using Newtonsoft.Json.Linq;
-using patting_server.lib;
-using patting_server.util;
+using partting_server.lib;
+using partting_server.util;
 
-namespace patting_server.controller
+namespace partting_server.controller
 {
     public class APIController
     {

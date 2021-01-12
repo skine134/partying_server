@@ -1,10 +1,10 @@
 using System;
 using Newtonsoft.Json.Linq;
 using log4net;
-using patting_server.util;
+using partting_server.util;
 
 
-namespace patting_server.service
+namespace partting_server.service
 {
     public class ItemService
     {

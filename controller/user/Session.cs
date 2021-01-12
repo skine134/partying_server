@@ -1,4 +1,4 @@
-namespace patting_server.controller.user
+namespace partting_server.controller.user
 {
     public class Session
     {

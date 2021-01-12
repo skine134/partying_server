@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using patting_server.util;
+using partting_server.util;
 
-namespace patting_server.lib
+namespace partting_server.lib
 {
     public class Common
     {

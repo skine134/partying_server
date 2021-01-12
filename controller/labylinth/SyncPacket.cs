@@ -1,9 +1,9 @@
 using System.Net.Sockets;  
-using patting_server.lib;
+using partting_server.lib;
 using Newtonsoft.Json.Linq;
-using patting_server.service;
+using partting_server.service;
 
-namespace patting_server.controller
+namespace partting_server.controller
 {
     public class SyncPacket : APIController
     {

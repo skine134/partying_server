@@ -2,10 +2,10 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using patting_server.lib;
+using partting_server.lib;
 
 
-namespace patting_server.controller
+namespace partting_server.controller
 {
     public class Connected : APIController
     {

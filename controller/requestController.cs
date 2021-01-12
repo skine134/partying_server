@@ -1,9 +1,9 @@
 using System;
-using patting_server.util;
+using partting_server.util;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 
-namespace patting_server.controller
+namespace partting_server.controller
 {
     public class RequestController
     {

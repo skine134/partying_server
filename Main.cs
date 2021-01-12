@@ -1,6 +1,6 @@
-﻿using patting_server.lib;
+﻿using partting_server.lib;
 
-namespace patting_server
+namespace partting_server
 {
     class Program
     {

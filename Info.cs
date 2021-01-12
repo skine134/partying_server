@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using Newtonsoft.Json.Linq;
-namespace patting_server
+namespace partting_server
 {
     public class Info
     {

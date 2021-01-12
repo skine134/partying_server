@@ -1,8 +1,8 @@
 using System.Runtime.Serialization;
-using patting_server.lib;
+using partting_server.lib;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-namespace patting_server.util
+namespace partting_server.util
 {
     public class Config
     {

@@ -1,9 +1,9 @@
 using System;
 using log4net;
-using patting_server.lib;
+using partting_server.lib;
 
 
-namespace patting_server.util
+namespace partting_server.util
 {
     public class ErrorHandler
     {

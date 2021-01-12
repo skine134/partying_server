@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 
 
-namespace patting_server.controller
+namespace partting_server.controller
 {
     public class ConnectedExit : APIController
     {

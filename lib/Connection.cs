@@ -3,8 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using patting_server.lib;
-using patting_server.controller;
+using partting_server.controller;
 
 // State object for reading client data asynchronously
 public class StateObject
@@ -22,7 +21,7 @@ public class StateObject
     public Socket workSocket = null;
 }
 
-namespace patting_server.lib
+namespace partting_server.lib
 {
 
     public class Connection

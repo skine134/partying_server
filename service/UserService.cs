@@ -1,12 +1,12 @@
 using System;
 using Newtonsoft.Json.Linq;
-using patting_server.lib;
-using patting_server.util;
+using partting_server.lib;
+using partting_server.util;
 using log4net;
 
 
 
-namespace patting_server.service
+namespace partting_server.service
 {
     public class UserService
     {
