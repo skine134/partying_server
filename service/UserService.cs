@@ -1,15 +1,16 @@
 using Newtonsoft.Json.Linq;
+using patting_server.lib;
+using patting_server.service;
 using patting_server.util;
 using log4net;
 using System.Net.Sockets;  
 
 
 
-namespace patting_server.lib
+namespace patting_server.service
 {
-    public class UserLib
+    public class UserService
     {
-        public UserLib(){}
         private static ILog log = Logger.GetLogger();
 
         public static void saveUserInfo(string userUuid,JObject userInfo, Socket handler){
@@ -24,20 +25,6 @@ namespace patting_server.lib
                 usersInfo[userUuid]["vector"] = vector;
             }else{
                 usersInfo.Add(userUuid,userInfo);
-            }
-
-            Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
-        }
-        public static void saveItemInfo(string userUuid,JObject userInfo, Socket handler){
-            string item = userInfo.Value<string>("item");
-            JObject usersInfo = Info.UsersInfo;
-
-            try{
-                usersInfo[userUuid]["item"] = item;
-            }catch{
-                log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
             }
 
             Info.UsersInfo = usersInfo;
@@ -77,36 +64,6 @@ namespace patting_server.lib
             try{
                 string usersInfoString = usersInfo.ToString();
                 Connection.Send(handler,usersInfoString);
-            }catch{
-                log.Error("Status Code: 000");
-                Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");
-            }
-
-            log.Info(Info.UsersInfo.ToString());
-        }
-        public static void saveAiInfo(string aiUuid,JObject aiInfo, Socket handler){
-            string location = aiInfo.Value<string>("location");
-            string vector = aiInfo.Value<string>("vector");
-            string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
-            
-            JObject aisInfo = Info.AiInfo;
-
-            if(aisInfo.ContainsKey(aiUuid)){
-                aisInfo[aiUuid]["location"] = location;
-                aisInfo[aiUuid]["vector"] = vector;
-                aisInfo[aiUuid]["detectedUserUuid"] = detectedUserUuid;
-            }else{
-                aisInfo.Add(aiUuid,aiInfo);
-            }
-            Info.AiInfo = aisInfo;
-            log.Info(Info.AiInfo.ToString());
-        }
-        public static void sendAiInfo(string aiUuid, Socket handler){
-            JObject aisInfo = Info.AiInfo;
-        
-            try{
-                string aisInfoString = aisInfo.ToString();
-                Connection.Send(handler,aisInfoString);
             }catch{
                 log.Error("Status Code: 000");
                 Connection.Send(handler,"Error Code: 001 해당 유저가 존재하지 않습니다.");

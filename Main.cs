@@ -1,4 +1,5 @@
 ﻿using patting_server.lib;
+using patting_server.service;
 using patting_server.util;
 using log4net;
 

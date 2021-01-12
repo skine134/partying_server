@@ -1,8 +1,6 @@
 using System.Net.Sockets;  
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using patting_server;
-using patting_server.lib;
+using patting_server.service;
 
 
 namespace patting_server.controller
@@ -10,8 +8,7 @@ namespace patting_server.controller
     public class Move : APIController
     {
         public Move(JObject requestJson,Socket handler) : base(requestJson){
-            // moveValidationCheck(requestJson);
-            UserLib.saveUserInfo(requestJson["uuid"].ToString(),requestJson,handler);
+            UserService.saveUserInfo(requestJson["uuid"].ToString(),requestJson,handler);
         }
     }
 }
