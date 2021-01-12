@@ -6,8 +6,8 @@ namespace patting_server.controller
 {
     public class Death : APIController
     {
-        public Death(JObject requestJson,Socket handler) : base(requestJson){
-            UserService.deleteUserInfo(requestJson["uuid"].ToString(),handler);
+        public Death(JObject requestJson) : base(requestJson){
+            UserService.deleteUserInfo(requestJson["uuid"].ToString());
         }
     }
 }

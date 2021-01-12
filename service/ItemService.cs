@@ -12,7 +12,7 @@ namespace patting_server.service
     {
         
         private static ILog log = Logger.GetLogger();
-        public static void saveItemInfo(string userUuid,JObject userInfo, Socket handler){
+        public static void saveItemInfo(string userUuid,JObject userInfo){
             string item = userInfo.Value<string>("item");
             JObject usersInfo = Info.UsersInfo;
 

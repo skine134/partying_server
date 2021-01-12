@@ -6,8 +6,8 @@ namespace patting_server.controller
 {
     public class AiMove : APIController
     {
-        public AiMove(JObject requestJson,Socket handler) : base(requestJson){
-            AIService.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson,handler);
+        public AiMove(JObject requestJson) : base(requestJson){
+            AIService.saveAiInfo(requestJson["aiUuid"].ToString(),requestJson);
         }
     }
 }

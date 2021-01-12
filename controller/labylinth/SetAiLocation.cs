@@ -6,8 +6,8 @@ namespace patting_server.controller
 {
     public class SetAiLocation : APIController
     {
-        public SetAiLocation(JObject requestJson, Socket handler) : base(requestJson){
-            AIService.sendAiInfo(requestJson["aiUuid"].ToString(),handler);
+        public SetAiLocation(JObject requestJson) : base(requestJson){
+            AIService.sendAiInfo(requestJson["aiUuid"].ToString());
         }
     }
 }

@@ -12,7 +12,7 @@ namespace patting_server.service
     {
         
         private static ILog log = Logger.GetLogger();
-        public static void saveAiInfo(string aiUuid,JObject aiInfo, Socket handler){
+        public static void saveAiInfo(string aiUuid,JObject aiInfo){
             string location = aiInfo.Value<string>("location");
             string vector = aiInfo.Value<string>("vector");
             string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
@@ -28,7 +28,7 @@ namespace patting_server.service
             Info.AiInfo = aisInfo;
             log.Info(Info.AiInfo.ToString());
         }
-        public static void sendAiInfo(string aiUuid, Socket handler){
+        public static void sendAiInfo(string aiUuid){
             JObject aisInfo = Info.AiInfo;
         
             try{

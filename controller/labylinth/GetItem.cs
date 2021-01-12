@@ -6,8 +6,8 @@ namespace patting_server.controller
 {
     public class GetItem : APIController
     {
-        public GetItem(JObject requestJson,Socket handler) : base(requestJson){
-            ItemService.saveItemInfo(requestJson["uuid"].ToString(),requestJson,handler);
+        public GetItem(JObject requestJson) : base(requestJson){
+            ItemService.saveItemInfo(requestJson["uuid"].ToString(),requestJson);
         }
     }
 }

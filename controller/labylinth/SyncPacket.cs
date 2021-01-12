@@ -6,7 +6,7 @@ namespace patting_server.controller
 {
     public class SyncPacket : APIController
     {
-        public SyncPacket(JObject requestJson, Socket handler) : base(requestJson){
+        public SyncPacket(JObject requestJson) : base(requestJson){
             UserService.sendUserInfo(requestJson["uuid"].ToString());
         }
     }

@@ -23,31 +23,31 @@ namespace patting_server.controller
                     break;
 
                 case "move":
-                    new Move(requestJson, handler);
+                    new Move(requestJson);
                     break;
 
                 case "aiMove":
-                    new AiMove(requestJson, handler);
+                    new AiMove(requestJson);
                     break;
 
                 case "getItem":
-                    new GetItem(requestJson, handler);
+                    new GetItem(requestJson);
                     break;
 
                 case "death":
-                    new Death(requestJson, handler);
+                    new Death(requestJson);
                     break;
 
                 case "isDetected":
-                    new IsDetected(requestJson, handler);
+                    new IsDetected(requestJson);
                     break;
 
                 case "syncPacket":
-                    new SyncPacket(requestJson, handler);
+                    new SyncPacket(requestJson);
                     break;
 
                 case "setAiLocation":
-                    new SetAiLocation(requestJson, handler);
+                    new SetAiLocation(requestJson);
                     break;
 
                 // ...

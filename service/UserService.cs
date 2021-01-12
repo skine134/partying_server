@@ -30,7 +30,7 @@ namespace patting_server.service
             Info.UsersInfo = usersInfo;
             log.Info(Info.UsersInfo.ToString());
         }
-        public static void deleteUserInfo(string userUuid, Socket handler){
+        public static void deleteUserInfo(string userUuid){
             JObject usersInfo = Info.UsersInfo;
 
             try{
