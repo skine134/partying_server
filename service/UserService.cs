@@ -37,7 +37,7 @@ namespace patting_server.service
                 usersInfo[userUuid]["death"] = true;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
+                ErrorHandler.NotFoundException("40402");
             }
 
             Info.UsersInfo = usersInfo;
@@ -52,7 +52,7 @@ namespace patting_server.service
                 usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
+                ErrorHandler.NotFoundException("40402");
             }
 
             Info.UsersInfo = usersInfo;
@@ -66,7 +66,7 @@ namespace patting_server.service
                 Connection.Send(usersInfoString);
             }catch{
                 log.Error("Status Code: 000");
-                Connection.Send("Error Code: 001 해당 유저가 존재하지 않습니다.");
+                ErrorHandler.NotFoundException("40402");
             }
 
             log.Info(Info.UsersInfo.ToString());

@@ -18,7 +18,6 @@ namespace patting_server.service
             string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
             
             JObject aisInfo = Info.AiInfo;
-
             if(aisInfo.ContainsKey(aiUuid)){
                 aisInfo[aiUuid]["location"] = location;
                 aisInfo[aiUuid]["vector"] = vector;

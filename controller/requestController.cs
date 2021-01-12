@@ -53,7 +53,7 @@ namespace patting_server.controller
                 // ...
 
                 default:
-                    new NotFoundException(String.Format("{0} 타입의 api가 존재 하지 않습니다.", type));
+                    ErrorHandler.NotFoundException("40401");
                     break;
             }
         }

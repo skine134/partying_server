@@ -153,9 +153,10 @@ namespace patting_server.lib
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), handler);
         }
-        public static void Send(String data, String[] userList)
+        public static void Send(String sendData, String[] userList)
         {
 
+            string data = sendData+"<EOF>";
             Console.WriteLine("Sent {0} bytes to client.", data);
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.UTF8.GetBytes(data);
