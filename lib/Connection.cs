@@ -151,7 +151,6 @@ namespace partting_server.lib
                         }
                         // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
                         RequestController.CallApi(receiveData, handler);
-
                     }
                 }
                 state.sb.Clear();

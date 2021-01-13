@@ -7,7 +7,9 @@ namespace partting_server
     {
         // 사용자 정보를 저장
         private static JObject usersInfo = new JObject();
-        // Ai 정보를 저장
+        //TODO threadInfo에 api명-apithread 저장 후, 사용자가 connection이 종료 되면 api thread 종료하도록 수정 필요.
+        public static Dictionary<string, int> threadInfo = new Dictionary<string, int>();
+// Ai 정보를 저장
         private static JObject aiInfo = new JObject();
         // uuid-handler pair
         public static Dictionary<string, Socket> MultiUserHandler = new Dictionary<string, Socket>();
