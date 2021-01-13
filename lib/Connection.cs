@@ -130,8 +130,6 @@ namespace partting_server.lib
                 bytesRead = handler.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-
-                    receiveDone.Set();
                     // There  might be more data, so store the data received so far.  
                     state.sb.Append(Encoding.UTF8.GetString(
                         state.buffer, 0, bytesRead));
@@ -153,14 +151,23 @@ namespace partting_server.lib
                         RequestController.CallApi(receiveData, handler);
                     }
                 }
+                receiveDone.Set();
                 state.sb.Clear();
+                if (!handler.Connected)
+                    return;
                 state.workSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
+                receiveDone.WaitOne();
             }
             catch (SocketException se)
             {
                 log.Error(se.Message);
                 new ConnectedExit(null, handler);
+                return;
+            }
+            catch(ObjectDisposedException oe)
+            {
+                log.Error(oe.Message);
                 return;
             }
             catch (Exception e)
@@ -212,6 +219,7 @@ namespace partting_server.lib
                     handler.BeginSend(byteData, 0, byteData.Length, 0,
                         new AsyncCallback(SendCallback), handler);
                 }
+                sendDone.Set();
             }
             catch (SocketException se)
             {

@@ -11,6 +11,7 @@ namespace partting_server.controller
         public static void CallApi(string requestData, Socket handler)
         {
             JObject requestJson = JObject.Parse(requestData);
+            
             string type = requestJson.Value<string>("type");
             switch (type)
             {
