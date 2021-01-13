@@ -95,8 +95,8 @@ namespace partting_server.lib
 
                 // Signal the main thread to continue.  
                 allDone.Set();
-                Socket listener = (Socket)ar.AsyncState;
-                handler = listener.EndAccept(ar);
+                    Socket listener = (Socket)ar.AsyncState;
+                    handler = listener.EndAccept(ar);
                 Console.WriteLine(Common.FindHandler(handler));
                 // Create the state object.  
                 StateObject state = new StateObject();
@@ -104,11 +104,17 @@ namespace partting_server.lib
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
             }
+            
+            catch (SocketException se){
+                log.Error(se.Message);
+                new ConnectedExit(null,handler);
+                return;
+                
+            }
             catch (Exception e)
             {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
-                return;
             }
         }
 
@@ -122,15 +128,8 @@ namespace partting_server.lib
                 StateObject state = (StateObject)ar.AsyncState;
                 Socket handler = state.workSocket;
                 int bytesRead = 0;
-                try{
                 // Read data from the client socket.
                 bytesRead = handler.EndReceive(ar);
-                }
-                catch(SocketException se){
-                    log.Error(se.Message);
-                    new ConnectedExit(null,handler);
-                    return;
-                }
                 if (bytesRead > 0)
                 {
                     
@@ -158,21 +157,18 @@ namespace partting_server.lib
                     }
                 }
                 state.sb.Clear();
-                try{
-                // data received. Get more.  
                 state.workSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
-                }catch(SocketException se){
-                    log.Error(se.Message);
-                    new ConnectedExit(null,handler);
-                    return;
-                }
+            }
+            catch(SocketException se){
+                log.Error(se.Message);
+                new ConnectedExit(null,handler);
+                return;
             }
             catch (Exception e)
             {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
-                return;
             }
         }
 
@@ -193,8 +189,8 @@ namespace partting_server.lib
             }
             catch (SocketException se){
                 log.Error(se.Message);
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
+                new ConnectedExit(null,handler);
+                return;
             }
             catch (Exception e)
             {
@@ -219,11 +215,15 @@ namespace partting_server.lib
                         new AsyncCallback(SendCallback), handler);
                 }
             }
+            catch(SocketException se){
+                log.Error(se.Message);
+                new ConnectedExit(null,handler);
+                return;
+            }
             catch (Exception e)
             {
                 log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
-                return;
             }
         }
 
@@ -233,13 +233,15 @@ namespace partting_server.lib
             {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
-
                 
                 //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
+            }
+            catch(SocketException se){
+                log.Error(se.Message);
+                new ConnectedExit(null,handler);
+                return;
             }
             catch (Exception e)
             {
