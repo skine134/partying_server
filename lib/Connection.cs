@@ -32,7 +32,7 @@ namespace partting_server.lib
     {
 
         // Thread signal.  
-        public static ManualResetEvent allDone = 
+        public static ManualResetEvent allDone =
             new ManualResetEvent(false);
         private static ManualResetEvent sendDone =
             new ManualResetEvent(false);
@@ -49,7 +49,6 @@ namespace partting_server.lib
             // running the listener is "host.contoso.com".  
             // IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());  
             IPAddress ipAddress = IPAddress.Parse("0.0.0.0");
-            Console.WriteLine(ipAddress);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 1045);
 
             // Create a TCP/IP socket.  
@@ -67,7 +66,6 @@ namespace partting_server.lib
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.  
-                    Console.WriteLine("Waiting for a connection...");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback),
                         listener);
@@ -79,11 +77,10 @@ namespace partting_server.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                log.Error(e.Message);
                 Send(Common.getErrorFormat("50000"));
             }
 
-            Console.WriteLine("\nPress ENTER to continue...");
             Console.Read();
 
         }
@@ -95,21 +92,21 @@ namespace partting_server.lib
 
                 // Signal the main thread to continue.  
                 allDone.Set();
-                    Socket listener = (Socket)ar.AsyncState;
-                    handler = listener.EndAccept(ar);
-                Console.WriteLine(Common.FindHandler(handler));
+                Socket listener = (Socket)ar.AsyncState;
+                handler = listener.EndAccept(ar);
                 // Create the state object.  
                 StateObject state = new StateObject();
                 state.workSocket = handler;
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
             }
-            
-            catch (SocketException se){
+
+            catch (SocketException se)
+            {
                 log.Error(se.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
-                
+
             }
             catch (Exception e)
             {
@@ -132,7 +129,7 @@ namespace partting_server.lib
                 bytesRead = handler.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    
+
                     receiveDone.Set();
                     // There  might be more data, so store the data received so far.  
                     state.sb.Append(Encoding.UTF8.GetString(
@@ -160,9 +157,10 @@ namespace partting_server.lib
                 state.workSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
             }
-            catch(SocketException se){
+            catch (SocketException se)
+            {
                 log.Error(se.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
             }
             catch (Exception e)
@@ -187,15 +185,16 @@ namespace partting_server.lib
                 handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), handler);
             }
-            catch (SocketException se){
+            catch (SocketException se)
+            {
                 log.Error(se.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
             }
             catch (Exception e)
             {
                 log.Error(e.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
             }
         }
@@ -215,9 +214,10 @@ namespace partting_server.lib
                         new AsyncCallback(SendCallback), handler);
                 }
             }
-            catch(SocketException se){
+            catch (SocketException se)
+            {
                 log.Error(se.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
             }
             catch (Exception e)
@@ -233,14 +233,15 @@ namespace partting_server.lib
             {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
-                
+
                 //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
             }
-            catch(SocketException se){
+            catch (SocketException se)
+            {
                 log.Error(se.Message);
-                new ConnectedExit(null,handler);
+                new ConnectedExit(null, handler);
                 return;
             }
             catch (Exception e)

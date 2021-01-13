@@ -13,12 +13,14 @@ namespace partting_server.controller
         protected ILog log = Logger.GetLogger();
         public Connected(JObject requestJson, Socket handler)
         {
-                foreach(KeyValuePair<string,Socket> item in Info.MultiUserHandler){
-                    if (Info.MultiUserHandler[item.Key] == handler){
-                        Connection.Send(string.Format("{0}'uuid':'{1}'{2}","{",item.Key,"}"));
-                        break;
-                    }
+            foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
+            {
+                if (Info.MultiUserHandler[item.Key] == handler)
+                {
+                    Connection.Send(string.Format("{0}'uuid':'{1}'{2}", "{", item.Key, "}"));
+                    break;
                 }
+            }
         }
     }
 }

@@ -44,7 +44,6 @@ namespace partting_server.lib
         public static bool FindHandler(Socket handler)
         {
             bool result = false;
-            Console.WriteLine(Info.MultiUserHandler.Count);
             if (Info.MultiUserHandler.Count > 0)
             {
 
@@ -52,13 +51,13 @@ namespace partting_server.lib
                 {
                     if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
                     {
-                        Console.WriteLine("있음");
                         result = true;
                         break;
                     }
                 }
             }
-            if (!result){
+            if (!result)
+            {
                 Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
             }
             return result;
