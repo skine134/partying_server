@@ -15,17 +15,18 @@ namespace partting_server.service
         {
             string location = aiInfo.Value<string>("location");
             string vector = aiInfo.Value<string>("vector");
-            string detectedUserUuid = aiInfo.Value<string>("detectedUserUuid");
+            string detectedAiUuid = aiInfo.Value<string>("detectedAiUuid");
 
             JObject aisInfo = Info.AiInfo;
             if (aisInfo.ContainsKey(aiUuid))
             {
                 aisInfo[aiUuid]["location"] = location;
                 aisInfo[aiUuid]["vector"] = vector;
-                aisInfo[aiUuid]["detectedUserUuid"] = detectedUserUuid;
+                aisInfo[aiUuid]["detectedAiUuid"] = detectedAiUuid;
             }
             else
             {
+                aisInfo.Remove("type");
                 aisInfo.Add(aiUuid, aiInfo);
             }
             Info.AiInfo = aisInfo;

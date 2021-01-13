@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using partting_server.lib;
@@ -17,11 +18,16 @@ namespace partting_server.controller
         public void GetUserInfo()
         {
 
+            int count = 0;
             while (true)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(100);
                 string usersInfoString = UserService.getUserInfo();
-                Connection.Send(usersInfoString, Info.MultiUserHandler.Keys.ToList().ToArray());
+                string sendJson = Common.getResponseFormat("syncPackegt", usersInfoString);
+                Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
+                if (count%100 == 0)
+                    log.Info(String.Format("res {0}", sendJson).Replace("\n",String.Empty));
+                count++;
             }
         }
     }

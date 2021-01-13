@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using partting_server.util;
 
@@ -32,13 +33,16 @@ namespace partting_server.lib
                 return errorMessage;
             }
         }
-
+        public static string getResponseFormat(string type, string data){
+            string responseFormat = JsonConvert.SerializeObject(new{type=type,data=JObject.Parse(data)});
+            return responseFormat;
+        }
         public static string getErrorFormat(string errorCode)
         {
             JObject errorFormat = Config.errorResponseForm;
             errorFormat["errorCode"] = errorCode;
             errorFormat["errorMsg"] = Config.errorMessage[errorCode];
-            return errorFormat.ToString();
+            return Common.getResponseFormat("error",errorFormat.ToString());
 
         }
         public static bool FindHandler(Socket handler)

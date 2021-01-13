@@ -23,6 +23,7 @@ namespace partting_server.controller
                         handler.Shutdown(SocketShutdown.Both);
                         handler.Close();
                         Info.MultiUserHandler.Remove(item.Key);
+                        log.Info("사용자와 연결을 종료했습니다.");
                         break;
                     }
                 }

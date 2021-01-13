@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json.Linq;
@@ -16,11 +17,16 @@ namespace partting_server.controller
         }
         public void getAiLocation()
         {
+            int count = 0;
             while (true)
             {
                 Thread.Sleep(100);
                 string aisInfoString = AIService.getAiInfo();
-                Connection.Send(aisInfoString, Info.MultiUserHandler.Keys.ToList().ToArray());
+                string sendJson = Common.getResponseFormat("syncAiLocation",aisInfoString);
+                Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
+                if (count%100 == 0)
+                    log.Info(String.Format("res {0}", sendJson).Replace("\n",String.Empty));
+                count++;
             }
         }
     }

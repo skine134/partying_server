@@ -94,6 +94,7 @@ namespace partting_server.lib
                 allDone.Set();
                 Socket listener = (Socket)ar.AsyncState;
                 handler = listener.EndAccept(ar);
+                Common.FindHandler(handler);
                 // Create the state object.  
                 StateObject state = new StateObject();
                 state.workSocket = handler;
@@ -203,7 +204,6 @@ namespace partting_server.lib
             try
             {
                 string data = sendData + "<EOF>";
-                log.Info(String.Format("res {0}", data));
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.  

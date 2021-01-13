@@ -8,14 +8,18 @@ namespace partting_server.util
     public class ErrorHandler
     {
 
-        ILog log = Logger.GetLogger();
+        private static ILog log = Logger.GetLogger();
         public static void NotFoundException(string errorCode)
         {
-            Connection.Send(Common.getErrorFormat(errorCode));
+            string sendErrorJson = Common.getErrorFormat(errorCode).Replace("\n",String.Empty);
+            Connection.Send(sendErrorJson);
+            log.Info(sendErrorJson);
         }
         public static void InvalidException(string errorCode)
         {
-            Connection.Send(Common.getErrorFormat(errorCode));
+            string sendErrorJson = Common.getErrorFormat(errorCode).Replace("\n",String.Empty);
+            Connection.Send(sendErrorJson);
+            log.Info(sendErrorJson);
         }
     }
 
