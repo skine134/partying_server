@@ -11,24 +11,44 @@ namespace partting_server.service
     {
 
         private static ILog log = Logger.GetLogger();
-        public static void saveAiInfo(string aiUuid, JObject aiInfo)
+        public static void saveAiInfo(JObject aiInfo)
         {
-            string location = aiInfo.Value<string>("location");
-            string vector = aiInfo.Value<string>("vector");
-            string detectedAiUuid = aiInfo.Value<string>("detectedAiUuid");
+            string aiUuid = aiInfo.Value<string>("aiUuid");
+            string location = aiInfo.Value<string>("loc");
+            string vector = aiInfo.Value<string>("vec");
+            string detectedAiUuid = aiInfo.Value<string>("targetUuid");
 
             JObject aisInfo = Info.AiInfo;
             if (aisInfo.ContainsKey(aiUuid))
             {
-                aisInfo[aiUuid]["location"] = location;
-                aisInfo[aiUuid]["vector"] = vector;
-                aisInfo[aiUuid]["detectedAiUuid"] = detectedAiUuid;
+                aisInfo[aiUuid]["loc"] = location;
+                aisInfo[aiUuid]["vec"] = vector;
+                aisInfo[aiUuid]["targetUuid"] = detectedAiUuid;
             }
             else
             {
                 aisInfo.Remove("type");
                 aisInfo.Add(aiUuid, aiInfo);
             }
+            Info.AiInfo = aisInfo;
+            log.Info(Info.AiInfo.ToString());
+        }
+        public static void saveDetectedUserInfo(string userUuid, JObject aiInfo)
+        {
+            JObject aisInfo = Info.AiInfo;
+            string tagerAiUuid = aiInfo.Value<string>("aiUuid");
+
+            try
+            {
+                aisInfo[userUuid]["targetUuid"] = userUuid;
+                aisInfo[userUuid]["aiUuid"] = tagerAiUuid;
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                ErrorHandler.NotFoundException("40404");
+            }
+
             Info.AiInfo = aisInfo;
             log.Info(Info.AiInfo.ToString());
         }

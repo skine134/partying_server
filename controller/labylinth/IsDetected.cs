@@ -8,7 +8,7 @@ namespace partting_server.controller
     {
         public IsDetected(JObject requestJson) : base(requestJson)
         {
-            UserService.saveDetectedUserInfo(requestJson["uuid"].ToString(), requestJson);
+            AIService.saveDetectedUserInfo(requestJson["uuid"].ToString(), (JObject)requestJson["data"]);
         }
     }
 }

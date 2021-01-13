@@ -14,19 +14,20 @@ namespace partting_server.service
 
         public static void saveUserInfo(string userUuid, JObject userInfo)
         {
-            string movement = userInfo.Value<string>("movement");
-            string location = userInfo.Value<string>("location");
-            string vector = userInfo.Value<string>("vector");
+            string movement = userInfo.Value<string>("event");
+            string location = userInfo.Value<string>("loc");
+            string vector = userInfo.Value<string>("vec");
             JObject usersInfo = Info.UsersInfo;
 
             if (usersInfo.ContainsKey(userUuid))
             {
-                usersInfo[userUuid]["movement"] = movement;
-                usersInfo[userUuid]["location"] = location;
-                usersInfo[userUuid]["vector"] = vector;
+                usersInfo[userUuid]["event"] = movement;
+                usersInfo[userUuid]["loc"] = location;
+                usersInfo[userUuid]["vec"] = vector;
             }
             else
             {
+                userInfo.Remove("type");
                 usersInfo.Add(userUuid, userInfo);
             }
 
@@ -40,25 +41,6 @@ namespace partting_server.service
             try
             {
                 usersInfo[userUuid]["death"] = true;
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                ErrorHandler.NotFoundException("40402");
-            }
-
-            Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
-        }
-        public static void saveDetectedUserInfo(string userUuid, JObject userInfo)
-        {
-            JObject usersInfo = Info.UsersInfo;
-            string taggerAiUuid = userInfo.Value<string>("taggerAiUuid");
-
-            try
-            {
-                usersInfo[userUuid]["isDetected"] = true;
-                usersInfo[userUuid]["taggerAiUuid"] = taggerAiUuid;
             }
             catch (Exception e)
             {
