@@ -17,8 +17,8 @@ namespace partting_server.controller
             {
                 if (Info.MultiUserHandler[item.Key] == handler)
                 {
-                    string response = "{'uuid': '"+item.Key+"'}";
-                    Connection.Send(Common.getResponseFormat("connected",response));
+                    string response = "{'uuid': '" + item.Key + "'}";
+                    Connection.Send(Common.getResponseFormat("connected", response));
                     break;
                 }
             }
