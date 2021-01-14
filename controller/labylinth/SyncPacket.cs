@@ -22,10 +22,15 @@ namespace partting_server.controller
             while (true)
             {
                 Thread.Sleep(100);
+                
+                if (Info.MultiUserHandler.Count==0)
+                {
+                    break;
+                }
                 string usersInfoString = UserService.getUserInfo();
-                string sendJson = Common.getResponseFormat("syncPackegt", usersInfoString);
+                string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);
                 Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
-                if (count%100 == 0)
+                if (count%10 == 0)
                     log.Info(String.Format("res {0}", sendJson).Replace("\n",String.Empty));
                 count++;
             }

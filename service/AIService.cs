@@ -31,7 +31,6 @@ namespace partting_server.service
                 aisInfo.Add(aiUuid, aiInfo);
             }
             Info.AiInfo = aisInfo;
-            log.Info(Info.AiInfo.ToString());
         }
         public static void saveDetectedUserInfo(string userUuid, JObject aiInfo)
         {
@@ -50,15 +49,12 @@ namespace partting_server.service
             }
 
             Info.AiInfo = aisInfo;
-            log.Info(Info.AiInfo.ToString());
         }
         public static string getAiInfo()
         {
             JObject aisInfo = Info.AiInfo;
             string aisInfoString = "";
             aisInfoString = aisInfo.ToString();
-
-            log.Info(Info.UsersInfo.ToString());
             return aisInfoString;
         }
     }

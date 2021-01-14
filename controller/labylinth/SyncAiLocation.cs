@@ -20,6 +20,10 @@ namespace partting_server.controller
             int count = 0;
             while (true)
             {
+                if (Info.MultiUserHandler.Count==0)
+                {
+                    break;
+                }
                 Thread.Sleep(100);
                 string aisInfoString = AIService.getAiInfo();
                 string sendJson = Common.getResponseFormat("syncAiLocation",aisInfoString);
