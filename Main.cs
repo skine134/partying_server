@@ -1,9 +1,7 @@
-﻿using patting_server.lib;
-using patting_server.util;
-using log4net;
+using System;
+using partting_server.lib;
 
-
-namespace patting_server
+namespace partting_server
 {
     class Program
     {
