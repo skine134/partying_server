@@ -33,8 +33,9 @@ namespace partting_server.lib
                 return errorMessage;
             }
         }
-        public static string getResponseFormat(string type, string data){
-            string responseFormat = JsonConvert.SerializeObject(new{type=type,data=JObject.Parse(data)});
+        public static string getResponseFormat(string type, string data)
+        {
+            string responseFormat = JsonConvert.SerializeObject(new { type = type, data = JObject.Parse(data) });
             return responseFormat;
         }
         public static string getErrorFormat(string errorCode)
@@ -42,7 +43,7 @@ namespace partting_server.lib
             JObject errorFormat = Config.errorResponseForm;
             errorFormat["errorCode"] = errorCode;
             errorFormat["errorMsg"] = Config.errorMessage[errorCode];
-            return Common.getResponseFormat("error",errorFormat.ToString());
+            return Common.getResponseFormat("error", errorFormat.ToString());
 
         }
         public static bool FindHandler(Socket handler)

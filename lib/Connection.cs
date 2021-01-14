@@ -1,9 +1,7 @@
-using System.Net.Mime;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using partting_server.controller;
@@ -165,7 +163,7 @@ namespace partting_server.lib
                 new ConnectedExit(null, handler);
                 return;
             }
-            catch(ObjectDisposedException oe)
+            catch (ObjectDisposedException oe)
             {
                 log.Error(oe.Message);
                 return;

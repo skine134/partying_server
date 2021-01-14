@@ -1,6 +1,5 @@
 using System;
 using Newtonsoft.Json.Linq;
-using partting_server.lib;
 using partting_server.util;
 using log4net;
 
@@ -32,7 +31,6 @@ namespace partting_server.service
             }
 
             Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
         }
         public static void deleteUserInfo(string userUuid)
         {
@@ -49,15 +47,12 @@ namespace partting_server.service
             }
 
             Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
         }
         public static string getUserInfo()
         {
             JObject usersInfo = Info.UsersInfo;
             string usersInfoString = "";
             usersInfoString = usersInfo.ToString();
-
-            log.Info(Info.UsersInfo.ToString());
             return usersInfoString;
         }
     }

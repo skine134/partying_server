@@ -26,7 +26,6 @@ namespace partting_server.service
             }
 
             Info.UsersInfo = usersInfo;
-            log.Info(Info.UsersInfo.ToString());
         }
     }
 }
