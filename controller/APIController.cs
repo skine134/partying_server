@@ -13,7 +13,7 @@ namespace partting_server.controller
         public APIController(JObject requestJson)
         {
             string requestIp = ((IPEndPoint)Info.MultiUserHandler[requestJson["uuid"].ToString()].RemoteEndPoint).Address.ToString();
-            log.Info(string.Format("{0}", requestJson.ToString()));
+            log.Info(string.Format("{0}", requestJson.ToString().Replace("\n",String.Empty)));
         }
     }
 }

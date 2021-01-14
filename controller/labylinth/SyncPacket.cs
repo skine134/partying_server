@@ -23,7 +23,7 @@ namespace partting_server.controller
             {
                 Thread.Sleep(100);
                 string usersInfoString = UserService.getUserInfo();
-                string sendJson = Common.getResponseFormat("syncPackegt", usersInfoString);
+                string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);
                 Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
                 if (count%100 == 0)
                     log.Info(String.Format("res {0}", sendJson).Replace("\n",String.Empty));
