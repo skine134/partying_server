@@ -238,7 +238,6 @@ namespace partting_server.lib
             {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
-
                 //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
