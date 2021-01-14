@@ -420,3 +420,5 @@ $RECYCLE.BIN/
 # custom .gitignore
 log
 package
+nohup.out
+.vscode
