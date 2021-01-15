@@ -14,8 +14,8 @@ namespace partting_server.service
         public static void saveUserInfo(string userUuid, JObject userInfo)
         {
             string movement = userInfo.Value<string>("event");
-            string location = userInfo.Value<string>("loc");
-            string vector = userInfo.Value<string>("vec");
+            JObject location = (JObject)userInfo["loc"];
+            JObject vector = (JObject)userInfo["vec"];
             JObject usersInfo = Info.UsersInfo;
 
             if (usersInfo.ContainsKey(userUuid))

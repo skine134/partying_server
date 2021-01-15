@@ -11,7 +11,7 @@ using partting_server.util;
 public class StateObject
 {
     // Size of receive buffer.  
-    public const int BufferSize = 1024;
+    public const int BufferSize = 4096;
 
     // Receive buffer.  
     public byte[] buffer = new byte[BufferSize];
@@ -139,18 +139,25 @@ namespace partting_server.lib
                     {
                         // All the data has been read from the
                         // client. Display it on the console.  
-                        log.Info(String.Format("req {0}", content));
-                        string receiveData = "";
-                        for (int i = 0; i < content.IndexOf("<EOF>"); i++)
-                        {
-                            receiveData = receiveData + content[i];
-                        }
+                        string[] receiveDatas = content.Split("<EOF>");
                         // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
-                        RequestController.CallApi(receiveData, handler);
+                        foreach(string receiveData in receiveDatas)
+                            if (!receiveData.Equals(""))
+                                try
+                                {
+                                    log.Info(String.Format("req {0}", content));
+                                    RequestController.CallApi(receiveData, handler);
+                                }
+                                catch (Exception e)
+                                {
+                                    log.Error(e.Message);
+                                    Send(Common.getErrorFormat("50000"));
+                                }
+
                     }
                 }
-                receiveDone.Set();
                 state.sb.Clear();
+                receiveDone.Set();
                 if (!handler.Connected)
                     return;
                 state.workSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -238,7 +245,6 @@ namespace partting_server.lib
             {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
-
                 //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);

@@ -22,7 +22,6 @@ namespace partting_server.controller
             while (true)
             {
                 Thread.Sleep(100);
-
                 if (Info.MultiUserHandler.Count == 0)
                 {
                     break;
