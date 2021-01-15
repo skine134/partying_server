@@ -2,15 +2,24 @@ using System;
 using partting_server.util;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
+using log4net;
 
 namespace partting_server.controller
 {
     public class RequestController
 
     {
+        private static ILog log = Logger.GetLogger();
         public static void CallApi(string requestData, Socket handler)
         {
-            JObject requestJson = JObject.Parse(requestData);
+            
+            JObject requestJson = null;
+            try{
+                requestJson = JObject.Parse(requestData);
+            }catch(Exception e){
+                log.Error(e.Message);
+                ErrorHandler.InvalidException("40001");
+            }
             
             string type = requestJson.Value<string>("type");
             switch (type)
@@ -54,6 +63,7 @@ namespace partting_server.controller
                 // ...
 
                 default:
+                    log.Error("해당 타입의 api가 존재하지 않습니다.");
                     ErrorHandler.NotFoundException("40401");
                     break;
             }
