@@ -13,105 +13,62 @@ namespace patting_server.lib
         private static ILog log = Logger.GetLogger();
 
         // Uuid 정규식 참고문서 https://big-blog.tistory.com/2581
-        private static string regexPatternUuid = @"^[A-C]{1,3}$";
-        private static string regexPatternAiUuid = @"^[A-C]{1,3}$";
-
-        // private static string regexPatternMovement = @"^01[01678]-[0-9]{4}-[0-9]{4}$";
-        private static string regexPatternLocation = @"^\{x:[0-9]{1,5},y:[0-9]{1,5},z:[0-9]{1,5}\}$";
-        // {x:23,y:23,z:1040}
-        private static string regexPatternVector = @"^\{x:[0-9]{1,5},y:[0-9]{1,5},z:[0-9]{1,5}\}$";
-
-        // private static string regexPatternItem = @"^01[01678]-[0-9]{4}-[0-9]{4}$";
-
+        private static string regexPatternUuid = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$";
+        private static string regexPatternLoc = @"^\{x:[0-9]{1,5},y:[0-9]{1,5},z:[0-9]{1,5}\}$";
         private static Regex uuidRegex = new Regex(regexPatternUuid);
-        private static Regex aiUuidRegex = new Regex(regexPatternAiUuid);
-
-        // private static Regex movementRegex = new Regex(regexPatternMovement);
-        private static Regex locationRegex = new Regex(regexPatternLocation);
-        private static Regex vectorRegex = new Regex(regexPatternVector);
-
-        // private static Regex itemRegex = new Regex(regexPatternItem);
-
-        public static void checkRegexMove(JObject checkJson, Socket handler)
+        private static Regex LocRegex = new Regex(regexPatternLoc);
+        public static bool checkRegex(JObject requestJson, Socket handler)
         {
-            string uuid = checkJson.Value<string>("uuid");
-            string movement = checkJson.Value<string>("movement");
-            string location = checkJson.Value<string>("location");
-            string vector = checkJson.Value<string>("vector");
+            JObject dataJson = (JObject)requestJson["data"];
 
-            bool isMovement = false;
+            bool checkFlag = true;
 
-            if (movement.Equals("Move") || movement.Equals("Dodge") || movement.Equals("Jump"))
-            {
-                isMovement = true;
+            if(requestJson.ContainsKey("uuid")){
+                string uuid = requestJson.Value<string>("uuid");
+                if(!uuidRegex.IsMatch(uuid)){
+                    checkFlag = false;
+                }
             }
 
-            if (!(uuidRegex.IsMatch(uuid) && isMovement && locationRegex.IsMatch(location) && vectorRegex.IsMatch(vector)))
-            {
+            if(requestJson.ContainsKey("data")){
+                 if(dataJson.ContainsKey("uuid")){
+                    string uuid = dataJson.Value<string>("uuid");
+                    if(!uuidRegex.IsMatch(uuid)){
+                        checkFlag = false;
+                    }
+                }
+                 if(dataJson.ContainsKey("aiUuid")){
+                    string aiUuid = dataJson.Value<string>("aiUuid");
+                    if(!uuidRegex.IsMatch(aiUuid)){
+                        checkFlag = false;
+                    }
+                }
+                 if(dataJson.ContainsKey("targetUuid")){
+                    string targetUuid = dataJson.Value<string>("targetUuid");
+                    if(!uuidRegex.IsMatch(targetUuid)){
+                        checkFlag = false;
+                    }
+                }
+                if(dataJson.ContainsKey("loc")){
+                    string loc = dataJson.Value<string>("loc");
+                    if(!LocRegex.IsMatch(loc)){
+                        checkFlag = false;
+                    }
+                }
+                if(dataJson.ContainsKey("vec")){
+                    string vec = dataJson.Value<string>("vec");
+                    if(!LocRegex.IsMatch(vec)){
+                        checkFlag = false;
+                    }
+                }
+            }
+            if(!checkFlag){
                 log.Error("Status Code: 002");
                 ErrorHandler.InvalidException("40002");
+                return false;
+            }else{
+                return true;
             }
         }
-        public static void checkRegexAiMove(JObject checkJson, Socket handler)
-        {
-            string aiUuid = checkJson.Value<string>("aiUuid");
-            string movement = checkJson.Value<string>("movement");
-            string location = checkJson.Value<string>("location");
-            string vector = checkJson.Value<string>("vector");
-
-            bool isMovement = false;
-
-            if (movement.Equals("Move") || movement.Equals("Dodge") || movement.Equals("Jump"))
-            {
-                isMovement = true;
-            }
-
-            if (!(aiUuidRegex.IsMatch(aiUuid) && isMovement && locationRegex.IsMatch(location) && vectorRegex.IsMatch(vector)))
-            {
-                log.Error("Status Code: 002");
-                ErrorHandler.InvalidException("40002");
-            }
-        }
-        public static void checkRegexGetItem(JObject checkJson, Socket handler)
-        {
-            string uuid = checkJson.Value<string>("uuid");
-            string item = checkJson.Value<string>("item");
-
-            bool isItem = false;
-
-            if (isItem.Equals("ItemExample1") || isItem.Equals("ItemExample2") || isItem.Equals("ItemExample3"))
-            {
-                isItem = true;
-            }
-
-
-            if (!(uuidRegex.IsMatch(uuid) && isItem))
-            {
-                log.Error("Status Code: 002");
-                ErrorHandler.InvalidException("40002");
-            }
-        }
-        public static void checkRegexUuid(JObject checkJson, Socket handler)
-        {
-            string uuid = checkJson.Value<string>("uuid");
-            if (!uuidRegex.IsMatch(uuid))
-            {
-                log.Error("Status Code: 002");
-                ErrorHandler.InvalidException("40002");
-            }
-        }
-        public static void checkRegexSetAiLocation(JObject checkJson, Socket handler)
-        {
-            string aiUuid = checkJson.Value<string>("aiUuid");
-            if (!aiUuidRegex.IsMatch(aiUuid))
-            {
-                log.Error("Status Code: 002");
-                ErrorHandler.InvalidException("40002");
-            }
-        }
-
-
-
-
     }
 }

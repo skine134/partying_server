@@ -1,5 +1,6 @@
 using System;
 using partting_server.util;
+using patting_server.lib;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using log4net;
@@ -20,52 +21,55 @@ namespace partting_server.controller
                 log.Error(e.Message);
                 ErrorHandler.InvalidException("40001");
             }
-            
-            string type = requestJson.Value<string>("type");
-            switch (type)
-            {
-                case "connected":
-                    new Connected(requestJson, handler);
-                    break;
 
-                case "connectedExit":
-                    new ConnectedExit(requestJson, handler);
-                    break;
 
-                case "move":
-                    new Move(requestJson);
-                    break;
+            if(RegularExpression.checkRegex(requestJson,handler)){
+                string type = requestJson.Value<string>("type");
+                switch (type)
+                {
+                    case "connected":
+                        new Connected(requestJson, handler);
+                        break;
 
-                case "aiMove":
-                    new AiMove(requestJson);
-                    break;
+                    case "connectedExit":
+                        new ConnectedExit(requestJson, handler);
+                        break;
 
-                case "getItem":
-                    new GetItem(requestJson);
-                    break;
+                    case "move":
+                        new Move(requestJson);
+                        break;
 
-                case "death":
-                    new Death(requestJson);
-                    break;
+                    case "aiMove":
+                        new AiMove(requestJson);
+                        break;
 
-                case "isDetected":
-                    new IsDetected(requestJson);
-                    break;
+                    case "getItem":
+                        new GetItem(requestJson);
+                        break;
 
-                case "syncPacket":
-                    new SyncPacket(requestJson);
-                    break;
+                    case "death":
+                        new Death(requestJson);
+                        break;
 
-                case "syncAiLocation":
-                    new SyncAiLocation(requestJson);
-                    break;
+                    case "isDetected":
+                        new IsDetected(requestJson);
+                        break;
 
-                // ...
+                    case "syncPacket":
+                        new SyncPacket(requestJson);
+                        break;
 
-                default:
-                    log.Error("해당 타입의 api가 존재하지 않습니다.");
-                    ErrorHandler.NotFoundException("40401");
-                    break;
+                    case "syncAiLocation":
+                        new SyncAiLocation(requestJson);
+                        break;
+
+                    // ...
+
+                    default:
+                        log.Error("해당 타입의 api가 존재하지 않습니다.");
+                        ErrorHandler.NotFoundException("40401");
+                        break;
+                }
             }
         }
     }
