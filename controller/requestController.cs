@@ -70,6 +70,9 @@ namespace partting_server.controller
                         ErrorHandler.NotFoundException("40401");
                         break;
                 }
+            }else{
+                log.Error("형식이 올바르지 않습니다.");
+                ErrorHandler.InvalidException("40003");
             }
         }
     }

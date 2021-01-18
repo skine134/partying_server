@@ -15,14 +15,14 @@ namespace partting_server.service
             string aiUuid = aiInfo.Value<string>("aiUuid");
             string location = aiInfo.Value<string>("loc");
             string vector = aiInfo.Value<string>("vec");
-            string detectedAiUuid = aiInfo.Value<string>("targetUuid");
+            string targetPoint = aiInfo.Value<string>("targetPoint");
 
             JObject aisInfo = Info.AiInfo;
             if (aisInfo.ContainsKey(aiUuid))
             {
                 aisInfo[aiUuid]["loc"] = location;
                 aisInfo[aiUuid]["vec"] = vector;
-                aisInfo[aiUuid]["targetUuid"] = detectedAiUuid;
+                aisInfo[aiUuid]["targetPoint"] = targetPoint;
             }
             else
             {
