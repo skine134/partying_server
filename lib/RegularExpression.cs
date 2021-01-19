@@ -1,6 +1,8 @@
 using System;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using log4net;
 using partting_server.util;
@@ -14,117 +16,76 @@ namespace patting_server.lib
         private static ILog log = Logger.GetLogger();
 
         // Uuid 정규식 참고문서 https://big-blog.tistory.com/2581
-        private static string regexPatternUuid = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$";
-        private static string regexPatternAiUuid = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$";
-        private static string regexPatternItemUuid = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$";
-        private static string regexPatternLoc = @"^\{x:[0-9]{1,5},y:[0-9]{1,5},z:[0-9]{1,5}\}$";
-        private static string regexPatternVec = @"^\{x:[0-9]{1,5},y:[0-9]{1,5},z:[0-9]{1,5}\}$";
-        private static Regex uuidRegex = new Regex(regexPatternUuid);
-        private static Regex aiUuidRegex = new Regex(regexPatternAiUuid);
-        private static Regex itemRegex = new Regex(regexPatternItemUuid);
-        private static Regex LocRegex = new Regex(regexPatternLoc);
-        private static Regex VecRegex = new Regex(regexPatternVec);
-        public static void checkRegex(JObject requestJson, Socket handler)
-        {
-            JObject dataJson = (JObject)requestJson["data"];
 
-            if(requestJson.ContainsKey("type")){
-                try{
-                    string type = requestJson.Value<string>("type");
-                }catch(Exception e){
-                    log.Error(e.Message);
-                    ErrorHandler.InvalidException("40002");
+        
+        public static bool typeCheck(KeyValuePair<string,JToken> value){
+            bool result = true;
+            if (Config.typeConfig.ContainsKey(value.Key))
+                if (value.Value.Type != Config.typeConfig[value.Key])
+                    result = false;
+            else 
+                if (value.Value.Type != Config.typeConfig["other"])
+                    result = false;
+            if (!result)
+                log.Error(String.Format("{0} 은(는) {1} 타입이 아닙니다.",value,Config.typeConfig[value.Key]));
+            return true;
+        }
+        public static bool regexCheck(KeyValuePair<string,JToken> value){
+            bool result = true;
+            if (Config.regexConfig.ContainsKey(value.Key)){
+                Regex regex = new Regex(Config.regexConfig[value.Key]);
+                result = regex.IsMatch(value.Value.ToString());
+            }
+            else{
+                if (value.Key.Contains("Uuid") || value.Key.Contains("uuid")){
+                    Regex regex = new Regex(Config.regexConfig["uuid"]);
+                    result = regex.IsMatch(value.Value.ToString());
+                }
+            }
+            if (!result)
+                log.Error(String.Format("{0} 은(는) 정규식에 맞지 않습니다.",value));
+            return result;
+        }
+        public static void valueValidationCheck(KeyValuePair<string,JToken> value){
+            if (!typeCheck(value)){
+                ErrorHandler.InvalidException("40002");
+                }
+            if (!regexCheck(value)){
+                ErrorHandler.InvalidException("40003");
+                }
+        }
+        public static void listValidation(JArray list){
+            foreach(JToken item in list){
+                switch (item.Type){
+                    case JTokenType.Object:
+                        jsonValidation((JObject)item);
+                        break;
+                    case JTokenType.Array:
+                        jsonValidation((JObject)item);
+                        break;
+                    default:
+                        ErrorHandler.InvalidException("40000");
+                        break;
+                        
                 }
             }
 
-            if(requestJson.ContainsKey("uuid")){
-                try{
-                    string uuid = requestJson.Value<string>("uuid");
-                    if(!uuidRegex.IsMatch(uuid)){
-                        log.Error("형식이 올바르지 않습니다.");
-                        ErrorHandler.InvalidException("40003");
-                    }
-                }catch(Exception e){
-                    log.Error(e.Message);
-                    ErrorHandler.InvalidException("40002");
+        }
+        public static void jsonValidation(JObject json){
+            
+            foreach(KeyValuePair<string,JToken> item in json){
+                switch (item.Value.Type){
+                    case JTokenType.Object:
+                        jsonValidation((JObject)item.Value);
+                        break;
+                    case JTokenType.Array:
+                        listValidation((JArray)item.Value);
+                        break;
+                    default:
+                        valueValidationCheck(item);
+                        break;
                 }
-            }
-
-            if(requestJson.ContainsKey("data")){
-                if(dataJson.ContainsKey("uuid")){
-                    try{
-                        string uuid = dataJson.Value<string>("uuid");
-                        if(!uuidRegex.IsMatch(uuid)){
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                }
-                if(dataJson.ContainsKey("aiUuid")){
-                    try{
-                        string aiUuid = dataJson.Value<string>("aiUuid");
-                        if(!aiUuidRegex.IsMatch(aiUuid)){
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                }
-                if(dataJson.ContainsKey("ItemUuid")){
-                    try{
-                        string ItemUuid = dataJson.Value<string>("ItemUuid");
-                        if(!itemRegex.IsMatch(ItemUuid)){
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                }
-                if(dataJson.ContainsKey("targetPoint")){
-                    try{
-                        string targetPoint = dataJson.Value<string>("targetPoint");
-                        if(!uuidRegex.IsMatch(targetPoint)){ 
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                   
-                }
-                if(dataJson.ContainsKey("loc")){
-                    try{
-                        string loc = dataJson.Value<string>("loc");
-                        if(!LocRegex.IsMatch(loc)){
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                }
-                if(dataJson.ContainsKey("vec")){
-                    try{
-                        string vec = dataJson.Value<string>("vec");
-                        if(!VecRegex.IsMatch(vec)){
-                            log.Error("형식이 올바르지 않습니다.");
-                            ErrorHandler.InvalidException("40003");
-                        }
-                    }catch(Exception e){
-                        log.Error(e.Message);
-                        ErrorHandler.InvalidException("40002");
-                    }
-                }
-            }
+            };
         }
     }
 }

@@ -22,7 +22,7 @@ namespace partting_server.controller
                 ErrorHandler.InvalidException("40001");
             }
 
-            RegularExpression.checkRegex(requestJson,handler);
+            RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
             switch (type)
