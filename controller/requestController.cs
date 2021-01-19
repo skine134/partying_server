@@ -22,57 +22,53 @@ namespace partting_server.controller
                 ErrorHandler.InvalidException("40001");
             }
 
+            RegularExpression.checkRegex(requestJson,handler);
+            
+            string type = requestJson.Value<string>("type");
+            switch (type)
+            {
+                case "connected":
+                    new Connected(requestJson, handler);
+                    break;
 
-            if(RegularExpression.checkRegex(requestJson,handler)){
-                string type = requestJson.Value<string>("type");
-                switch (type)
-                {
-                    case "connected":
-                        new Connected(requestJson, handler);
-                        break;
+                case "connectedExit":
+                    new ConnectedExit(requestJson, handler);
+                    break;
 
-                    case "connectedExit":
-                        new ConnectedExit(requestJson, handler);
-                        break;
+                case "move":
+                    new Move(requestJson);
+                    break;
 
-                    case "move":
-                        new Move(requestJson);
-                        break;
+                case "aiMove":
+                    new AiMove(requestJson);
+                    break;
 
-                    case "aiMove":
-                        new AiMove(requestJson);
-                        break;
+                case "getItem":
+                    new GetItem(requestJson);
+                    break;
 
-                    case "getItem":
-                        new GetItem(requestJson);
-                        break;
+                case "death":
+                    new Death(requestJson);
+                    break;
 
-                    case "death":
-                        new Death(requestJson);
-                        break;
+                case "isDetected":
+                    new IsDetected(requestJson);
+                    break;
 
-                    case "isDetected":
-                        new IsDetected(requestJson);
-                        break;
+                case "syncPacket":
+                    new SyncPacket(requestJson);
+                    break;
 
-                    case "syncPacket":
-                        new SyncPacket(requestJson);
-                        break;
+                case "syncAiLocation":
+                    new SyncAiLocation(requestJson);
+                    break;
 
-                    case "syncAiLocation":
-                        new SyncAiLocation(requestJson);
-                        break;
+                // ...
 
-                    // ...
-
-                    default:
-                        log.Error("해당 타입의 api가 존재하지 않습니다.");
-                        ErrorHandler.NotFoundException("40401");
-                        break;
-                }
-            }else{
-                log.Error("형식이 올바르지 않습니다.");
-                ErrorHandler.InvalidException("40003");
+                default:
+                    log.Error("해당 타입의 api가 존재하지 않습니다.");
+                    ErrorHandler.NotFoundException("40401");
+                    break;
             }
         }
     }

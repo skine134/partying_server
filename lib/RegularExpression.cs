@@ -24,7 +24,7 @@ namespace patting_server.lib
         private static Regex itemRegex = new Regex(regexPatternItemUuid);
         private static Regex LocRegex = new Regex(regexPatternLoc);
         private static Regex VecRegex = new Regex(regexPatternVec);
-        public static bool checkRegex(JObject requestJson, Socket handler)
+        public static void checkRegex(JObject requestJson, Socket handler)
         {
             JObject dataJson = (JObject)requestJson["data"];
 
@@ -34,7 +34,6 @@ namespace patting_server.lib
                 }catch(Exception e){
                     log.Error(e.Message);
                     ErrorHandler.InvalidException("40002");
-                    return false;
                 }
             }
 
@@ -42,7 +41,8 @@ namespace patting_server.lib
                 try{
                     string uuid = requestJson.Value<string>("uuid");
                     if(!uuidRegex.IsMatch(uuid)){
-                        return false;
+                        log.Error("형식이 올바르지 않습니다.");
+                        ErrorHandler.InvalidException("40003");
                     }
                 }catch(Exception e){
                     log.Error(e.Message);
@@ -55,7 +55,8 @@ namespace patting_server.lib
                     try{
                         string uuid = dataJson.Value<string>("uuid");
                         if(!uuidRegex.IsMatch(uuid)){
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -66,7 +67,8 @@ namespace patting_server.lib
                     try{
                         string aiUuid = dataJson.Value<string>("aiUuid");
                         if(!aiUuidRegex.IsMatch(aiUuid)){
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -77,7 +79,8 @@ namespace patting_server.lib
                     try{
                         string ItemUuid = dataJson.Value<string>("ItemUuid");
                         if(!itemRegex.IsMatch(ItemUuid)){
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -88,7 +91,8 @@ namespace patting_server.lib
                     try{
                         string targetPoint = dataJson.Value<string>("targetPoint");
                         if(!uuidRegex.IsMatch(targetPoint)){ 
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -100,7 +104,8 @@ namespace patting_server.lib
                     try{
                         string loc = dataJson.Value<string>("loc");
                         if(!LocRegex.IsMatch(loc)){
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -111,7 +116,8 @@ namespace patting_server.lib
                     try{
                         string vec = dataJson.Value<string>("vec");
                         if(!VecRegex.IsMatch(vec)){
-                            return false;
+                            log.Error("형식이 올바르지 않습니다.");
+                            ErrorHandler.InvalidException("40003");
                         }
                     }catch(Exception e){
                         log.Error(e.Message);
@@ -119,7 +125,6 @@ namespace patting_server.lib
                     }
                 }
             }
-            return true;
         }
     }
 }
