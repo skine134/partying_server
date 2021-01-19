@@ -7,25 +7,6 @@ using partting_server.lib;
 
 namespace patting_server.controller.labylinth
 {
-    public class MapInfo
-    {
-        public int[,,] wallInfo;
-        public int[,] patrolpointInfo;
-        public string[,] trapInfo;
-        public Point clearItemLocation;
-        public MapInfo(int[,,] wallInfo, int[,] patrolpointInfo, string[,] trapInfo, Point clearItemLocation)
-        {
-            this.wallInfo = wallInfo;
-            this.patrolpointInfo = patrolpointInfo;
-            this.trapInfo = trapInfo;
-            this.clearItemLocation = clearItemLocation;
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(new { labylinthArray = wallInfo, patrolpoint = patrolpointInfo, trap = trapInfo, clearItem = clearItemLocation });
-        }
-    }
 
     public class CreateMap
     {
@@ -33,25 +14,29 @@ namespace patting_server.controller.labylinth
         public const int RIGHT = 1;
         public const int UP = 2;
         public const int DOWN = 3;
-        public const int Rows = 20; //배열의 행에 해당함
-        public const int Columns = 20; // 배열의 열에 해당함
+        public int Rows; //배열의 행에 해당함
+        public int Columns; // 배열의 열에 해당함
         private static Random random = new Random();
 
         private int[,,] grid; //미로를 만들기 위한 격자 생성 {left,right,up,down}
         private string[,] Spawn; //유닛 오브젝트의 위치를 지정하기 위한 배열 생성
-        private int initRow = random.Next(0, Rows); // 행에 대한 미로찾기를 위한 처음의 시작값
-        private int initColumn = random.Next(0, Columns); // 열에 대한 미로찾기를 위한 처음의 시작값
-        private int trapCount = 15; //함정 오브젝트의 수량 제한
+        private int initRow; // 행에 대한 미로찾기를 위한 처음의 시작값
+        private int initColumn;  // 열에 대한 미로찾기를 위한 처음의 시작값
+        private int trapCount; //함정 오브젝트의 수량 제한
         private HashSet<string> visitCell = new HashSet<string>();
-
         public CreateMap(int Rows, int Columns)
         {
-            CreateGrid(Rows, Columns);
+            this.Rows = Rows;
+            this.Columns = Columns;
+            this.initRow = random.Next(0, Rows);
+            this.initColumn = random.Next(0, Columns);
+            this.trapCount = (int)(Rows * Columns * 4 / 10);
+            CreateGrid(this.Rows, this.Columns);
             HuntAndKill();
             SetTrap(trapCount);
-            MapInfo mapInfo = new MapInfo(grid,new int[0,0],Spawn,new Point(initRow,initColumn));
-            Connection.Send(mapInfo.ToString());
+            Connection.Send(this.ToString());
         }
+        public CreateMap(int size) : this(size, size) { }
         void CreateGrid(int rows, int columns) // 그리드를 쉽게 호출하기 위해 함수로 정의
         {
             grid = new int[rows, columns, 4]; //행과 열을 설정하여 미로를 위한 격자를 초기화함
@@ -76,7 +61,7 @@ namespace patting_server.controller.labylinth
         void HuntAndKill()
         {
             Walk(initRow, initColumn);
-            while (Hunt()) ;
+            while (!Hunt()) ;
         }
 
         void Walk(int row, int column)
@@ -113,7 +98,7 @@ namespace patting_server.controller.labylinth
         bool Hunt() //방문하지 않은 길을 찾기 위함
         {
             IEnumerator<string> visitCellEnum = visitCell.GetEnumerator();
-            do
+            while (visitCellEnum.MoveNext())
             {
 
                 string[] rowAndCol = visitCellEnum.Current.Split(",");
@@ -124,7 +109,7 @@ namespace patting_server.controller.labylinth
                     Walk(row, column);
                     return false;
                 }
-            } while (visitCellEnum.MoveNext());
+            }
 
             return true;
         }
@@ -186,7 +171,7 @@ namespace patting_server.controller.labylinth
             if (!IsVisited(currentRow, currentColumn - 1))
                 notVisitedArray.Add(UP);
             if (!IsVisited(currentRow, currentColumn + 1))
-                notVisitedArray.Add(UP);
+                notVisitedArray.Add(DOWN);
             return notVisitedArray.ToArray();
         }
         string PointToString(int row, int column)
@@ -215,6 +200,11 @@ namespace patting_server.controller.labylinth
                     }
                 }
             }
+        }
+        public override string ToString()
+        {
+            //TODO clearItem 수정 필요, patrolPoint 추가 필요.
+            return JsonConvert.SerializeObject(new { labylinthArray = grid, trap = Spawn, clearItem = new { seat = new { row = 12, col = 4 } } });
         }
     }
 }
