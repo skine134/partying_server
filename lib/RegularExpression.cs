@@ -21,7 +21,7 @@ namespace patting_server.lib
         public static bool typeCheck(KeyValuePair<string,JToken> value){
             bool result = true;
             if (Config.typeConfig.ContainsKey(value.Key))
-                if (value.Value.Type != Config.typeConfig[value.Key])
+                if (value.Value.Type.Equals(Config.typeConfig[value.Key]))
                     result = false;
             else 
                 if (value.Value.Type != Config.typeConfig["other"])
