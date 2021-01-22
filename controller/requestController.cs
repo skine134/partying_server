@@ -1,5 +1,6 @@
 using System;
 using partting_server.util;
+using patting_server.lib;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using log4net;
@@ -20,6 +21,8 @@ namespace partting_server.controller
                 log.Error(e.Message);
                 ErrorHandler.InvalidException("40001");
             }
+
+            RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
             switch (type)
