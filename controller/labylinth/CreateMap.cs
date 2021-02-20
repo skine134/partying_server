@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using partting_server.lib;
 
 
-namespace patting_server.controller.labylinth
+namespace partting_server.controller
 {
 
     public class CreateMap
@@ -20,6 +20,7 @@ namespace patting_server.controller.labylinth
 
         private int[,,] grid; //미로를 만들기 위한 격자 생성 {left,right,up,down}
         private string[,] Spawn; //유닛 오브젝트의 위치를 지정하기 위한 배열 생성
+        private int[,] patrolPoint;
         private int initcolumn; // 행에 대한 미로찾기를 위한 처음의 시작값
         private int initrow;  // 열에 대한 미로찾기를 위한 처음의 시작값
         private int trapCount; //함정 오브젝트의 수량 제한
@@ -33,14 +34,16 @@ namespace patting_server.controller.labylinth
             this.trapCount = (int)(columns * rows * 4 / 10);
             CreateGrid(this.columns, this.rows);
             HuntAndKill();
+            SetPatrolPoint(5);
             SetTrap(trapCount);
-            Connection.Send(this.ToString());
+            Connection.Send(Common.getResponseFormat("createMap", this.ToString()));
         }
         public CreateMap(int size) : this(size, size) { }
         void CreateGrid(int columns, int rows) // 그리드를 쉽게 호출하기 위해 함수로 정의
         {
             grid = new int[columns, rows, 4]; //행과 열을 설정하여 미로를 위한 격자를 초기화함
             Spawn = new string[columns, rows];
+            patrolPoint = new int[columns, rows];
             for (int i = 0; i < columns; i++)
             {
                 for (int j = 0; j < rows; j++)
@@ -48,6 +51,7 @@ namespace patting_server.controller.labylinth
                     for (int k = 0; k < grid.GetLength(2); k++)
                         grid[i, j, k] = 0;
                     Spawn[i, j] = "";
+                    patrolPoint[i, j] = 0;
                     if (j == 0)
                         grid[i, j, LEFT] = 1;
                     grid[i, j, RIGHT] = 1;
@@ -189,7 +193,7 @@ namespace patting_server.controller.labylinth
                 int Rand = random.Next(0, 2);
                 //Player Respon구간은 각 모서리의 2*2구간만큼 랜덤 리스폰 구상중
                 //AI Respon구간은 정 중앙의 3*3구간의 랜덤 리스폰 구상중
-                if (!Spawn[column, row].Equals("")) // ResponCheck를 통해 해당 배열구간에 다른 오브젝트의 여부를 확인 추후(AI,Player)를 추가하여 함정 설치
+                if (Spawn[column, row].Equals("")) // ResponCheck를 통해 해당 배열구간에 다른 오브젝트의 여부를 확인 추후(AI,Player)를 추가하여 함정 설치
                 {
                     if (Rand == 0)
                     { //가시함정 오브젝트
@@ -202,9 +206,23 @@ namespace patting_server.controller.labylinth
                 }
             }
         }
+        void SetPatrolPoint(int count)
+        {
+
+            for (int i = 0; i < count; i++)
+            {
+                // 함정을 랜덤으로 생성하는 역할
+                int column = random.Next(1, (rows - 2));
+                int row = random.Next(1, (columns - 2));
+                
+                patrolPoint[column, row]=1;
+            }
+        }
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(new { labylinthArray = grid, trap = Spawn, clearItem = new { seat = new { column = 12, col = 4 } } });
+            string response = JsonConvert.SerializeObject(new { labylinthArray = grid,patrolPoint=patrolPoint, trap = Spawn, clearItem = new { x= 12, y=  4 } });
+            Console.WriteLine(response);
+            return response;
         }
     }
 }

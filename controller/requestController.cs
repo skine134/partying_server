@@ -1,9 +1,9 @@
 using System;
-using partting_server.util;
-using patting_server.lib;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using log4net;
+using partting_server.util;
+using patting_server.lib;
 
 namespace partting_server.controller
 {
@@ -25,41 +25,44 @@ namespace partting_server.controller
             RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
+            type = partting_server.lib.Common.ToPascalCase(type);
             switch (type)
             {
-                case "connected":
+                case "Connected":
                     new Connected(requestJson, handler);
                     break;
 
-                case "connectedExit":
+                case "ConnectedExit":
                     new ConnectedExit(requestJson, handler);
                     break;
 
-                case "move":
+                case "Move":
                     new Move(requestJson);
                     break;
 
-                case "aiMove":
+                case "AiMove":
                     new AiMove(requestJson);
                     break;
 
-                case "getItem":
+                case "GetItem":
                     new GetItem(requestJson);
                     break;
 
-                case "death":
+                case "Death":
                     new Death(requestJson);
                     break;
 
-                case "isDetected":
+                case "IsDetected":
                     new IsDetected(requestJson);
                     break;
 
-                case "syncPacket":
+                case "SyncPacket":
                     new SyncPacket(requestJson);
                     break;
-
-                case "syncAiLocation":
+                case "CreateMap":
+                    new CreateMap(20);
+                    break;
+                case "SyncAiLocation":
                     new SyncAiLocation(requestJson);
                     break;
 
