@@ -190,18 +190,26 @@ namespace partting_server.controller
                 // 함정을 랜덤으로 생성하는 역할
                 int column = random.Next(1, (rows - 2));
                 int row = random.Next(1, (columns - 2));
-                int Rand = random.Next(0, 2);
+                int rand = random.Next(0, 4);
                 //Player Respon구간은 각 모서리의 2*2구간만큼 랜덤 리스폰 구상중
                 //AI Respon구간은 정 중앙의 3*3구간의 랜덤 리스폰 구상중
                 if (Spawn[column, row].Equals("")) // ResponCheck를 통해 해당 배열구간에 다른 오브젝트의 여부를 확인 추후(AI,Player)를 추가하여 함정 설치
                 {
-                    if (Rand == 0)
-                    { //가시함정 오브젝트
-                        Spawn[column, row] = "SpikeTrap";
-                    }
-                    if (Rand == 1)
-                    {//바닥함정 오브젝트
-                        Spawn[column, row] = "HoleTrap";
+                    switch(rand){
+                        case 0:
+                            Spawn[column, row] = "spike";   //가시 함정
+                            break;
+                        case 1:
+                            Spawn[column, row] = "hole";    //구멍 함정
+                            break;
+                        case 2:
+                            Spawn[column, row] = "slow";    //슬로우 함정
+                            break;
+                        case 3:
+                            Spawn[column, row] = "danger";  //위험 지역
+                            break;
+                        
+
                     }
                 }
             }
@@ -221,7 +229,6 @@ namespace partting_server.controller
         public override string ToString()
         {
             string response = JsonConvert.SerializeObject(new { labylinthArray = grid,patrolPoint=patrolPoint, trap = Spawn, clearItem = new { x= 12, y=  4 } });
-            Console.WriteLine(response);
             return response;
         }
     }

@@ -55,10 +55,6 @@ namespace partting_server.controller
                 case "IsDetected":
                     new IsDetected(requestJson);
                     break;
-
-                case "SyncPacket":
-                    new SyncPacket(requestJson);
-                    break;
                 case "CreateMap":
                     new CreateMap(20);
                     break;

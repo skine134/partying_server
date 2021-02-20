@@ -9,6 +9,7 @@ namespace partting_server.controller
 {
     public class APIController
     {
+        
         protected ILog log = Logger.GetLogger();
         public APIController(JObject requestJson)
         {

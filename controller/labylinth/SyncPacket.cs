@@ -10,29 +10,29 @@ namespace partting_server.controller
     public class SyncPacket : APIController
     {
         private Thread syncPacketThread;
+
         public SyncPacket(JObject requestJson) : base(requestJson)
         {
-            syncPacketThread = new Thread(GetUserInfo);
-            syncPacketThread.Start();
-        }
-        public void GetUserInfo()
-        {
-
-            int count = 0;
-            while (true)
-            {
-                Thread.Sleep(100);
-                if (Info.MultiUserHandler.Count == 0)
-                {
-                    break;
-                }
                 string usersInfoString = UserService.getUserInfo();
                 string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);
                 Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
-                if (count % 10 == 0)
-                    log.Info(String.Format("res {0}", sendJson).Replace("\n", String.Empty));
-                count++;
-            }
         }
+        // public void GetUserInfo()
+        // {
+
+        //     int count = 0;
+        //     while (true)
+        //     {
+        //         Thread.Sleep(100);
+        //         if (Info.MultiUserHandler.Count == 0)
+        //         {
+        //             break;
+        //         }
+
+        //         if (count % 10 == 0)
+        //             log.Info(String.Format("res {0}", sendJson).Replace("\n", String.Empty));
+        //         count++;
+        //     }
+        // }
     }
 }

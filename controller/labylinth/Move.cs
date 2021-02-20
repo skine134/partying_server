@@ -9,7 +9,8 @@ namespace partting_server.controller
     {
         public Move(JObject requestJson) : base(requestJson)
         {
-            UserService.saveUserInfo(requestJson["uuid"].ToString(), (JObject)requestJson["data"]);
+            UserService.saveUserInfo(requestJson["uuid"].ToString(), JObject.Parse(requestJson.Value<string>("data")));
+            new SyncPacket(requestJson);
         }
     }
 }
