@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using log4net;
 using partting_server.lib;
@@ -17,10 +18,14 @@ namespace partting_server.controller
             {
                 if (Info.MultiUserHandler[item.Key] == handler)
                 {
-                    string response = "{'uuid': '" + item.Key + "'}";
+                    string response = JsonConvert.SerializeObject(new {uuid=item.Key});
                     Connection.Send(Common.getResponseFormat("connected", response));
                     break;
                 }
+            }
+            if (Info.MultiUserHandler.Count == 2)
+            {
+                new CreateMap(20);
             }
         }
     }

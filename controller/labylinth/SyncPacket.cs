@@ -7,11 +7,11 @@ using partting_server.service;
 
 namespace partting_server.controller
 {
-    public class SyncPacket : APIController
+    public class SyncPacket
     {
         private Thread syncPacketThread;
 
-        public SyncPacket(JObject requestJson) : base(requestJson)
+        public SyncPacket()
         {
                 string usersInfoString = UserService.getUserInfo();
                 string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);

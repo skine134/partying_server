@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
@@ -12,6 +13,58 @@ namespace partting_server.lib
     public class Common
     {
 
+        public static void CallAPI(string server, string APIName, params object[] list)
+        {
+            /// <summary>
+            /// param : "namespace.className"
+            /// </summary>
+            Type controller = CallClass(server, APIName);
+            // CallMethod(controller, APIName, list);
+        }
+
+        public static Type CallClass(string server,string APIName)
+        {
+            /// <summary>
+            /// param : "namespace.className"
+            /// returm : Type
+            /// </summary>
+            /// <returns></returns>
+            Type type = Type.GetType($"partting_server.controller.{server}.{APIName}");
+            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+            try
+            {
+                constructor.Invoke(new object[] { });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return type;
+        }
+
+        public static void CallMethod(Type classType, String APIName, params object[] list)
+        {
+            /// <summary>
+            /// param : classInstance : classInstance , APIName : APIName, list : API params
+            /// process : Call Method
+            /// returm : None
+            /// </summary>
+            /// <returns></returns>
+            Type type = classType;
+
+            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+            object classObject = constructor.Invoke(new object[] { });
+            // private, protected, public에 관계없이 취득한다.
+            MethodInfo info = type.GetMethod(APIName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            try
+            {
+                info.Invoke(classObject, list);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
         public static Dictionary<string, string> readErrorMessage()
         {
             var path = Config.errorMessageLocation;
