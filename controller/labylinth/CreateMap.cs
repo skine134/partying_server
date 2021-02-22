@@ -18,6 +18,8 @@ namespace partting_server.controller
         public int columns; //배열의 행에 해당함
         public int rows; // 배열의 열에 해당함
         private static Random random = new Random();
+        private HashSet<string> visitCell = new HashSet<string>();
+        // -- JsonFormat으로 뺄 것들
         private string[,] playerLocs;
         private int[,,] grid; //미로를 만들기 위한 격자 생성 {left,right,up,down}
         private string[,] trapPoints; //유닛 오브젝트의 위치를 지정하기 위한 배열 생성
@@ -26,20 +28,27 @@ namespace partting_server.controller
         private int initrow;  // 열에 대한 미로찾기를 위한 처음의 시작값
         private int trapCount; //함정 오브젝트의 수량 제한
         private int patrolCount;
-        private HashSet<string> visitCell = new HashSet<string>();
+        // --
         public CreateMap(int columns, int rows)
         {
+            // Initialize
             this.columns = columns;
             this.rows = rows;
             this.initcolumn = random.Next(0, columns);
             this.initrow = random.Next(0, rows);
             this.trapCount = (int)(columns * rows * 4 / 10);
             this.patrolCount = (int)(columns * rows * 4 / 10);
+
+            // 미로 생성
             CreateGrid(this.columns, this.rows);
             HuntAndKill();
+
+            // 오브젝트 배치
             SetpatrolPoints(patrolCount);
             SetTrap(trapCount);
             SetPlayerLocs(Info.MultiUserHandler);
+
+            //생성된 맵 전송
             Connection.Send(Common.getResponseFormat("createMap", this.ToString()), Info.MultiUserHandler.Keys.ToList().ToArray());
         }
         public CreateMap(int size) : this(size, size) { }
