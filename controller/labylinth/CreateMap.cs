@@ -253,13 +253,13 @@ namespace partting_server.controller
                     column = random.Next(1, (rows - 2));
                     row = random.Next(1, (columns - 2));
 
-                }while(patrolPoints[column, row] != 0 || trapPoints[column,row] != "");
+                }while(patrolPoints[column, row] != 0 || trapPoints[column,row] != "" || playerLocs[column,row] != "");
                 playerLocs[column,row] = item.Key;
             }
         }
         public override string ToString()
         {
-            string response = JsonConvert.SerializeObject(new { labylinthArray = grid,patrolPoints=patrolPoints, trap = trapPoints,playerLocs = playerLocs, clearItem = new { x= 12, y=  4 } });
+            string response = JsonConvert.SerializeObject(new { labylinthArray = grid,patrolPoints=patrolPoints, trap = trapPoints, playerLocs = playerLocs, clearItem = new { x= 12, y=  4 } });
             return response;
         }
     }

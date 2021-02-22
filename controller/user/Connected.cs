@@ -23,7 +23,7 @@ namespace partting_server.controller
                     break;
                 }
             }
-            if (Info.MultiUserHandler.Count == 2)
+            if (Info.MultiUserHandler.Count >= 2)
             {
                 new CreateMap(20);
             }
