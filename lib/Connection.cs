@@ -11,7 +11,7 @@ using partting_server.util;
 public class StateObject
 {
     // Size of receive buffer.  
-    public const int BufferSize = 4096;
+    public const int BufferSize = 1024*1024;
 
     // Receive buffer.  
     public byte[] buffer = new byte[BufferSize];
@@ -30,12 +30,12 @@ namespace partting_server.lib
     {
 
         // Thread signal.  
-        public static ManualResetEvent allDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent sendDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone =
-            new ManualResetEvent(false);
+        public static AutoResetEvent allDone =
+            new AutoResetEvent(false);
+        public static AutoResetEvent sendDone =
+            new AutoResetEvent(false);
+        public static AutoResetEvent receiveDone =
+            new AutoResetEvent(false);
         private static Socket handler;
         private static ILog log = Logger.GetLogger();
 
@@ -196,6 +196,7 @@ namespace partting_server.lib
                 // Begin sending the data to the remote device.
                 handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), handler);
+                sendDone.WaitOne();
             }
             catch (SocketException se)
             {
@@ -215,6 +216,7 @@ namespace partting_server.lib
             try
             {
                 string data = sendData + "<EOF>";
+                log.Info(String.Format("res {0}", data));
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.  
@@ -223,8 +225,8 @@ namespace partting_server.lib
                     Socket handler = Info.MultiUserHandler[userUuid];
                     handler.BeginSend(byteData, 0, byteData.Length, 0,
                         new AsyncCallback(SendCallback), handler);
+                    sendDone.WaitOne();
                 }
-                sendDone.Set();
             }
             catch (SocketException se)
             {
@@ -248,6 +250,7 @@ namespace partting_server.lib
                 //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
+                sendDone.Set();
             }
             catch (SocketException se)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using Newtonsoft.Json;
@@ -16,16 +17,12 @@ namespace partting_server.controller
         {
             foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
             {
-                if (Info.MultiUserHandler[item.Key] == handler)
+                // if (Info.MultiUserHandler[item.Key] == handler)
                 {
                     string response = JsonConvert.SerializeObject(new {uuid=item.Key});
                     Connection.Send(Common.getResponseFormat("connected", response));
                     break;
                 }
-            }
-            if (Info.MultiUserHandler.Count >= 2)
-            {
-                new CreateMap(20);
             }
         }
     }

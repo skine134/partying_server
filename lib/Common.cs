@@ -102,18 +102,21 @@ namespace partting_server.lib
         public static bool FindHandler(Socket handler)
         {
             bool result = false;
-            if (Info.MultiUserHandler.Count > 0)
-            {
+            // Console.WriteLine($"handler: {((IPEndPoint)handler.RemoteEndPoint).Address.ToString()}"); 
+            // TODO EndoPoint가 192.168.0.1 로만 나오는 문제 있음.
+            // if (Info.MultiUserHandler.Count > 0)
+            // {
 
-                foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
-                {
-                    if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
+            //     foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
+            //     {
+            //         Console.WriteLine($"item : {((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()}");
+            //         if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
+            //         {
+            //             result = true;
+            //             break;
+            //         }
+            //     }
+            // }
             if (!result)
             {
                 Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
