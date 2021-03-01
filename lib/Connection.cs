@@ -11,7 +11,7 @@ using partting_server.util;
 public class StateObject
 {
     // Size of receive buffer.  
-    public const int BufferSize = 1024*1024;
+    public const int BufferSize = 1024*8;
 
     // Receive buffer.  
     public byte[] buffer = new byte[BufferSize];

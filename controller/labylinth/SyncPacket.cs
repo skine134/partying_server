@@ -1,22 +1,26 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Newtonsoft.Json;
 using partting_server.lib;
-using Newtonsoft.Json.Linq;
 using partting_server.service;
+using partting_server.JsonFormat;
 
 namespace partting_server.controller
 {
     public class SyncPacket
     {
-        private Thread syncPacketThread;
 
         public SyncPacket()
         {
-                string usersInfoString = UserService.getUserInfo();
+                PlayerInfo[] usersInfo = UserService.getUserInfo();
+                
+                string usersInfoString = JsonConvert.SerializeObject(new {usersInfo = usersInfo});
                 string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);
                 Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
         }
+        
+        // private Thread syncPacketThread;
         // public void GetUserInfo()
         // {
 

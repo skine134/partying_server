@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
 using log4net;
+using partting_server.JsonFormat;
+using partting_server.util;
 
 
 
@@ -13,47 +15,23 @@ namespace partting_server.service
 
         public static void saveUserInfo(string userUuid, JObject userInfo)
         {
-            string movement = userInfo.Value<string>("event");
-            JObject location = (JObject)userInfo["loc"];
-            JObject vector = (JObject)userInfo["vec"];
-            JObject usersInfo = Info.UsersInfo;
 
-            if (usersInfo.ContainsKey(userUuid))
-            {
-                usersInfo[userUuid]["event"] = movement;
-                usersInfo[userUuid]["loc"] = location;
-                usersInfo[userUuid]["vec"] = vector;
-            }
-            else
-            {
-                userInfo.Remove("type");
-                usersInfo.Add(userUuid, userInfo);
-            }
-
+            Queue<PlayerInfo> usersInfo = Info.UsersInfo;
+            usersInfo.Enqueue(userInfo.ToObject<PlayerInfo>());
             Info.UsersInfo = usersInfo;
         }
         public static void deleteUserInfo(string userUuid)
         {
-            JObject usersInfo = Info.UsersInfo;
+            // PlayerInfo[] usersInfo = Info.UsersInfo;
 
-            try
-            {
-                usersInfo[userUuid]["death"] = true;
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                ErrorHandler.NotFoundException("40402");
-            }
-
-            Info.UsersInfo = usersInfo;
+            // Info.UsersInfo = usersInfo;
         }
-        public static string getUserInfo()
+        public static PlayerInfo[] getUserInfo()
         {
-            JObject usersInfo = Info.UsersInfo;
-            string usersInfoString = "";
-            usersInfoString = usersInfo.ToString();
-            return usersInfoString;
+            Queue<PlayerInfo> usersInfo = Info.UsersInfo;
+            PlayerInfo[] result = usersInfo.ToArray();
+            Info.UsersInfo.Clear();
+            return result;
         }
     }
 }

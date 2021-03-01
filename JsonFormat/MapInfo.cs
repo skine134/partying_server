@@ -1,6 +1,6 @@
 using partting_server.util;
 
-namespace Communication.JsonFormat
+namespace partting_server.JsonFormat
 {
     public class MapInfo
     {

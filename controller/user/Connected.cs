@@ -17,7 +17,7 @@ namespace partting_server.controller
         {
             foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
             {
-                // if (Info.MultiUserHandler[item.Key] == handler)
+                if (Info.MultiUserHandler[item.Key] == handler)
                 {
                     string response = JsonConvert.SerializeObject(new {uuid=item.Key});
                     Connection.Send(Common.getResponseFormat("connected", response));
