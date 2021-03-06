@@ -14,9 +14,9 @@ namespace partting_server.util
         public static Dictionary<string,JTokenType> typeConfig = new Dictionary<string,JTokenType>()
         {
             {"other",JTokenType.String},
-            {"x",JTokenType.Float},
-            {"y",JTokenType.Float},
-            {"z",JTokenType.Float},
+            {"X",JTokenType.Float},
+            {"Y",JTokenType.Float},
+            {"Z",JTokenType.Float},
         };
         public static Dictionary<string,string> regexConfig = new Dictionary<string,string>()
         {

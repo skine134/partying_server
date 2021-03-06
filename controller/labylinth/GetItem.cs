@@ -1,5 +1,6 @@
+using System.Linq;
 using Newtonsoft.Json.Linq;
-using partting_server.service;
+using partting_server.lib;
 
 namespace partting_server.controller
 {
@@ -7,7 +8,7 @@ namespace partting_server.controller
     {
         public GetItem(JObject requestJson) : base(requestJson)
         {
-            ItemService.saveItemInfo(requestJson["uuid"].ToString(), requestJson);
+            Connection.Send(Common.getResponseFormat("getItem",requestJson["uuid"].ToString()), Info.MultiUserHandler.Keys.ToList().ToArray());
         }
     }
 }
