@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using log4net;
 using partting_server.util;
+using partting_server.lib;
 
 namespace partting_server.controller
 {
@@ -17,12 +19,14 @@ namespace partting_server.controller
 
                 foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
                 {
-                    if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
+                    if (handler == item.Value)
                     {
                         handler.Shutdown(SocketShutdown.Both);
                         handler.Close();
                         Info.MultiUserHandler.Remove(item.Key);
                         log.Info("사용자와 연결을 종료했습니다.");
+                        if (Info.MultiUserHandler.Count > 0)
+                            Connection.Send(Common.getResponseFormat("connectedExit", JsonConvert.SerializeObject(new {uuid = item.Key})),Info.MultiUserHandler.Keys.ToList().ToArray());
                         break;
                     }
                 }
