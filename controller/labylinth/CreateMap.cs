@@ -37,8 +37,8 @@ namespace partting_server.controller
             this.rows = rows;
             this.initcolumn = random.Next(0, columns);
             this.initrow = random.Next(0, rows);
-            this.trapCount = (int)(columns * rows/ 10);
-            this.patrolCount = (int)(columns * rows/ 10);
+            this.trapCount = (int)(columns * rows / 10);
+            this.patrolCount = (int)(columns * rows / 10);
             try
             {
                 // 미로 생성
@@ -202,6 +202,28 @@ namespace partting_server.controller
         {
             return String.Format("{0},{1}", column, row);
         }
+        void SetpatrolPoints(int count, int columns, int rows)
+        {
+            patrolPoints = new CellInfo[count];
+            for (int i = 0; i < count; i++)
+            {
+                patrolPoints[i] = new CellInfo();
+                // 함정을 랜덤으로 생성하는 역할
+                int column = 0;
+                int row = 0;
+                do
+                {
+                    column = random.Next(1, (columns - 2));
+                    row = random.Next(1, (rows - 2));
+                    if (IsEmpty(patrolPoints, column, row))
+                        continue;
+
+                } while (false);
+                patrolPoints[i].col = column;
+                patrolPoints[i].row = row;
+                patrolPoints[i].data = 1;
+            }
+        }
         void SetTrap(int count, int columns, int rows)
         {
             trapPoints = new CellInfo[count];
@@ -209,8 +231,15 @@ namespace partting_server.controller
             {
                 trapPoints[i] = new CellInfo();
                 // 함정을 랜덤으로 생성하는 역할
-                int column = random.Next(1, (columns - 2));
-                int row = random.Next(1, (rows - 2));
+                int column = 0;
+                int row = 0;
+                do
+                {
+                    column = random.Next(1, (columns - 2));
+                    row = random.Next(1, (rows - 2));
+                    if (IsEmpty(trapPoints, column, row))
+                        continue;
+                } while (false);
                 int rand = random.Next(0, 4);
                 trapPoints[i].col = column;
                 trapPoints[i].row = row;
@@ -233,20 +262,6 @@ namespace partting_server.controller
                 }
             }
         }
-        void SetpatrolPoints(int count, int columns, int rows)
-        {
-            patrolPoints = new CellInfo[count];
-            for (int i = 0; i < count; i++)
-            {
-                patrolPoints[i] = new CellInfo();
-                // 함정을 랜덤으로 생성하는 역할
-                int column = random.Next(1, (columns - 2));
-                int row = random.Next(1, (rows - 2));
-                patrolPoints[i].col = column;
-                patrolPoints[i].row = row;
-                patrolPoints[i].data = 1;
-            }
-        }
         void SetPlayerLocs(Dictionary<string, Socket> MultiUserHandler, int columns, int rows)
         {
             playerLocs = new CellInfo[Info.MultiUserHandler.Count];
@@ -260,11 +275,11 @@ namespace partting_server.controller
                 {
                     column = random.Next(1, (columns - 2));
                     row = random.Next(1, (rows - 2));
-                    if(IsEmpty(patrolPoints,column,row))
+                    if (IsEmpty(patrolPoints, column, row))
                         continue;
-                    if (IsEmpty(trapPoints,column,row))
+                    if (IsEmpty(trapPoints, column, row))
                         continue;
-                    if (IsEmpty(playerLocs,column,row))
+                    if (IsEmpty(playerLocs, column, row))
                         continue;
 
                 } while (false);
@@ -274,11 +289,11 @@ namespace partting_server.controller
                 ++i;
             }
         }
-        private bool IsEmpty(CellInfo[] list,int column,int row)
+        private bool IsEmpty(CellInfo[] list, int column, int row)
         {
-            bool result =true;
+            bool result = true;
             foreach (CellInfo item in list)
-                if (item.col == column && item.row == row)
+                if (item != null&&item.col == column && item.row == row)
                 {
                     result = false;
                     break;

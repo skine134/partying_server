@@ -19,7 +19,9 @@ namespace partting_server.controller
             {
                 if (Info.MultiUserHandler[item.Key] == handler)
                 {
-                    string response = JsonConvert.SerializeObject(new {uuid=item.Key});
+                    Info.MultiUserHandler[requestJson["uuid"].ToString()] = handler;
+                    Info.MultiUserHandler.Remove(item.Key);
+                    string response = JsonConvert.SerializeObject(new {});
                     Connection.Send(Common.getResponseFormat("connected", response));
                     break;
                 }
