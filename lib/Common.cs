@@ -103,20 +103,20 @@ namespace partting_server.lib
         {
             bool result = false;
             // Console.WriteLine($"handler: {((IPEndPoint)handler.RemoteEndPoint).Address.ToString()}"); 
-            if (Info.MultiUserHandler.Count > 0)
-            {
+            // if (Info.MultiUserHandler.Count > 0)
+            // {
 
-                foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
-                {
-                    if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
-                    {
+            //     foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
+            //     {
+            //         if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
+            //         {
                         
-                        Info.MultiUserHandler[item.Key] = handler;
-                        result = true;
-                        break;
-                    }
-                }
-            }
+            //             Info.MultiUserHandler[item.Key] = handler;
+            //             result = true;
+            //             break;
+            //         }
+            //     }
+            // }
             if (!result)
                 Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
             return result;
