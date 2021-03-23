@@ -103,24 +103,22 @@ namespace partting_server.lib
         {
             bool result = false;
             // Console.WriteLine($"handler: {((IPEndPoint)handler.RemoteEndPoint).Address.ToString()}"); 
-            // TODO EndoPoint가 192.168.0.1 로만 나오는 문제 있음.
-            // if (Info.MultiUserHandler.Count > 0)
-            // {
-
-            //     foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
-            //     {
-            //         Console.WriteLine($"item : {((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()}");
-            //         if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
-            //         {
-            //             result = true;
-            //             break;
-            //         }
-            //     }
-            // }
-            if (!result)
+            if (Info.MultiUserHandler.Count > 0)
             {
-                Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
+
+                foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
+                {
+                    if ((((IPEndPoint)item.Value.RemoteEndPoint).Address.ToString()).Equals(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()))
+                    {
+                        
+                        Info.MultiUserHandler[item.Key] = handler;
+                        result = true;
+                        break;
+                    }
+                }
             }
+            if (!result)
+                Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
             return result;
         }
         public static string ToPascalCase(string str)
