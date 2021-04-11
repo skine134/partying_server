@@ -4,10 +4,10 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using log4net;
 using Newtonsoft.Json;
-using partting_server.lib;
-using partting_server.util;
+using partying_server.lib;
+using partying_server.util;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
 
     public class CreateMap

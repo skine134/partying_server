@@ -1,4 +1,4 @@
-namespace partting_server.util
+namespace partying_server.util
 {
     public class Division2
     {

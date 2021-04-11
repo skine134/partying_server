@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-using partting_server.lib;
-using partting_server.service;
+using partying_server.lib;
+using partying_server.service;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class SyncAiLocation : APIController
     {

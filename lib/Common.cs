@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
+using partying_server.util;
 
-namespace partting_server.lib
+namespace partying_server.lib
 {
     public class Common
     {
@@ -29,7 +29,7 @@ namespace partting_server.lib
             /// returm : Type
             /// </summary>
             /// <returns></returns>
-            Type type = Type.GetType($"partting_server.controller.{server}.{APIName}");
+            Type type = Type.GetType($"partying_server.controller.{server}.{APIName}");
             ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
             try
             {

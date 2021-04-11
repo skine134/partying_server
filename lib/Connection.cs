@@ -4,8 +4,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using log4net;
-using partting_server.controller;
-using partting_server.util;
+using partying_server.controller;
+using partying_server.util;
 
 // State object for reading client data asynchronously
 public class StateObject
@@ -23,7 +23,7 @@ public class StateObject
     public Socket workSocket = null;
 }
 
-namespace partting_server.lib
+namespace partying_server.lib
 {
 
     public class Connection

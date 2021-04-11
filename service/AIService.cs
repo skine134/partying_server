@@ -1,10 +1,10 @@
 using System;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
+using partying_server.util;
 using log4net;
 
 
-namespace partting_server.service
+namespace partying_server.service
 {
     public class AIService
     {

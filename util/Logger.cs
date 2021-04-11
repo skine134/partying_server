@@ -1,7 +1,7 @@
 using log4net;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
-namespace partting_server.util
+namespace partying_server.util
 {
     public class Logger
     {

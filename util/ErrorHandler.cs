@@ -1,9 +1,9 @@
 using System;
 using log4net;
-using partting_server.lib;
+using partying_server.lib;
 
 
-namespace partting_server.util
+namespace partying_server.util
 {
     public class ErrorHandler
     {

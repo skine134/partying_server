@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
-using partting_server.lib;
-using partting_server.service;
-using partting_server.JsonFormat;
+using partying_server.lib;
+using partying_server.service;
+using partying_server.JsonFormat;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class SyncPacket
     {

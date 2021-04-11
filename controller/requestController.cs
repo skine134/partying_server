@@ -2,10 +2,10 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using log4net;
-using partting_server.util;
+using partying_server.util;
 using patting_server.lib;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class RequestController
 
@@ -25,7 +25,7 @@ namespace partting_server.controller
             RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
-            type = partting_server.lib.Common.ToPascalCase(type);
+            type = partying_server.lib.Common.ToPascalCase(type);
             switch (type)
             {
                 case "Connected":

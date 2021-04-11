@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using log4net;
-using partting_server.JsonFormat;
-using partting_server.util;
+using partying_server.JsonFormat;
+using partying_server.util;
 
 
 
-namespace partting_server.service
+namespace partying_server.service
 {
     public class UserService
     {

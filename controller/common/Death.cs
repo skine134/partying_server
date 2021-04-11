@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using partting_server.service;
-using partting_server.lib;
+using partying_server.service;
+using partying_server.lib;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class Death : APIController
     {

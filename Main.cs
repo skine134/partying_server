@@ -1,6 +1,6 @@
-using partting_server.lib;
+using partying_server.lib;
 
-namespace partting_server
+namespace partying_server
 {
     class Program
     {

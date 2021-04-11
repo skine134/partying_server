@@ -3,9 +3,9 @@ using System;
 using System.Net;
 using log4net;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
+using partying_server.util;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class APIController
     {

@@ -1,15 +1,18 @@
-using partting_server.lib;
+using partying_server.lib;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-namespace partting_server.util
+namespace partying_server.util
 {
     public class Config
     {
         public static string errorMessageLocation = @"./util/ErrorMessage.csv";
         public static Dictionary<string, string> errorMessage = Common.readErrorMessage();
         public static JObject errorResponseForm = JObject.Parse(@"{'errorCode' : '', 'errorMsg' : ''}");
-        
-
+        public static float bossHP = 6000f;
+        public static float playerSpeed = 14f;
+        public static float playerHealth = 3;
+        public static float playerAttackDamage = 1f;
+        public static float playerShotSpeed = 1f;
         // 기록되지 않은 항목들은 모두 string type으로 검사.
         public static Dictionary<string,JTokenType> typeConfig = new Dictionary<string,JTokenType>()
         {

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using partting_server.util;
+using partying_server.util;
 
-namespace partting_server.JsonFormat
+namespace partying_server.JsonFormat
 {
     public class BaseJsonFormat
     {

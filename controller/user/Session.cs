@@ -1,4 +1,4 @@
-namespace partting_server.controller.user
+namespace partying_server.controller.user
 {
     public class Session
     {

@@ -4,10 +4,10 @@ using System.Net.Sockets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using log4net;
-using partting_server.util;
-using partting_server.lib;
+using partying_server.util;
+using partying_server.lib;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class ConnectedExit
     {
