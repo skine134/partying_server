@@ -5,7 +5,7 @@ using partying_server.lib;
 
 namespace partying_server.controller
 {
-    public class GetItem : APIController
+    public class GetItem : BaseAPI
     {
         public GetItem(JObject requestJson) : base(requestJson)
         {

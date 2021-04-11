@@ -3,7 +3,7 @@ using partying_server.service;
 
 namespace partying_server.controller
 {
-    public class AiMove : APIController
+    public class AiMove : BaseAPI
     {
         public AiMove(JObject requestJson) : base(requestJson)
         {

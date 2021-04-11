@@ -6,7 +6,7 @@ using partying_server.lib;
 
 namespace partying_server.controller
 {
-    public class AttackBoss : APIController
+    public class AttackBoss : BaseAPI
     {
         
         public AttackBoss(JObject requestJson) : base(requestJson)

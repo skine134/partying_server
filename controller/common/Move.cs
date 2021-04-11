@@ -5,7 +5,7 @@ using partying_server.service;
 
 namespace partying_server.controller
 {
-    public class Move : APIController
+    public class Move : BaseAPI
     {
         public Move(JObject requestJson) : base(requestJson)
         {

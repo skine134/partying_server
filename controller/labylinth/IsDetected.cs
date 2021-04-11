@@ -3,7 +3,7 @@ using partying_server.service;
 
 namespace partying_server.controller
 {
-    public class IsDetected : APIController
+    public class IsDetected : BaseAPI
     {
         public IsDetected(JObject requestJson) : base(requestJson)
         {

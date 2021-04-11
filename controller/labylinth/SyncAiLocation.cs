@@ -7,7 +7,7 @@ using partying_server.service;
 
 namespace partying_server.controller
 {
-    public class SyncAiLocation : APIController
+    public class SyncAiLocation : BaseAPI
     {
         private Thread syncAiLocationThread;
         public SyncAiLocation(JObject requestJson) : base(requestJson)
