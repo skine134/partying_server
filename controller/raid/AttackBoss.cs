@@ -13,8 +13,7 @@ namespace partying_server.controller
         {
             var data = requestJson["data"] as JObject;
             BossService.AttackedBoss((float)data["damage"]);
-            var sendJson = Common.getResponseFormat("SyncBoss", Info.BossInfo.ToString());
-            Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
+            Connection.SendAll(Common.GetResponseFormat("SyncBoss", Info.BossInfo));
         }
     }
 }

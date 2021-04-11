@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using log4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using partying_server.lib;
 using partying_server.util;
 
@@ -51,7 +52,7 @@ namespace partying_server.controller
                 SetPlayerLocs(Info.MultiUserHandler, this.columns, this.rows);
 
                 //생성된 맵 전송
-                Connection.Send(Common.getResponseFormat("createMap", this.ToString()), Info.MultiUserHandler.Keys.ToList().ToArray());
+                Connection.SendAll(Common.GetResponseFormat("createMap", JObject.Parse(this.ToString())));
             }
             catch (Exception e)
             {

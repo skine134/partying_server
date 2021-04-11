@@ -22,7 +22,7 @@ namespace partying_server.controller
                     Info.MultiUserHandler[requestJson["uuid"].ToString()] = handler;
                     Info.MultiUserHandler.Remove(item.Key);
                     string response = JsonConvert.SerializeObject(new {});
-                    Connection.Send(Common.getResponseFormat("connected", response));
+                    Connection.Send(Common.GetResponseFormat("connected", response));
                     break;
                 }
             }

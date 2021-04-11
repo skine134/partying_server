@@ -13,23 +13,22 @@ namespace partying_server.service
     {
         private static ILog log = Logger.GetLogger();
 
-        public static void saveUserInfo(string userUuid, JObject userInfo)
+        public static void SaveUserInfo(string userUuid, JObject userInfo)
         {
 
             Queue<PlayerInfo> usersInfo = Info.UsersInfo;
             usersInfo.Enqueue(userInfo.ToObject<PlayerInfo>());
             Info.UsersInfo = usersInfo;
         }
-        public static void deleteUserInfo(string userUuid)
+        public static void DeleteUserInfo(string userUuid)
         {
             // PlayerInfo[] usersInfo = Info.UsersInfo;
 
             // Info.UsersInfo = usersInfo;
         }
-        public static PlayerInfo[] getUserInfo()
+        public static PlayerInfo[] GetUserInfo()
         {
-            Queue<PlayerInfo> usersInfo = Info.UsersInfo;
-            PlayerInfo[] result = usersInfo.ToArray();
+            PlayerInfo[] result = Info.UsersInfo.ToArray();
             Info.UsersInfo.Clear();
             return result;
         }

@@ -10,11 +10,16 @@ namespace partying_server.controller
     public class BaseAPI
     {
         
+        protected string uuid;
+        protected JObject data;
         protected ILog log = Logger.GetLogger();
         public BaseAPI(JObject requestJson)
         {
-            string requestIp = ((IPEndPoint)Info.MultiUserHandler[requestJson["uuid"].ToString()].RemoteEndPoint).Address.ToString();
+            string requestIp = ((IPEndPoint)Info.MultiUserHandler[uuid].RemoteEndPoint).Address.ToString();
             log.Info(string.Format("[{0}] : {1}",requestIp, requestJson.ToString().Replace("\n",String.Empty)));
+            uuid = requestJson["uuid"].ToString();
+            data = requestJson["data"] as JObject;
+
         }
     }
 }

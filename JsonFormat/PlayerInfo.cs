@@ -60,7 +60,7 @@ namespace partying_server.JsonFormat
 
         }
 
-        public string ObjectToJson()
+        public override string ToString()
         {
             /// <summary>
             /// 현재 오브젝트를 json 형식의 string으로 반환합니다.

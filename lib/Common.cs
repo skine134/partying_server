@@ -7,6 +7,7 @@ using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using partying_server.util;
+using partying_server.JsonFormat;
 
 namespace partying_server.lib
 {
@@ -65,7 +66,7 @@ namespace partying_server.lib
                 Console.WriteLine(e);
             }
         }
-        public static Dictionary<string, string> readErrorMessage()
+        public static Dictionary<string, string> ReadErrorMessage()
         {
             var path = Config.errorMessageLocation;
             using (TextFieldParser csvReader = new TextFieldParser(path))
@@ -86,17 +87,14 @@ namespace partying_server.lib
                 return errorMessage;
             }
         }
-        public static string getResponseFormat(string type, string data)
+        public static string GetResponseFormat(string type, object data)
         {
-            string responseFormat = JsonConvert.SerializeObject(new { type = type, server = "Labylinth", data = JObject.Parse(data) });
-            return responseFormat;
+            return ResponseFormat.ObjectToString(type,data);
         }
-        public static string getErrorFormat(string errorCode)
+        public static string GetErrorFormat(string errorCode)
         {
-            JObject errorFormat = Config.errorResponseForm;
-            errorFormat["errorCode"] = errorCode;
-            errorFormat["errorMsg"] = Config.errorMessage[errorCode];
-            return Common.getResponseFormat("error", errorFormat.ToString());
+            ErrorFormat errorFormat = new ErrorFormat(errorCode);
+            return Common.GetResponseFormat("error", errorFormat);
 
         }
         public static bool FindHandler(Socket handler)
@@ -144,6 +142,8 @@ namespace partying_server.lib
             return result;
         }
         // Convert the string to camel case.
+        
+        
         public static string ToCamelCase(string str)
         {
             if (!string.IsNullOrEmpty(str) && str.Length > 1)
@@ -151,6 +151,48 @@ namespace partying_server.lib
                 return char.ToLowerInvariant(str[0]) + str.Substring(1);
             }
             return str;
+        }
+        private static JArray listToCamelCase(JArray list){
+            var result = new JArray();
+            foreach(JToken item in list){
+                switch (item.Type){
+                    case JTokenType.Object:
+                        result.Add(ToCamelCaseForJson((JObject)item));
+                        break;
+                    case JTokenType.Array:
+                        result.Add(listToCamelCase((JArray)item));
+                        break;
+                    case JTokenType.String:
+                        result.Add(ToCamelCase(item.ToString()));
+                        break;
+                    default:
+                        result.Add(item);
+                        break;
+                        
+                }
+            }
+            return result;
+        }
+        public static JObject ToCamelCaseForJson(JObject json){
+            JObject result = new JObject();
+            foreach(KeyValuePair<string,JToken> item in json){
+                var rename = ToCamelCase(item.Key);
+                switch (item.Value.Type){
+                    case JTokenType.Object:
+                        result[rename] = ToCamelCaseForJson((JObject)item.Value);
+                        break;
+                    case JTokenType.Array:
+                        result[rename] = listToCamelCase((JArray)item.Value);
+                        break;
+                    case JTokenType.String:
+                        result[rename] = item.Value;
+                        break;
+                    default:
+                        result[rename] = item.Value;
+                        break;
+                }
+            };
+            return result;
         }
     }
 }

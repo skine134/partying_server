@@ -1,13 +1,13 @@
 using partying_server.lib;
 using System.Collections.Generic;
+using partying_server.JsonFormat;
 using Newtonsoft.Json.Linq;
 namespace partying_server.util
 {
     public class Config
     {
         public static string errorMessageLocation = @"./util/ErrorMessage.csv";
-        public static Dictionary<string, string> errorMessage = Common.readErrorMessage();
-        public static JObject errorResponseForm = JObject.Parse(@"{'errorCode' : '', 'errorMsg' : ''}");
+        public static Dictionary<string, string> errorMessage = Common.ReadErrorMessage();
         public static float bossHP = 6000f;
         public static float playerSpeed = 14f;
         public static float playerHealth = 3;

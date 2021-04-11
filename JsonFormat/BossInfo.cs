@@ -9,7 +9,7 @@ namespace partying_server.JsonFormat
         public string pattern = "";
         public Division3 vec = new Division3();
         public Division3 loc = new Division3();
-        public float bossHP = Config.bossHP;
+        private float bossHP = Config.bossHP;
         public float BossHP
         {
             get

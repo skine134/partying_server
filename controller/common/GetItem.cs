@@ -9,7 +9,7 @@ namespace partying_server.controller
     {
         public GetItem(JObject requestJson) : base(requestJson)
         {
-            Connection.Send(Common.getResponseFormat("getItem",JsonConvert.SerializeObject(new {uuid = requestJson.Value<string>("uuid")})), Info.MultiUserHandler.Keys.ToList().ToArray());
+            Connection.SendAll(Common.GetResponseFormat("getItem",new {uuid = uuid}));
         }
     }
 }

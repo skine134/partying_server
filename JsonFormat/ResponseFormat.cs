@@ -1,19 +1,24 @@
 using Newtonsoft.Json;
-using partying_server.util;
+using Newtonsoft.Json.Linq;
+using partying_server.lib;
 
 namespace partying_server.JsonFormat
 {
-    public class BaseJsonFormat
+    public class ResponseFormat
     {
         private string type;
-        private string server;
         private object data;
-        public string ObjectToJson()
+        public ResponseFormat(string type,object data)
+        {
+            this.type = type;
+            this.data = data;
+        }
+        public string ObjectToString()
         {
             return JsonConvert.SerializeObject(this);
         }
 
-        public static string ObjectToJson(string type, string server, object data = null)
+        public static string ObjectToString(string type, object data = null)
         {
             /// <summary>
             /// 현재 오브젝트를 json 형식의 string으로 반환합니다.
@@ -29,11 +34,13 @@ namespace partying_server.JsonFormat
             /// }
             /// </returns>
             string _type = type;
-            string _server = server;
-            object _data = data;
-            if (data==null)
-             _data = new {};
-            return JsonConvert.SerializeObject(new { type = _type, server = _server, data =  _data});
+            var _data = data;
+            if (_data==null)
+                _data = new {};
+            else
+                _data = JObject.FromObject(data);
+            
+            return Common.ToCamelCaseForJson(JObject.FromObject(new ResponseFormat(_type,_data))).ToString();
         }
         public void SetValues(string type, object data)
         {
@@ -41,7 +48,6 @@ namespace partying_server.JsonFormat
             this.Data = data;
         }
         public string Type { get => type; set => type = value; }
-        public string Server { get => server; set => server = value; }
         public object Data { get => data; set => data = value; }
     }
 }

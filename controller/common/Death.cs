@@ -11,7 +11,7 @@ namespace partying_server.controller
     {
         public Death(JObject requestJson) : base(requestJson)
         {
-            Connection.Send(Common.getResponseFormat("death",JsonConvert.SerializeObject(new {uuid = requestJson.Value<string>("uuid")})), Info.MultiUserHandler.Keys.ToList().ToArray());
+            Connection.SendAll(Common.GetResponseFormat("death",new {uuid = uuid}));
         }
     }
 }

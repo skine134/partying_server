@@ -13,11 +13,8 @@ namespace partying_server.controller
 
         public SyncPacket()
         {
-                PlayerInfo[] usersInfo = UserService.getUserInfo();
-                
-                string usersInfoString = JsonConvert.SerializeObject(new {usersInfo = usersInfo});
-                string sendJson = Common.getResponseFormat("syncPacket", usersInfoString);
-                Connection.Send(sendJson, Info.MultiUserHandler.Keys.ToList().ToArray());
+            var usersInfo = UserService.GetUserInfo();
+            Connection.SendAll(Common.GetResponseFormat("syncPacket", new {usersInfo = usersInfo}));
         }
         
         // private Thread syncPacketThread;

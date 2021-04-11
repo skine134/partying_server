@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -76,7 +77,7 @@ namespace partying_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
 
             Console.Read();
@@ -110,7 +111,7 @@ namespace partying_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
 
@@ -151,7 +152,7 @@ namespace partying_server.lib
                                 catch (Exception e)
                                 {
                                     log.Error(e.Message);
-                                    Send(Common.getErrorFormat("50000"));
+                                    Send(Common.GetErrorFormat("50000"));
                                 }
 
                     }
@@ -178,7 +179,7 @@ namespace partying_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
 
@@ -211,7 +212,7 @@ namespace partying_server.lib
                 return;
             }
         }
-        public static void Send(String sendData, String[] userList)
+        public static void SendAll(String sendData)
         {
             try
             {
@@ -220,7 +221,7 @@ namespace partying_server.lib
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.  
-                foreach (string userUuid in userList)
+                foreach (string userUuid in Info.MultiUserHandler.Keys.ToList().ToArray())
                 {
                     Socket handler = Info.MultiUserHandler[userUuid];
                     handler.BeginSend(byteData, 0, byteData.Length, 0,
@@ -237,7 +238,7 @@ namespace partying_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
 
@@ -260,7 +261,7 @@ namespace partying_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
     }
