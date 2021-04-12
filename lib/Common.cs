@@ -119,6 +119,18 @@ namespace partying_server.lib
                 Info.MultiUserHandler.Add(Guid.NewGuid().ToString(), handler);
             return result;
         }
+        public static DateTime ConvertFromUnixTimestamp(double timestamp)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local);
+            return origin.AddSeconds(timestamp);
+        }
+
+        public static double ConvertToUnixTimestamp(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
         public static string ToPascalCase(string str)
         {
             // If there are 0 or 1 characters, just return the string.

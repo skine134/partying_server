@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using Newtonsoft.Json.Linq;
+using partying_server.util;
 using partying_server.JsonFormat;
+
 namespace partying_server
 {
     public class Info
     {
+        public static int currentStage = Config.defaultStage;
         // Ai 정보를 저장
         private static JObject aiInfo = new JObject();
 
