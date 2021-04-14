@@ -6,7 +6,7 @@ namespace partying_server.util
 {
     public class Config
     {
-        public static int defaultStage = 0;
+        public static int defaultStage = 1;
         public static string errorMessageLocation = @"./util/ErrorMessage.csv";
         public static Dictionary<string, string> errorMessage = Common.ReadErrorMessage();
         public static float bossHP = 6000f;

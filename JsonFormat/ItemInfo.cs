@@ -5,8 +5,10 @@ namespace partying_server.JsonFormat
 {
     public class ItemInfo
     {
+        private static Random random = new Random();
         public enum Items { Wind, Attck, Heart, ReloadSpeed, Healthmax, Resurrection }
-        public int ItemName {get; set;}
-        public double DisApearTime {get; set;} = (double)Common.ConvertToUnixTimestamp(DateTime.Now.AddSeconds(Config.itemRemainSeconds));
+        public Division2 Loc {get;set;} = new Division2(random.Next(10,290),random.Next(10,290));
+        public int Name {get; set;}
+        public double LifeTime {get; set;} = (double)Common.ConvertToUnixTimestamp(DateTime.Now.AddSeconds(Config.itemRemainSeconds));
     }
 }

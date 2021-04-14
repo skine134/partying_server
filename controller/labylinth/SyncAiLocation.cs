@@ -25,8 +25,8 @@ namespace partying_server.controller
                     break;
                 }
                 Thread.Sleep(100);
-                string aisInfoString = AIService.getAiInfo();
-                string sendJson = Common.GetResponseFormat("syncAiLocation", aisInfoString);
+                var aiInfo = AIService.getAiInfo();
+                string sendJson = Common.GetResponseFormat("syncAiLocation", aiInfo);
                 Connection.SendAll(sendJson);
                 if (count % 100 == 0)
                     log.Info(String.Format("res {0}", sendJson).Replace("\n", String.Empty));

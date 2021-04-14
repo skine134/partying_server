@@ -15,6 +15,7 @@ namespace partying_server.controller
         {
             var usersInfo = UserService.GetUserInfo();
             Connection.SendAll(Common.GetResponseFormat("syncPacket", new {usersInfo = usersInfo}));
+
         }
         
         // private Thread syncPacketThread;

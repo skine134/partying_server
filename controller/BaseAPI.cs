@@ -15,10 +15,10 @@ namespace partying_server.controller
         protected ILog log = Logger.GetLogger();
         public BaseAPI(JObject requestJson)
         {
-            string requestIp = ((IPEndPoint)Info.MultiUserHandler[uuid].RemoteEndPoint).Address.ToString();
-            log.Info(string.Format("[{0}] : {1}",requestIp, requestJson.ToString().Replace("\n",String.Empty)));
             uuid = requestJson["uuid"].ToString();
             data = requestJson["data"] as JObject;
+            string requestIp = ((IPEndPoint)Info.MultiUserHandler[uuid].RemoteEndPoint).Address.ToString();
+            log.Info(string.Format("[{0}] : {1}",requestIp, requestJson.ToString().Replace("\n",String.Empty)));
 
         }
     }

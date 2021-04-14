@@ -21,7 +21,6 @@ namespace partying_server.controller
                 log.Error(e.Message);
                 ErrorHandler.InvalidException("40001");
             }
-
             RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
@@ -61,7 +60,9 @@ namespace partying_server.controller
                 case "SyncAiLocation":
                     new SyncAiLocation(requestJson);
                     break;
-
+                case "InitStage2":
+                    new InitStage2(requestJson);
+                    break;
                 // ...
 
                 default:

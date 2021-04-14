@@ -43,6 +43,7 @@ namespace partying_server.lib
         // -------- Receive Method ---------
         public static void waittingRequest()
         {
+            log.Info("started partying_game_server");
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  

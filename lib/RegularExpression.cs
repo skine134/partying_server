@@ -26,8 +26,8 @@ namespace patting_server.lib
             else 
                 if (value.Value.Type != Config.typeConfig["other"])
                     result = false;
-            if (!result)
-                log.Error(String.Format("{0} 은(는) {1} 타입이 아닙니다.",value,Config.typeConfig[value.Key]));
+            // if (!result)
+            //     log.Error(String.Format("{0} 은(는) {1} 타입이 아닙니다.",value,Config.typeConfig[value.Key]));
             return true;
         }
         public static bool regexCheck(KeyValuePair<string,JToken> value){

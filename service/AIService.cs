@@ -49,12 +49,9 @@ namespace partying_server.service
 
             Info.AiInfo = aisInfo;
         }
-        public static string getAiInfo()
+        public static JObject getAiInfo()
         {
-            JObject aisInfo = Info.AiInfo;
-            string aisInfoString = "";
-            aisInfoString = aisInfo.ToString();
-            return aisInfoString;
+            return Info.AiInfo;
         }
     }
 }

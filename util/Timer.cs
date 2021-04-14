@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace partying_server.util
@@ -24,15 +25,17 @@ namespace partying_server.util
             // Create a timer with a two second interval.
             aTimer = new System.Timers.Timer(seconds);
             // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Elapsed += async ( sender, e ) => await OnTimedEvent(_callback);
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
         }
 
-        private static void OnTimedEvent(Object source, ElapsedEventArgs ek)
+        private static Task OnTimedEvent(Action callback)
         {
-            if (_callback!=null)
-                _callback();
+            Console.WriteLine("time event");
+            if (callback!=null)
+                callback();
+            throw null;
         }
         public void Stop()
         {

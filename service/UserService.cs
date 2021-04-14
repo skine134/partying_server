@@ -15,10 +15,14 @@ namespace partying_server.service
 
         public static void SaveUserInfo(string userUuid, JObject userInfo)
         {
-
+            try{
+                
             Queue<PlayerInfo> usersInfo = Info.UsersInfo;
             usersInfo.Enqueue(userInfo.ToObject<PlayerInfo>());
             Info.UsersInfo = usersInfo;
+            }catch(Exception e){
+                log.Error(e.Message);
+            }
         }
         public static void DeleteUserInfo(string userUuid)
         {

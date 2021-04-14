@@ -15,7 +15,7 @@ namespace partying_server.controller
             Timer timeEvent = new Timer(Config.itemSpawnSeconds,()=>
             {
                 ItemInfo item = new ItemInfo();
-                item.ItemName = random.Next(0,Enum.GetValues(typeof(ItemInfo.Items)).Length);
+                item.Name = random.Next(0,Enum.GetValues(typeof(ItemInfo.Items)).Length);
                 Connection.SendAll(Common.GetResponseFormat("SpawnItem",item));
             });
             timeEvent.Start();

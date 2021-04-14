@@ -15,14 +15,14 @@ namespace partying_server.controller
         protected ILog log = Logger.GetLogger();
         public Connected(JObject requestJson, Socket handler)
         {
+            log.Info($"{requestJson.ToString()}");
             foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
             {
                 if (Info.MultiUserHandler[item.Key] == handler)
                 {
                     Info.MultiUserHandler[requestJson["uuid"].ToString()] = handler;
                     Info.MultiUserHandler.Remove(item.Key);
-                    string response = JsonConvert.SerializeObject(new {});
-                    Connection.Send(Common.GetResponseFormat("connected", response));
+                    Connection.Send(Common.GetResponseFormat("connected", new {}));
                     break;
                 }
             }
