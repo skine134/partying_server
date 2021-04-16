@@ -12,7 +12,7 @@ namespace partying_server.controller
         {
             
             random = new Random();
-            Timer timeEvent = new Timer(Config.itemSpawnSeconds,()=>
+            AsyncTimer timeEvent = new AsyncTimer(Config.itemSpawnSeconds,()=>
             {
                 ItemInfo item = new ItemInfo();
                 item.Name = random.Next(0,Enum.GetValues(typeof(ItemInfo.Items)).Length);

@@ -12,7 +12,7 @@ namespace partying_server.controller
         public BossPattern()
         {
             random = new Random();
-            Timer timeEvent = new Timer(Config.bossPatternTime,()=>
+            AsyncTimer timeEvent = new AsyncTimer(Config.bossPatternTime,()=>
             {
                 Info.BossInfo.pattern = random.Next(0,Enum.GetValues(typeof(BossInfo.Patterns)).Length);
                 new SyncBoss();
