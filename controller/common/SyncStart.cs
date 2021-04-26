@@ -12,7 +12,7 @@ namespace partying_server.controller
             {
                 Info.SyncCount.Clear();
                 var datetime= System.DateTime.Now.AddSeconds(5);
-                Connection.SendAll(Common.GetResponseFormat("SyncStart", new {startTime = datetime.ToString(Config.startTimeFormat)}));
+                Connection.SendAll(Common.GetResponseFormat("SyncStart", new {startTime = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddSeconds(5))}));
             }
             Info.SyncCount.Add(uuid);
         }
