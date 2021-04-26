@@ -63,6 +63,9 @@ namespace partying_server.controller
                 case "InitStage2":
                     new InitStage2(requestJson);
                     break;
+                case "SyncStart":
+                    new SyncStart(requestJson);
+                    break;
                 // ...
 
                 default:

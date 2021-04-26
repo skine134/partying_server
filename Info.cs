@@ -8,6 +8,7 @@ namespace partying_server
 {
     public class Info
     {
+        public static HashSet<string> SyncCount{get;} =new HashSet<string>();
         public static int currentStage = Config.defaultStage;
         // Ai 정보를 저장
         private static JObject aiInfo = new JObject();

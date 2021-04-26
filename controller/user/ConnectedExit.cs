@@ -24,6 +24,9 @@ namespace partying_server.controller
                         handler.Shutdown(SocketShutdown.Both);
                         handler.Close();
                         Info.MultiUserHandler.Remove(item.Key);
+                        if(Info.SyncCount.Contains(item.Key))
+                            Info.SyncCount.Remove(item.Key);
+
                         log.Info("사용자와 연결을 종료했습니다.");
                         if (Info.MultiUserHandler.Count > 0)
                             Connection.SendAll(Common.GetResponseFormat("connectedExit",new {uuid = item.Key}));

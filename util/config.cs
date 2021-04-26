@@ -30,5 +30,6 @@ namespace partying_server.util
         {
             {"uuid",@"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"}
         };
+        public static string startTimeFormat = "mm:ss";
     }
 }
