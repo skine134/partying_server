@@ -57,9 +57,6 @@ namespace partying_server.controller
                 case "CreateMap":
                     new CreateMap(20);
                     break;
-                case "SyncAiLocation":
-                    new SyncAiLocation(requestJson);
-                    break;
                 case "InitStage2":
                     new InitStage2(requestJson);
                     break;

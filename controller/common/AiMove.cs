@@ -7,7 +7,8 @@ namespace partying_server.controller
     {
         public AiMove(JObject requestJson) : base(requestJson)
         {
-            AIService.saveAiInfo((JObject)requestJson["data"]);
+            // AIService.saveAiInfo((JObject)requestJson["data"]);
+            
         }
     }
 }
