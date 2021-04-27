@@ -15,7 +15,7 @@ namespace partying_server.controller
         protected ILog log = Logger.GetLogger();
         public Connected(JObject requestJson, Socket handler)
         {
-            log.Info($"{requestJson.ToString()}");
+            log.Info($"{requestJson.ToString().Replace("\n","")}");
             foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
             {
                 if (Info.MultiUserHandler[item.Key] == handler)

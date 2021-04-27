@@ -29,7 +29,7 @@ namespace partying_server.controller
                 string sendJson = Common.GetResponseFormat("syncAiLocation", aiInfo);
                 Connection.SendAll(sendJson);
                 if (count % 100 == 0)
-                    log.Info(String.Format("res {0}", sendJson).Replace("\n", String.Empty));
+                    log.Info($"res {sendJson.Replace("\n", "")}");
                 count++;
             }
         }

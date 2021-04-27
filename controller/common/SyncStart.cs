@@ -8,13 +8,13 @@ namespace partying_server.controller
     {
         public SyncStart(JObject requestJson) : base(requestJson)
         {
+            Info.SyncCount.Add(uuid);
             if(Info.SyncCount.Count>=Info.MultiUserHandler.Count)
             {
                 Info.SyncCount.Clear();
                 var datetime= System.DateTime.Now.AddSeconds(5);
                 Connection.SendAll(Common.GetResponseFormat("SyncStart", new {startTime = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddSeconds(5))}));
             }
-            Info.SyncCount.Add(uuid);
         }
     }
 }

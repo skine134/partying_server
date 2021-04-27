@@ -47,12 +47,12 @@ namespace patting_server.lib
             return result;
         }
         public static void valueValidationCheck(KeyValuePair<string,JToken> value){
-            if (!typeCheck(value)){
-                ErrorHandler.InvalidException("40002");
-                }
-            if (!regexCheck(value)){
-                ErrorHandler.InvalidException("40003");
-                }
+            // if (!typeCheck(value)){
+            //     ErrorHandler.InvalidException("40002");
+            //     }
+            // if (!regexCheck(value)){
+            //     ErrorHandler.InvalidException("40003");
+            //     }
         }
         public static void listValidation(JArray list){
             foreach(JToken item in list){

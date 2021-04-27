@@ -13,13 +13,13 @@ namespace partying_server.util
         {
             string sendErrorJson = Common.GetErrorFormat(errorCode).Replace("\n", String.Empty);
             Connection.Send(sendErrorJson);
-            log.Info(sendErrorJson);
+            log.Info(sendErrorJson.Replace("\n",""));
         }
         public static void InvalidException(string errorCode)
         {
             string sendErrorJson = Common.GetErrorFormat(errorCode).Replace("\n", String.Empty);
             Connection.Send(sendErrorJson);
-            log.Info(sendErrorJson);
+            log.Info(sendErrorJson.Replace("\n",""));
         }
     }
 

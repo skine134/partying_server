@@ -147,7 +147,7 @@ namespace partying_server.lib
                             if (!receiveData.Equals(""))
                                 try
                                 {
-                                    log.Info(String.Format("req {0}", content));
+                                    log.Info($"req {receiveData.Replace("\n","")}");
                                     RequestController.CallApi(receiveData, handler);
                                 }
                                 catch (Exception e)
@@ -186,13 +186,13 @@ namespace partying_server.lib
 
 
         // ---------- Send Method --------------
-        public static void Send(String sendData)
+        public static void Send(string sendData)
         {
 
             try
             {
                 string data = sendData + "<EOF>";
-                log.Info(String.Format("res {0}", data));
+                log.Info($"res {sendData.Replace("\n","")}");
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.
@@ -213,12 +213,12 @@ namespace partying_server.lib
                 return;
             }
         }
-        public static void SendAll(String sendData)
+        public static void SendAll(string sendData)
         {
             try
             {
                 string data = sendData + "<EOF>";
-                log.Info(String.Format("res {0}", data));
+                log.Info($"res {sendData.Replace("\n","")}");
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.  
