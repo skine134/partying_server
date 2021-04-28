@@ -301,9 +301,50 @@ namespace partying_server.controller
                 }
             return result;
         }
+        private string[] GridConvertToStringArray(int[,,] grid)
+        {
+            string[] result = new string[rows];
+
+            for (var i = 0; i < grid.GetLength(0); i++)
+            {
+                string columnString = "";
+                for (var j = 0; j < grid.GetLength(1); j++)
+                {
+                    int roomValue = 0;
+                    for(var k=0;k<grid.GetLength(2);k++)
+                    {
+                        switch (k)
+                        {
+                            case LEFT:
+                                if(grid[i,j,k]==1)
+                                    roomValue+=8;
+                                break;
+                            case RIGHT:
+                                if(grid[i,j,k]==1)
+                                    roomValue+=4;
+                                break;
+                            case UP:
+                                if(grid[i,j,k]==1)
+                                    roomValue+=2;
+                                break;
+                            case DOWN:
+                                if(grid[i,j,k]==1)
+                                    roomValue+=1;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    columnString+=roomValue.ToString("X");
+                }
+                result[i]=columnString;
+            }
+            return result;
+        }
         public override string ToString()
         {
-            string response = JsonConvert.SerializeObject(new { labylinthArray = grid, patrolPoints = patrolPoints, trap = trapPoints, playerLocs = playerLocs, clearItem = new { x = 12, y = 4 } });
+            var labylinthArray = GridConvertToStringArray(grid);
+            string response = JsonConvert.SerializeObject(new { labylinthArray = labylinthArray, patrolPoints = patrolPoints, trap = trapPoints, playerLocs = playerLocs, clearItem = new { x = 12, y = 4 } });
             return response;
         }
     }
