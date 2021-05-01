@@ -1,6 +1,6 @@
 using partying_server.util;
 
-namespace Communication.JsonFormat
+namespace partying_server.JsonFormat
 {
     public class AiInfo
     {

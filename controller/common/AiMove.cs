@@ -1,5 +1,5 @@
 using Newtonsoft.Json.Linq;
-using partying_server.service;
+using partying_server.JsonFormat;
 
 namespace partying_server.controller
 {
@@ -7,7 +7,7 @@ namespace partying_server.controller
     {
         public AiMove(JObject requestJson) : base(requestJson)
         {
-            // AIService.saveAiInfo((JObject)requestJson["data"]);
+            new SyncAiPacket(((JObject)requestJson).ToObject<AiInfo>());
             
         }
     }
