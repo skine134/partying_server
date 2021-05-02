@@ -6,12 +6,20 @@ namespace partying_server.JsonFormat
 
     public class PlayerInfo
     {
-        public string movement = "";
+        public enum Movement
+        {
+            Idle,
+            Shot,
+            Run,
+            Dodge,
+            Dead,
+        }
+        public Movement movement = Movement.Idle;
         public string uuid = "";
         public Division3 vec = new Division3();
         public Division3 loc = new Division3();
-        public PlayerInfo() : this(new Division3(0,0,0),new Division3(0,0,0),"None","None"){}
-        public PlayerInfo(Division3 location, Division3 moveVec, string playerEvent, string userID)
+        public PlayerInfo() : this(new Division3(0, 0, 0), new Division3(0, 0, 0), 0, "None") { }
+        public PlayerInfo(Division3 location, Division3 moveVec, Movement playerEvent, string userID)
         {
             ///<summary>
             /// Description
@@ -35,7 +43,7 @@ namespace partying_server.JsonFormat
 
 
         }
-        public void SetInfo(Division3 location, Division3 moveVec, string playerEvent, string userID)
+        public void SetInfo(Division3 location, Division3 moveVec, Movement playerEvent, string userID)
         {
             ///<summary>
             /// Description
@@ -47,7 +55,7 @@ namespace partying_server.JsonFormat
             /// playerEvent : 현재 플레이어의 상태
             /// userID : 플레이어의 uuid
             /// </summary>
-            
+
             loc = location;
             this.vec = moveVec;
 
@@ -85,7 +93,7 @@ namespace partying_server.JsonFormat
             return JsonConvert.SerializeObject(this);
         }
 
-        
+
 
 
     }
