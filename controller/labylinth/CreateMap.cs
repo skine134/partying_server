@@ -41,7 +41,7 @@ namespace partying_server.controller
             this.rows = rows;
             this.initcolumn = random.Next(0, columns);
             this.initrow = random.Next(0, rows);
-            this.patrolUnitCount = 3;
+            this.patrolUnitCount = 0;
             this.trapCount = (int)(columns * rows / 10);
             this.patrolCount = (int)(columns * rows / 10);
             try
