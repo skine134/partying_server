@@ -7,7 +7,7 @@ namespace partying_server.controller
     {
         public AiMove(JObject requestJson) : base(requestJson)
         {
-            new SyncAiPacket(((JObject)requestJson).ToObject<AiInfo>());
+            new SyncAiPacket(data);
             
         }
     }

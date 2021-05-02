@@ -24,12 +24,15 @@ namespace partying_server.controller
         // -- JsonFormat으로 뺄 것들
         private int[,,] grid; //미로를 만들기 위한 격자 생성 {left,right,up,down}
         private CellInfo[] playerLocs;
-        private CellInfo[] trapPoints; //유닛 오브젝트의 위치를 지정하기 위한 배열 생성
+        private List<CellInfo> trapPoints; //유닛 오브젝트의 위치를 지정하기 위한 배열 생성
         private CellInfo[] patrolPoints;
+        private CellInfo[] patrolUnits;
+        private Division2 clearItem;
         private int initcolumn; // 행에 대한 미로찾기를 위한 처음의 시작값
         private int initrow;  // 열에 대한 미로찾기를 위한 처음의 시작값
         private int trapCount; //함정 오브젝트의 수량 제한
         private int patrolCount;
+        private int patrolUnitCount;
         // --
         public CreateMap(int columns, int rows)
         {
@@ -38,6 +41,7 @@ namespace partying_server.controller
             this.rows = rows;
             this.initcolumn = random.Next(0, columns);
             this.initrow = random.Next(0, rows);
+            this.patrolUnitCount = 3;
             this.trapCount = (int)(columns * rows / 10);
             this.patrolCount = (int)(columns * rows / 10);
             try
@@ -45,12 +49,11 @@ namespace partying_server.controller
                 // 미로 생성
                 CreateGrid(this.columns, this.rows);
                 HuntAndKill();
-
-                // 오브젝트 배치
-                SetpatrolPoints(patrolCount, this.columns, this.rows);
-                SetTrap(trapCount, this.columns, this.rows);
+                SetClearItem(this.columns, this.rows);
                 SetPlayerLocs(Info.MultiUserHandler, this.columns, this.rows);
-
+                SetPatrolUnit(patrolUnitCount, this.columns, this.rows);
+                SetPatrolPoints(patrolCount, this.columns, this.rows);
+                SetTrap(trapCount, this.columns, this.rows);    // 오브젝트 배치
                 //생성된 맵 전송
                 Connection.SendAll(Common.GetResponseFormat("createMap", JObject.Parse(this.ToString())));
             }
@@ -203,23 +206,83 @@ namespace partying_server.controller
         {
             return String.Format("{0},{1}", column, row);
         }
-        void SetpatrolPoints(int count, int columns, int rows)
+        void SetClearItem(int columns,int rows)
+        {
+            
+            var column = random.Next(1, (columns - 2));
+            var row = random.Next(1, (rows - 2));
+            clearItem = new Division2(column,row);
+        }
+        void SetPlayerLocs(Dictionary<string, Socket> MultiUserHandler, int columns, int rows)
+        {
+            playerLocs = new CellInfo[Info.MultiUserHandler.Count];
+            int i = 0;
+            foreach (KeyValuePair<string, Socket> item in MultiUserHandler)
+            {
+                int column = 0;
+                int row = 0;
+                while (true)
+                {
+                    column = random.Next(1, (columns - 2));
+                    row = random.Next(1, (rows - 2));
+                    if (!IsEmptyClearItem(clearItem,column,row))
+                        continue;
+                    break;
+                }
+                playerLocs[i] = new CellInfo();
+                playerLocs[i].col = column;
+                playerLocs[i].row = row;
+                playerLocs[i].data = item.Key;
+                ++i;
+            }
+        }
+        void SetPatrolUnit(int unitCount, int columns, int rows)
+        {
+            patrolUnits = new CellInfo[unitCount];
+            for (int i = 0; i < unitCount; i++)
+            {
+                patrolUnits[i] = new CellInfo();
+                // 함정을 랜덤으로 생성하는 역할
+                int column = 0;
+                int row = 0;
+                while (true)
+                {
+                    column = random.Next(1, (columns - 2));
+                    row = random.Next(1, (rows - 2));
+                    if (!IsEmptyClearItem(clearItem,column,row))
+                        continue;
+                    if (!IsEmpty(playerLocs, column, row))
+                        continue;
+                    break;
+                }
+                patrolUnits[i].col = column;
+                patrolUnits[i].row = row;
+                patrolUnits[i].data = Guid.NewGuid().ToString();
+            }
+
+        }
+        
+        void SetPatrolPoints(int count, int columns, int rows)
         {
             patrolPoints = new CellInfo[count];
             for (int i = 0; i < count; i++)
             {
-                patrolPoints[i] = new CellInfo();
                 // 함정을 랜덤으로 생성하는 역할
                 int column = 0;
                 int row = 0;
-                do
+                while (true)
                 {
                     column = random.Next(1, (columns - 2));
                     row = random.Next(1, (rows - 2));
-                    if (IsEmpty(patrolPoints, column, row))
+                    if (!IsEmptyClearItem(clearItem,column,row))
                         continue;
-
-                } while (false);
+                    if (!IsEmpty(playerLocs, column, row))
+                        continue;
+                    if (!IsEmpty(patrolUnits, column, row))
+                        continue;
+                    break;
+                }
+                patrolPoints[i] = new CellInfo();
                 patrolPoints[i].col = column;
                 patrolPoints[i].row = row;
                 patrolPoints[i].data = 1;
@@ -227,20 +290,29 @@ namespace partying_server.controller
         }
         void SetTrap(int count, int columns, int rows)
         {
-            trapPoints = new CellInfo[count];
-            for (int i = 0; i < trapPoints.Length; i++)
+            trapPoints = new List<CellInfo>();
+            for (int i = 0; i < count; i++)
             {
-                trapPoints[i] = new CellInfo();
                 // 함정을 랜덤으로 생성하는 역할
                 int column = 0;
                 int row = 0;
-                do
+                while (true)
                 {
                     column = random.Next(1, (columns - 2));
                     row = random.Next(1, (rows - 2));
-                    if (IsEmpty(trapPoints, column, row))
+                    if (!IsEmptyClearItem(clearItem,column,row))
                         continue;
-                } while (false);
+                    if (!IsEmpty(playerLocs, column, row))
+                        continue;
+                    if (!IsEmpty(patrolUnits, column, row))
+                        continue;
+                    if (!IsEmpty(patrolPoints, column, row))
+                        continue;
+                    if (!IsEmpty(trapPoints.ToArray(), column, row))
+                        continue;
+                    break;
+                }
+                trapPoints.Add(new CellInfo());
                 int rand = random.Next(0, 4);
                 trapPoints[i].col = column;
                 trapPoints[i].row = row;
@@ -263,42 +335,22 @@ namespace partying_server.controller
                 }
             }
         }
-        void SetPlayerLocs(Dictionary<string, Socket> MultiUserHandler, int columns, int rows)
-        {
-            playerLocs = new CellInfo[Info.MultiUserHandler.Count];
-            int i = 0;
-            foreach (KeyValuePair<string, Socket> item in MultiUserHandler)
-            {
-                playerLocs[i] = new CellInfo();
-                int column = 0;
-                int row = 0;
-                do
-                {
-                    column = random.Next(1, (columns - 2));
-                    row = random.Next(1, (rows - 2));
-                    if (IsEmpty(patrolPoints, column, row))
-                        continue;
-                    if (IsEmpty(trapPoints, column, row))
-                        continue;
-                    if (IsEmpty(playerLocs, column, row))
-                        continue;
-
-                } while (false);
-                playerLocs[i].col = column;
-                playerLocs[i].row = row;
-                playerLocs[i].data = item.Key;
-                ++i;
-            }
-        }
         private bool IsEmpty(CellInfo[] list, int column, int row)
         {
             bool result = true;
             foreach (CellInfo item in list)
-                if (item != null&&item.col == column && item.row == row)
+                if (item.col == column && item.row == row)
                 {
                     result = false;
                     break;
                 }
+            return result;
+        }
+        private bool IsEmptyClearItem(Division2 clearItem,int column, int row)
+        {
+            bool result = true;
+            if(clearItem.X==row &&clearItem.Y==column)
+                result =false;
             return result;
         }
         private string[] GridConvertToStringArray(int[,,] grid)
@@ -344,7 +396,7 @@ namespace partying_server.controller
         public override string ToString()
         {
             var labylinthArray = GridConvertToStringArray(grid);
-            string response = JsonConvert.SerializeObject(new { labylinthArray = labylinthArray, patrolPoints = patrolPoints, trap = trapPoints, playerLocs = playerLocs, clearItem = new { x = 12, y = 4 } });
+            string response = JsonConvert.SerializeObject(new { labylinthArray = labylinthArray, patrolPoints = patrolPoints, trap = trapPoints.ToArray(), playerLocs = playerLocs, clearItem = clearItem,patrolUnits = patrolUnits});
             return response;
         }
     }

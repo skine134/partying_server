@@ -4,9 +4,9 @@ namespace partying_server.JsonFormat
 {
     public class AiInfo
     {
-        public string Uuid {get;set;} = System.Guid.NewGuid().ToString();
-        public Division3 Loc {get;set;} = new Division3();
-        public Division3 Vec {get;set;} = new Division3();
+        public string Uuid {get;set;}
+        public Division3 Loc {get;set;}
+        public Division3 Vec {get;set;}
         
         public AiInfo(float Lx,float Ly, float Lz,float Vx, float Vy, float Vz,string uuid)
         {
