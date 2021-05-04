@@ -12,7 +12,7 @@ namespace partying_server
         public static int currentStage = Config.defaultStage;
         // Ai 정보를 저장
         private static JObject aiInfo = new JObject();
-
+        public static InitStage2 InitStage2 {get;set;}
         // Boss 정보를 저장
         public static BossInfo BossInfo {get; set;}= new BossInfo();
 

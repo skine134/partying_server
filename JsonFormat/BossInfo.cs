@@ -5,8 +5,9 @@ namespace partying_server.JsonFormat
 {
     public class BossInfo
     {
-        public enum Patterns { CHANGINGELAGER, OCTALASER, BODYSLAM, DIE, IDLE }
+        public enum Patterns { CHANGINGELAGER, OCTALASER, BODYSLAM, IDLE, DIE}
         public int pattern = (int)Patterns.IDLE;
+        public string Target { get; set; } = "";
         public Division3 Vec {get; set;}= new Division3();
         public Division3 Loc {get; set;}= Config.bossLoc;
         private float bossHP = Config.bossHP;

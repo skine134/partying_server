@@ -9,11 +9,23 @@ namespace partying_server.controller
         public SyncStart(JObject requestJson) : base(requestJson)
         {
             Info.SyncCount.Add(uuid);
-            if(Info.SyncCount.Count>=Info.MultiUserHandler.Count)
-            {
+            if(Info.SyncCount.Count<Info.MultiUserHandler.Count)
+                return;
                 Info.SyncCount.Clear();
                 var datetime= System.DateTime.Now.AddSeconds(5);
-                Connection.SendAll(Common.GetResponseFormat("SyncStart", new {startTime = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddSeconds(5))}));
+                Connection.SendAll(Common.GetResponseFormat("SyncStart", new {startTime = Common.ConvertToUnixTimestamp(datetime)}));
+            if(Info.currentStage==2)
+            {
+                AsyncTimer timeEvent = new AsyncTimer(1f);
+                timeEvent.Callback = ()=>
+                {
+                    if(datetime<System.DateTime.Now){
+                        new BossPattern();
+                        new SpawnItem();
+                        timeEvent.Flag=false;
+                    }
+                };
+                timeEvent.Start();
             }
         }
     }

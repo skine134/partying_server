@@ -63,6 +63,9 @@ namespace partying_server.controller
                 case "SyncStart":
                     new SyncStart(requestJson);
                     break;
+                case "AttackBoss":
+                    new AttackBoss(requestJson);
+                    break;
                 // ...
 
                 default:

@@ -7,13 +7,32 @@ namespace partying_server.util
     public class AsyncTimer
     {
         private Timer t;
-        public AsyncTimer(float time, Action callback)
+        public bool Flag { get; set; }
+        public Action Callback
         {
-            var seconds = time * 1000;
-            
+            set
+            {
+                t.Elapsed += new ElapsedEventHandler((s, e) =>
+                {
+
+                    if (!Flag)
+                    {
+                        t.Stop();
+                        return;
+                    }
+                    value();
+                }
+                );
+            }
+        }
+        public float seconds { get; set; }
+        public AsyncTimer(float time)
+        {
+            seconds = time * 1000;
+
             t = new Timer(seconds);
             t.AutoReset = true;
-            t.Elapsed += new ElapsedEventHandler((s,e)=>{callback();});
+            Flag = true;
         }
         public void Start()
         {
