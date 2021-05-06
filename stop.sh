@@ -1,6 +1,6 @@
 #! /bin/bash
 
-KILLNAME="dotnet run"
+KILLNAME="dotnet run 1214"
 kill_process(){
     ps_var=$(ps -ef |grep -v grep | grep $1)
     if [ "$ps_var" = "" ]
