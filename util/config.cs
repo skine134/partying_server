@@ -9,7 +9,7 @@ namespace partying_server.util
         public static int defaultStage = 1;
         public static string errorMessageLocation = @"./util/ErrorMessage.csv";
         public static Dictionary<string, string> errorMessage = Common.ReadErrorMessage();
-        public static float bossHP = 600f;
+        public static float bossHP = 10f;
         public static float playerSpeed = 14f;
         public static float playerHealth = 3;
         public static float playerAttackDamage = 1f;
@@ -17,7 +17,9 @@ namespace partying_server.util
         public static Division3 bossLoc = new Division3(150,30,150);
         public static float itemRemainSeconds = 60f;
         public static float itemSpawnSeconds = 30f;
-        public static float bossPatternTime = 5f;
+        public static float bossPatternTime = 10f;
+        public static int syncStartTime = 5;
+        public static float stage2PatternStartTime = 10f;
         // 기록되지 않은 항목들은 모두 string type으로 검사.
         public static Dictionary<string,JTokenType> typeConfig = new Dictionary<string,JTokenType>()
         {

@@ -16,14 +16,14 @@ namespace partying_server.controller
             AsyncTimer timeEvent = new AsyncTimer(Config.bossPatternTime);
             timeEvent.Callback=()=>
             {
-                if(Info.MultiUserHandler.Count<=0||Info.BossInfo.BossHP<=0)
+                if(Info.BossInfo.BossHP<=0)
                 {
                     timeEvent.Flag=false;
                 }
                 var keyList = Info.MultiUserHandler.Keys;
                 var uuidList = new List<string>(keyList);
                 Info.BossInfo.Target = uuidList[random.Next(0,uuidList.Count)];
-                Info.BossInfo.pattern = random.Next(0,Enum.GetValues(typeof(BossInfo.Patterns)).Length-1);
+                Info.BossInfo.pattern = 2; //random.Next(0,Enum.GetValues(typeof(BossInfo.Patterns)).Length-1);
                 new SyncBoss();
             };
             timeEvent.Start();

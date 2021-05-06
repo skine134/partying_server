@@ -9,6 +9,7 @@ namespace partying_server.JsonFormat
         public InitStage2()
         {
             BossInfo = new BossInfo();
+            Info.BossInfo = BossInfo;
             System.Random rand = new System.Random();
             PlayerLocs = new CellInfo[Info.MultiUserHandler.Count];
             var count = 0;

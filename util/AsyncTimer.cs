@@ -15,7 +15,7 @@ namespace partying_server.util
                 t.Elapsed += new ElapsedEventHandler((s, e) =>
                 {
 
-                    if (!Flag)
+                    if (Info.MultiUserHandler.Count<=0||!Flag)
                     {
                         t.Stop();
                         return;
