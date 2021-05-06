@@ -14,7 +14,7 @@ namespace partying_server.JsonFormat
             PlayerLocs = new CellInfo[Info.MultiUserHandler.Count];
             var count = 0;
             foreach(var player in Info.MultiUserHandler){
-                PlayerLocs[count] = new CellInfo(rand.Next(100,200),rand.Next(100,200),player.Key);
+                PlayerLocs[count] = new CellInfo(rand.Next(210,390),rand.Next(210,390),player.Key);
                 ++count;
             }
         }

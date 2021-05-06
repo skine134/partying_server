@@ -14,7 +14,7 @@ namespace partying_server.util
         public static float playerHealth = 3;
         public static float playerAttackDamage = 1f;
         public static float playerShotSpeed = 1f;
-        public static Division3 bossLoc = new Division3(150,30,150);
+        public static Division3 bossLoc = new Division3(300,30,300);
         public static float itemRemainSeconds = 60f;
         public static float itemSpawnSeconds = 30f;
         public static float bossPatternTime = 10f;
