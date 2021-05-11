@@ -13,7 +13,6 @@ namespace partying_server.lib
 {
     public class Common
     {
-
         public static void CallAPI(string server, string APIName, params object[] list)
         {
             /// <summary>
@@ -154,7 +153,10 @@ namespace partying_server.lib
             return result;
         }
         // Convert the string to camel case.
-        
+        public static void ResetStage()
+        {
+            Config.defaultStage = 1;
+        }
         
         public static string ToCamelCase(string str)
         {

@@ -6,22 +6,22 @@ namespace partying_server.util
 {
     public class Config
     {
-        public static int defaultStage = 1;
         public static string errorMessageLocation = @"./util/ErrorMessage.csv";
         public static Dictionary<string, string> errorMessage = Common.ReadErrorMessage();
-        public static float bossHP = 10f;
+        public static int defaultStage = 1;
         public static float playerSpeed = 14f;
         public static float playerHealth = 3;
+        public static int syncStartTime = 5;
+        public static int stage1MapSize = 10;
         public static int patrolUnitCount = 0;
         public static float playerAttackDamage = 1f;
         public static float playerShotSpeed = 1f;
-        public static Division3 bossLoc = new Division3(300,20,300);
-        public static int mapSize = 10;
+        public static float stage2PatternStartTime = 10f;
         public static float itemRemainSeconds = 60f;
         public static float itemSpawnSeconds = 5f;
+        public static float bossHP = 10f;
+        public static Division3 bossLoc = new Division3(300,20,300);
         public static float bossPatternTime = 10f;
-        public static int syncStartTime = 5;
-        public static float stage2PatternStartTime = 10f;
         // 기록되지 않은 항목들은 모두 string type으로 검사.
         public static Dictionary<string,JTokenType> typeConfig = new Dictionary<string,JTokenType>()
         {
