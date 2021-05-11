@@ -7,7 +7,7 @@ namespace partying_server.JsonFormat
     {
         private static Random random = new Random();
         public enum Items { Wind, Attck, Heart, ReloadSpeed, Healthmax, Resurrection }
-        public Division2 Loc {get;set;} = new Division2(random.Next(10,290),random.Next(10,290));
+        public Division2 Loc {get;set;} = new Division2(rand.Next(210,390),rand.Next(210,390));
         public int Name {get; set;}
         public double LifeTime {get; set;} = (double)Common.ConvertToUnixTimestamp(DateTime.Now.AddSeconds(Config.itemRemainSeconds));
     }

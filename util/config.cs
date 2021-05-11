@@ -18,7 +18,7 @@ namespace partying_server.util
         public static float playerShotSpeed = 1f;
         public static float stage2PatternStartTime = 10f;
         public static float itemRemainSeconds = 60f;
-        public static float itemSpawnSeconds = 5f;
+        public static float itemSpawnSeconds = 30f;
         public static float bossHP = 10f;
         public static Division3 bossLoc = new Division3(300,20,300);
         public static float bossPatternTime = 10f;
