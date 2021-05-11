@@ -26,7 +26,7 @@ namespace partying_server.controller
                 timeEvent.Callback = ()=>
                 {
                     if(datetime<System.DateTime.Now){
-                        // new BossPattern();
+                        new BossPattern();
                         new SpawnItem();
                         timeEvent.Flag=false;
                     }

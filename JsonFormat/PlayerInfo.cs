@@ -18,6 +18,7 @@ namespace partying_server.JsonFormat
         public string uuid = "";
         public Division3 vec = new Division3();
         public Division3 loc = new Division3();
+        public Division3 angle = new Division3();
         public PlayerInfo() : this(new Division3(0, 0, 0), new Division3(0, 0, 0), 0, "None") { }
         public PlayerInfo(Division3 location, Division3 moveVec, Movement playerEvent, string userID)
         {
@@ -66,6 +67,13 @@ namespace partying_server.JsonFormat
             uuid = userID;
 
 
+        }
+
+        public void SetAngle(Division3 angle)
+        {
+            this.angle.X = angle.X;
+            this.angle.Y = angle.Y;
+            this.angle.Z = angle.Z;
         }
 
         public override string ToString()

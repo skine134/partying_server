@@ -124,7 +124,7 @@ namespace partying_server.lib
                 // Retrieve the state object and the handler socket  
                 // from the asynchronous state object.  
                 StateObject state = (StateObject)ar.AsyncState;
-                Socket handler = state.workSocket;
+                handler = state.workSocket;
                 int bytesRead = 0;
                 // Read data from the client socket.
                 bytesRead = handler.EndReceive(ar);
