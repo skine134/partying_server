@@ -7,11 +7,12 @@ namespace partying_server.controller
     public class SyncStart:BaseAPI
     {
         public SyncStart(JObject requestJson) : base(requestJson)
-        {
+        {            
             Info.SyncCount.Add(uuid);
+            log.Info($"{Info.SyncCount.Count} / {Info.MultiUserHandler.Count}");
             if(Info.SyncCount.Count<Info.MultiUserHandler.Count)
                 return;
-                Info.SyncCount.Clear();
+            Info.SyncCount.Clear();
 
             var datetime= System.DateTime.Now.AddSeconds(5);
             var data = JObject.FromObject(new {startTime = Common.ConvertToUnixTimestamp(datetime)});
@@ -25,7 +26,7 @@ namespace partying_server.controller
                 timeEvent.Callback = ()=>
                 {
                     if(datetime<System.DateTime.Now){
-                        new BossPattern();
+                        // new BossPattern();
                         new SpawnItem();
                         timeEvent.Flag=false;
                     }

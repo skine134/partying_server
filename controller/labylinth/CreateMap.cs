@@ -349,7 +349,7 @@ namespace partying_server.controller
         private bool IsEmptyClearItem(Division2 clearItem,int column, int row)
         {
             bool result = true;
-            if(clearItem.X==row &&clearItem.Y==column)
+            if(clearItem.X==column &&clearItem.Y==row)
                 result =false;
             return result;
         }

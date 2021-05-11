@@ -55,7 +55,7 @@ namespace partying_server.controller
                     new IsDetected(requestJson);
                     break;
                 case "CreateMap":
-                    new CreateMap(20);
+                    new CreateMap(Config.mapSize);
                     break;
                 case "InitStage2":
                     new InitStage2(requestJson);
