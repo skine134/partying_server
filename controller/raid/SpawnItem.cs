@@ -18,7 +18,7 @@ namespace partying_server.controller
                 if(Info.MultiUserHandler.Count<=0)
                     timeEvent.Flag=false;
                 ItemInfo item = new ItemInfo();
-                item.Name = random.Next(0,Enum.GetValues(typeof(ItemInfo.Items)).Length);
+                item.Name = random.Next(0,Enum.GetValues(typeof(ItemInfo.Items)).Length-1);
                 Connection.SendAll(Common.GetResponseFormat("SpawnItem",item));
             };
             timeEvent.Start();
