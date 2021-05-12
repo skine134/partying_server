@@ -14,7 +14,7 @@ namespace partying_server.controller
                 return;
             Info.SyncCount.Clear();
 
-            var datetime= System.DateTime.Now.AddSeconds(5);
+            var datetime= System.DateTime.Now.AddSeconds(Config.syncStartTime);
             var data = JObject.FromObject(new {startTime = Common.ConvertToUnixTimestamp(datetime)});
             if(Info.currentStage==1)
                 data["finishTime"] = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddMinutes(2));

@@ -38,6 +38,7 @@ namespace partying_server.lib
         public static AutoResetEvent receiveDone =
             new AutoResetEvent(false);
         private static Socket handler;
+        private static string remainString = "";
         private static ILog log = Logger.GetLogger();
 
         // -------- Receive Method ---------
@@ -141,7 +142,9 @@ namespace partying_server.lib
                     {
                         // All the data has been read from the
                         // client. Display it on the console.  
-                        string[] receiveDatas = content.Split("<EOF>");
+                        string[] receiveDatas = (remainString + content).Split("<EOF>");
+                        remainString = receiveDatas[receiveDatas.Length-1];
+                        receiveDatas[receiveDatas.Length-1] = "";
                         // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
                         foreach(string receiveData in receiveDatas)
                             if (!receiveData.Equals(""))
@@ -232,7 +235,7 @@ namespace partying_server.lib
             }
             catch (SocketException se)
             {
-                log.Error(se.Message);
+                log.Error(se.StackTrace);
                 new ConnectedExit(null, handler);
                 return;
             }

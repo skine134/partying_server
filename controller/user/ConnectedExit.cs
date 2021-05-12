@@ -13,7 +13,12 @@ namespace partying_server.controller
         protected ILog log = Logger.GetLogger();
         public ConnectedExit(JObject requestJson, Socket handler)
         {
-            var userUuid = requestJson["uuid"].ToString();
+            var userUuid = "";
+            // 소켓 에러 났을때.
+            if(requestJson == null)
+                userUuid = Info.MultiUserHandler.FirstOrDefault(userConnection=>userConnection.Value==handler).Key;
+            else
+                userUuid = requestJson["uuid"].ToString();
             if (Info.MultiUserHandler.Count <= 0 || !Info.MultiUserHandler.ContainsKey(userUuid)){
                 ErrorHandler.NotFoundException("40401");
                 return;
