@@ -23,26 +23,17 @@ namespace partying_server.controller
             switch(Info.currentStage)
             {
                 case 1:
-                    AsyncTimer stage1TimeEvent = new AsyncTimer(Config.stage2PatternStartTime);
-                    var random = new System.Random();
+                    AsyncTimer stage1TimeEvent = new AsyncTimer(3);
                     stage1TimeEvent.Callback = ()=>
                     {
                         if(datetime<System.DateTime.Now){
-                            //TODO: 4*ai 마릿수 만큼 통신을 하므로 좋지 않은 코드 수정 필요.
-                            for(var i =0; i<Info.PatrolPoints.Length;i++)
-                            {
-                                var data = new AiInfo();
-                                data.Target = Info.PatrolPoints[random.Next(Info.PatrolPoints.Length)].data.ToString();
-                                data.Uuid = Info.PatrolUnits[random.Next(Info.PatrolUnits.Length)].data.ToString();
-                                new SyncAiPacket(JObject.FromObject(data));
-                            }
+                            new SyncAiPacketArray();
                             stage1TimeEvent.Flag=false;
                         }
                     };
                     stage1TimeEvent.Start();
                     break;
                 case 2:
-                
                     AsyncTimer stage2TimeEvent = new AsyncTimer(Config.stage2PatternStartTime);
                     stage2TimeEvent.Callback = ()=>
                     {

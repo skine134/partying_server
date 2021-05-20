@@ -14,7 +14,7 @@ namespace partying_server.util
         public static int syncStartTime = 5;
         public static int stage1FinishTime = 2;
         public static int stage1MapSize = 10;
-        public static int patrolUnitCount = 0;
+        public static int patrolUnitCount = 1;
         public static float playerAttackDamage = 1f;
         public static float playerShotSpeed = 1f;
         public static float stage2PatternStartTime = 10f;
