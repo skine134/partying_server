@@ -12,6 +12,7 @@ namespace partying_server.util
         public static float playerSpeed = 14f;
         public static float playerHealth = 3;
         public static int syncStartTime = 5;
+        public static int stage1FinishTime = 2;
         public static int stage1MapSize = 10;
         public static int patrolUnitCount = 0;
         public static float playerAttackDamage = 1f;
@@ -19,7 +20,7 @@ namespace partying_server.util
         public static float stage2PatternStartTime = 10f;
         public static float itemRemainSeconds = 60f;
         public static float itemSpawnSeconds = 30f;
-        public static float bossHP = 10f;
+        public static float bossHP = 50f;
         public static Division3 bossLoc = new Division3(300,20,300);
         public static float bossPatternTime = 10f;
         // 기록되지 않은 항목들은 모두 string type으로 검사.

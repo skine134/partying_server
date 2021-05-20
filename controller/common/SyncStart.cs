@@ -17,7 +17,7 @@ namespace partying_server.controller
             var datetime= System.DateTime.Now.AddSeconds(Config.syncStartTime);
             var data = JObject.FromObject(new {startTime = Common.ConvertToUnixTimestamp(datetime)});
             if(Info.currentStage==1)
-                data["finishTime"] = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddMinutes(2));
+                data["finishTime"] = Common.ConvertToUnixTimestamp(System.DateTime.Now.AddMinutes(Config.stage1FinishTime));
             
             Connection.SendAll(Common.GetResponseFormat("SyncStart", data));
             if(Info.currentStage==2)
