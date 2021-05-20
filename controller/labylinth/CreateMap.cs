@@ -259,7 +259,7 @@ namespace partying_server.controller
                 patrolUnits[i].row = row;
                 patrolUnits[i].data = Guid.NewGuid().ToString();
             }
-
+            Info.PatrolUnits = patrolUnits;
         }
         
         void SetPatrolPoints(int count, int columns, int rows)
@@ -285,8 +285,9 @@ namespace partying_server.controller
                 patrolPoints[i] = new CellInfo();
                 patrolPoints[i].col = column;
                 patrolPoints[i].row = row;
-                patrolPoints[i].data = 1;
+                patrolPoints[i].data = $"patrolPoint {column}_{row}";
             }
+            Info.PatrolPoints = patrolPoints;
         }
         void SetTrap(int count, int columns, int rows)
         {

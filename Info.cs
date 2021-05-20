@@ -11,6 +11,8 @@ namespace partying_server
         public static HashSet<string> SyncCount{get;} =new HashSet<string>();
         public static int currentStage = Config.defaultStage;
         // Ai 정보를 저장
+        public static CellInfo[] PatrolPoints {get;set;} = null;
+        public static CellInfo[] PatrolUnits {get;set;} = null;
         private static JObject aiInfo = new JObject();
         public static InitStage2 InitStage2 {get;set;}
         // Boss 정보를 저장

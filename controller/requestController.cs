@@ -34,25 +34,23 @@ namespace partying_server.controller
                 case "ConnectedExit":
                     new ConnectedExit(requestJson, handler);
                     break;
-
                 case "Move":
                     new Move(requestJson);
                     break;
-
-                case "AiMove":
-                    new AiMove(requestJson);
-                    break;
-
                 case "GetItem":
                     new GetItem(requestJson);
                     break;
-
                 case "Death":
                     new Death(requestJson);
                     break;
-
                 case "IsDetected":
                     new IsDetected(requestJson);
+                    break;
+                case "UnDetected":
+                    new UnDetected(requestJson);
+                    break;
+                case "AIFinishSearch":
+                    new UnDetected(requestJson);
                     break;
                 case "CreateMap":
                     new CreateMap(Config.stage1MapSize);

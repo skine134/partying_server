@@ -7,7 +7,7 @@ namespace partying_server.controller
     {
         public IsDetected(JObject requestJson) : base(requestJson)
         {
-            AIService.saveDetectedUserInfo(uuid, (JObject)requestJson["data"]);
+            new SyncAiPacket(requestJson);
         }
     }
 }
