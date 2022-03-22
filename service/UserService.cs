@@ -1,59 +1,40 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
 using log4net;
+using partying_server.JsonFormat;
+using partying_server.util;
 
 
 
-namespace partting_server.service
+namespace partying_server.service
 {
     public class UserService
     {
         private static ILog log = Logger.GetLogger();
 
-        public static void saveUserInfo(string userUuid, JObject userInfo)
+        public static void SaveUserInfo(string userUuid, JObject userInfo)
         {
-            string movement = userInfo.Value<string>("event");
-            JObject location = (JObject)userInfo["loc"];
-            JObject vector = (JObject)userInfo["vec"];
-            JObject usersInfo = Info.UsersInfo;
-
-            if (usersInfo.ContainsKey(userUuid))
-            {
-                usersInfo[userUuid]["event"] = movement;
-                usersInfo[userUuid]["loc"] = location;
-                usersInfo[userUuid]["vec"] = vector;
-            }
-            else
-            {
-                userInfo.Remove("type");
-                usersInfo.Add(userUuid, userInfo);
-            }
-
+            try{
+                
+            Queue<PlayerInfo> usersInfo = Info.UsersInfo;
+            usersInfo.Enqueue(userInfo.ToObject<PlayerInfo>());
             Info.UsersInfo = usersInfo;
-        }
-        public static void deleteUserInfo(string userUuid)
-        {
-            JObject usersInfo = Info.UsersInfo;
-
-            try
-            {
-                usersInfo[userUuid]["death"] = true;
-            }
-            catch (Exception e)
-            {
+            }catch(Exception e){
                 log.Error(e.Message);
-                ErrorHandler.NotFoundException("40402");
             }
-
-            Info.UsersInfo = usersInfo;
         }
-        public static string getUserInfo()
+        public static void DeleteUserInfo(string userUuid)
         {
-            JObject usersInfo = Info.UsersInfo;
-            string usersInfoString = "";
-            usersInfoString = usersInfo.ToString();
-            return usersInfoString;
+            // PlayerInfo[] usersInfo = Info.UsersInfo;
+
+            // Info.UsersInfo = usersInfo;
+        }
+        public static PlayerInfo[] GetUserInfo()
+        {
+            PlayerInfo[] result = Info.UsersInfo.ToArray();
+            Info.UsersInfo.Clear();
+            return result;
         }
     }
 }

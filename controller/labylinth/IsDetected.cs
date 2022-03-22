@@ -1,13 +1,13 @@
 using Newtonsoft.Json.Linq;
-using partting_server.service;
+using partying_server.service;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
-    public class IsDetected : APIController
+    public class IsDetected : BaseAPI
     {
         public IsDetected(JObject requestJson) : base(requestJson)
         {
-            AIService.saveDetectedUserInfo(requestJson["uuid"].ToString(), (JObject)requestJson["data"]);
+            new SyncAiPacket(requestJson);
         }
     }
 }

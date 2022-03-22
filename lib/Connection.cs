@@ -1,17 +1,18 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using log4net;
-using partting_server.controller;
-using partting_server.util;
+using partying_server.controller;
+using partying_server.util;
 
 // State object for reading client data asynchronously
 public class StateObject
 {
     // Size of receive buffer.  
-    public const int BufferSize = 4096;
+    public const int BufferSize = 1024*8;
 
     // Receive buffer.  
     public byte[] buffer = new byte[BufferSize];
@@ -23,25 +24,27 @@ public class StateObject
     public Socket workSocket = null;
 }
 
-namespace partting_server.lib
+namespace partying_server.lib
 {
 
     public class Connection
     {
 
         // Thread signal.  
-        public static ManualResetEvent allDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent sendDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone =
-            new ManualResetEvent(false);
+        public static AutoResetEvent allDone =
+            new AutoResetEvent(false);
+        public static AutoResetEvent sendDone =
+            new AutoResetEvent(false);
+        public static AutoResetEvent receiveDone =
+            new AutoResetEvent(false);
         private static Socket handler;
+        private static string remainString = "";
         private static ILog log = Logger.GetLogger();
 
         // -------- Receive Method ---------
         public static void waittingRequest()
         {
+            log.Info("started partying_game_server");
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
@@ -76,7 +79,7 @@ namespace partting_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
 
             Console.Read();
@@ -103,14 +106,14 @@ namespace partting_server.lib
             catch (SocketException se)
             {
                 log.Error(se.Message);
-                new ConnectedExit(null, handler);
+                new ConnectedExit(null, handler); 
                 return;
 
             }
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
 
@@ -122,7 +125,7 @@ namespace partting_server.lib
                 // Retrieve the state object and the handler socket  
                 // from the asynchronous state object.  
                 StateObject state = (StateObject)ar.AsyncState;
-                Socket handler = state.workSocket;
+                handler = state.workSocket;
                 int bytesRead = 0;
                 // Read data from the client socket.
                 bytesRead = handler.EndReceive(ar);
@@ -139,19 +142,21 @@ namespace partting_server.lib
                     {
                         // All the data has been read from the
                         // client. Display it on the console.  
-                        string[] receiveDatas = content.Split("<EOF>");
+                        string[] receiveDatas = (remainString + content).Split("<EOF>");
+                        remainString = receiveDatas[receiveDatas.Length-1];
+                        receiveDatas[receiveDatas.Length-1] = "";
                         // client에게 packet을 send하기 위한 Send()함수가 매개변수로 handler를 필요로 함
                         foreach(string receiveData in receiveDatas)
                             if (!receiveData.Equals(""))
                                 try
                                 {
-                                    log.Info(String.Format("req {0}", content));
+                                    log.Info($"req {receiveData.Replace("\n","")}");
                                     RequestController.CallApi(receiveData, handler);
                                 }
                                 catch (Exception e)
                                 {
                                     log.Error(e.Message);
-                                    Send(Common.getErrorFormat("50000"));
+                                    Send(Common.GetErrorFormat("50000"));
                                 }
 
                     }
@@ -178,24 +183,25 @@ namespace partting_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
 
 
         // ---------- Send Method --------------
-        public static void Send(String sendData)
+        public static void Send(string sendData)
         {
 
             try
             {
                 string data = sendData + "<EOF>";
-                log.Info(String.Format("res {0}", data));
+                log.Info($"res {sendData.Replace("\n","")}");
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.
                 handler.BeginSend(byteData, 0, byteData.Length, 0,
                     new AsyncCallback(SendCallback), handler);
+                sendDone.WaitOne();
             }
             catch (SocketException se)
             {
@@ -210,20 +216,44 @@ namespace partting_server.lib
                 return;
             }
         }
-        public static void Send(String sendData, String[] userList)
+        public static void SendAll(string sendData)
         {
             try
             {
                 string data = sendData + "<EOF>";
+                log.Info($"res {sendData.Replace("\n","")}");
                 // Convert the string data to byte data using ASCII encoding.  
                 byte[] byteData = Encoding.UTF8.GetBytes(data);
                 // Begin sending the data to the remote device.  
-                foreach (string userUuid in userList)
+                foreach (string userUuid in Info.MultiUserHandler.Keys.ToList().ToArray())
                 {
                     Socket handler = Info.MultiUserHandler[userUuid];
                     handler.BeginSend(byteData, 0, byteData.Length, 0,
                         new AsyncCallback(SendCallback), handler);
+                    sendDone.WaitOne();
                 }
+            }
+            catch (SocketException se)
+            {
+                log.Error(se.StackTrace);
+                new ConnectedExit(null, handler);
+                return;
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                Send(Common.GetErrorFormat("50000"));
+            }
+        }
+
+        private static void SendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.  
+                Socket handler = (Socket)ar.AsyncState;
+                // Complete sending the data to the remote device.  
+                int bytesSent = handler.EndSend(ar);
                 sendDone.Set();
             }
             catch (SocketException se)
@@ -235,30 +265,7 @@ namespace partting_server.lib
             catch (Exception e)
             {
                 log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
-            }
-        }
-
-        private static void SendCallback(IAsyncResult ar)
-        {
-            try
-            {
-                // Retrieve the socket from the state object.  
-                Socket handler = (Socket)ar.AsyncState;
-                //TODO 클라이언트측에서 이전 전송 정보를 받는 문제 수정 필요.
-                // Complete sending the data to the remote device.  
-                int bytesSent = handler.EndSend(ar);
-            }
-            catch (SocketException se)
-            {
-                log.Error(se.Message);
-                new ConnectedExit(null, handler);
-                return;
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                Send(Common.getErrorFormat("50000"));
+                Send(Common.GetErrorFormat("50000"));
             }
         }
     }

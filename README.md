@@ -1,4 +1,4 @@
-# partting_server
+# partying_server
 
 **Unity로 구현한 partting 게임의 서버**
 
@@ -15,7 +15,7 @@
 ## 2. 구조
 
 ```
-partting_server
+partying_server
 ├── package (nuget 외부 패키치 모음)
 │   ├── Extends Packages
 │   └── ...

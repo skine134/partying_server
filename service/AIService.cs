@@ -1,10 +1,10 @@
 using System;
 using Newtonsoft.Json.Linq;
-using partting_server.util;
+using partying_server.util;
 using log4net;
 
 
-namespace partting_server.service
+namespace partying_server.service
 {
     public class AIService
     {
@@ -15,14 +15,14 @@ namespace partting_server.service
             string aiUuid = aiInfo.Value<string>("aiUuid");
             string location = aiInfo.Value<string>("loc");
             string vector = aiInfo.Value<string>("vec");
-            string detectedAiUuid = aiInfo.Value<string>("targetUuid");
+            string targetPoint = aiInfo.Value<string>("targetPoint");
 
             JObject aisInfo = Info.AiInfo;
             if (aisInfo.ContainsKey(aiUuid))
             {
                 aisInfo[aiUuid]["loc"] = location;
                 aisInfo[aiUuid]["vec"] = vector;
-                aisInfo[aiUuid]["targetUuid"] = detectedAiUuid;
+                aisInfo[aiUuid]["targetPoint"] = targetPoint;
             }
             else
             {
@@ -49,12 +49,9 @@ namespace partting_server.service
 
             Info.AiInfo = aisInfo;
         }
-        public static string getAiInfo()
+        public static JObject getAiInfo()
         {
-            JObject aisInfo = Info.AiInfo;
-            string aisInfoString = "";
-            aisInfoString = aisInfo.ToString();
-            return aisInfoString;
+            return Info.AiInfo;
         }
     }
 }

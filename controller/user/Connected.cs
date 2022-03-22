@@ -2,23 +2,25 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using Newtonsoft.Json.Linq;
 using log4net;
-using partting_server.lib;
-using partting_server.util;
+using partying_server.lib;
+using partying_server.util;
 
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class Connected
     {
         protected ILog log = Logger.GetLogger();
         public Connected(JObject requestJson, Socket handler)
         {
+            log.Info($"{requestJson.ToString().Replace("\n","")}");
             foreach (KeyValuePair<string, Socket> item in Info.MultiUserHandler)
             {
                 if (Info.MultiUserHandler[item.Key] == handler)
                 {
-                    string response = "{'uuid': '" + item.Key + "'}";
-                    Connection.Send(Common.getResponseFormat("connected", response));
+                    Info.MultiUserHandler[requestJson["uuid"].ToString()] = handler;
+                    Info.MultiUserHandler.Remove(item.Key);
+                    Connection.Send(Common.GetResponseFormat("connected", new {}));
                     break;
                 }
             }

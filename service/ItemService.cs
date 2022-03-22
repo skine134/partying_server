@@ -1,10 +1,11 @@
-using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using log4net;
-using partting_server.util;
+using partying_server.util;
+using partying_server.JsonFormat;
 
 
-namespace partting_server.service
+namespace partying_server.service
 {
     public class ItemService
     {
@@ -13,18 +14,7 @@ namespace partting_server.service
         public static void saveItemInfo(string userUuid, JObject userInfo)
         {
             string item = userInfo.Value<string>("item");
-            JObject usersInfo = Info.UsersInfo;
-
-            try
-            {
-                usersInfo[userUuid]["item"] = item;
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                ErrorHandler.NotFoundException("40403");
-            }
-
+            Queue<PlayerInfo> usersInfo = Info.UsersInfo;
             Info.UsersInfo = usersInfo;
         }
     }

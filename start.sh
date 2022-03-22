@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-RUNNANE="dotnet run"
+RUNNANE="dotnet run 1214"
 
 runCheck=`ps -ef | grep -v grep | grep "${RUNNAME}" | wc -l`
 if [ "${runCheck}" -ge 1 ]

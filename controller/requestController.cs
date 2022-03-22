@@ -1,10 +1,11 @@
 using System;
-using partting_server.util;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using log4net;
+using partying_server.util;
+using patting_server.lib;
 
-namespace partting_server.controller
+namespace partying_server.controller
 {
     public class RequestController
 
@@ -20,46 +21,49 @@ namespace partting_server.controller
                 log.Error(e.Message);
                 ErrorHandler.InvalidException("40001");
             }
+            RegularExpression.jsonValidation(requestJson);
             
             string type = requestJson.Value<string>("type");
+            type = partying_server.lib.Common.ToPascalCase(type);
             switch (type)
             {
-                case "connected":
+                case "Connected":
                     new Connected(requestJson, handler);
                     break;
 
-                case "connectedExit":
+                case "ConnectedExit":
                     new ConnectedExit(requestJson, handler);
                     break;
-
-                case "move":
+                case "Move":
                     new Move(requestJson);
                     break;
-
-                case "aiMove":
-                    new AiMove(requestJson);
-                    break;
-
-                case "getItem":
+                case "GetItem":
                     new GetItem(requestJson);
                     break;
-
-                case "death":
+                case "Death":
                     new Death(requestJson);
                     break;
-
-                case "isDetected":
+                case "IsDetected":
                     new IsDetected(requestJson);
                     break;
-
-                case "syncPacket":
-                    new SyncPacket(requestJson);
+                case "UnDetected":
+                    new UnDetected(requestJson);
                     break;
-
-                case "syncAiLocation":
-                    new SyncAiLocation(requestJson);
+                case "AIFinishSearch":
+                    new UnDetected(requestJson);
                     break;
-
+                case "CreateMap":
+                    new CreateMap(Config.stage1MapSize);
+                    break;
+                case "InitStage2":
+                    new InitStage2(requestJson);
+                    break;
+                case "SyncStart":
+                    new SyncStart(requestJson);
+                    break;
+                case "AttackBoss":
+                    new AttackBoss(requestJson);
+                    break;
                 // ...
 
                 default:

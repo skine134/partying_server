@@ -1,9 +1,9 @@
 using System;
 using log4net;
-using partting_server.lib;
+using partying_server.lib;
 
 
-namespace partting_server.util
+namespace partying_server.util
 {
     public class ErrorHandler
     {
@@ -11,15 +11,15 @@ namespace partting_server.util
         private static ILog log = Logger.GetLogger();
         public static void NotFoundException(string errorCode)
         {
-            string sendErrorJson = Common.getErrorFormat(errorCode).Replace("\n", String.Empty);
+            string sendErrorJson = Common.GetErrorFormat(errorCode).Replace("\n", String.Empty);
             Connection.Send(sendErrorJson);
-            log.Info(sendErrorJson);
+            log.Info(sendErrorJson.Replace("\n",""));
         }
         public static void InvalidException(string errorCode)
         {
-            string sendErrorJson = Common.getErrorFormat(errorCode).Replace("\n", String.Empty);
+            string sendErrorJson = Common.GetErrorFormat(errorCode).Replace("\n", String.Empty);
             Connection.Send(sendErrorJson);
-            log.Info(sendErrorJson);
+            log.Info(sendErrorJson.Replace("\n",""));
         }
     }
 
